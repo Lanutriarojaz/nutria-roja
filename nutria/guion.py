@@ -14,7 +14,7 @@ _MODELOS_GEMINI = {}
 
 def _claves_gemini():
     """Claves de Gemini por orden: GEMINI_API_KEY_2 (cuenta personal) primero y luego la de la Nutria. Cada una tiene su cupo."""
-    return [k for k in [os.environ.get('GEMINI_API_KEY_2'), os.environ.get('GEMINI_API_KEY')] if k]
+    return [k for k in [os.environ.get('GEMINI_API_KEY_2'), os.environ.get('GEMINI_API_KEY_3'), os.environ.get('GEMINI_API_KEY')] if k]
 
 
 def _modelos_gemini(clave):
