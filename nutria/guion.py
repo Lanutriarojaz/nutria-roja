@@ -9,45 +9,76 @@ MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto
          'octubre', 'noviembre', 'diciembre']
 
 
-def llm(mensajes, temperatura=0.7):
-    """Gemini (plan gratuito, clave GEMINI_API_KEY); si no, Groq; si no, Pollinations (gratis sin clave)."""
+_MODELOS_GEMINI = None
+
+
+def _modelos_gemini():
+    """Modelos «flash» que la clave puede usar ahora mismo, del preferido al de reserva (cada uno tiene su propio cupo gratis)."""
+    global _MODELOS_GEMINI
+    if _MODELOS_GEMINI is not None:
+        return _MODELOS_GEMINI
+    pref = [m for m in [os.environ.get('NUTRIA_MODELO'), 'gemini-3.8-flash', 'gemini-flash-latest',
+                        'gemini-flash-lite-latest'] if m]
+    hay = []
+    try:
+        r = requests.get('https://generativelanguage.googleapis.com/v1beta/models',
+                         params={'key': os.environ['GEMINI_API_KEY'], 'pageSize': 200}, timeout=30)
+        for m in r.json().get('models', []):
+            n = m['name'].split('/')[-1]
+            if 'generateContent' in m.get('supportedGenerationMethods', []) and 'flash' in n \
+                    and not re.search(r'(image|tts|audio|live|exp|preview|thinking)', n):
+                hay.append(n)
+    except Exception as e:
+        print('  IA: no pude listar los modelos de Gemini:', repr(e)[:120], flush=True)
+    hay.sort(key=lambda n: [int(x) if x.isdigit() else 0 for x in re.findall(r'\d+', n)], reverse=True)
+    _MODELOS_GEMINI = list(dict.fromkeys(pref + hay))[:8]
+    print('  IA: modelos Gemini en rotación:', ', '.join(_MODELOS_GEMINI), flush=True)
+    return _MODELOS_GEMINI
+
+
+def _proveedores(mensajes, temperatura):
+    rf = {'type': 'json_object'}
     if os.environ.get('GEMINI_API_KEY'):
-        url, cab = ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-                    {'Authorization': f"Bearer {os.environ['GEMINI_API_KEY']}"})
-        cuerpo = {'model': os.environ.get('NUTRIA_MODELO', 'gemini-3.8-flash'), 'messages': mensajes,
-                  'temperature': temperatura, 'response_format': {'type': 'json_object'}}
-    elif os.environ.get('GROQ_API_KEY'):
-        url, cab = 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"}
-        cuerpo = {'model': 'llama-3.3-70b-versatile', 'messages': mensajes, 'temperature': temperatura,
-                  'response_format': {'type': 'json_object'}}
-    else:
-        url, cab = 'https://text.pollinations.ai/openai', {}
-        cuerpo = {'model': 'openai', 'messages': mensajes, 'response_format': {'type': 'json_object'}}
+        for m in _modelos_gemini():
+            yield (f'gemini:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+                   {'Authorization': f"Bearer {os.environ['GEMINI_API_KEY']}"},
+                   {'model': m, 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
+    if os.environ.get('GROQ_API_KEY'):
+        yield ('groq', 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"},
+               {'model': 'llama-3.3-70b-versatile', 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
+    yield ('pollinations', 'https://text.pollinations.ai/openai', {},
+           {'model': 'openai', 'messages': mensajes, 'response_format': rf})
+
+
+_AGOTADOS = set()   # modelos que ya han dicho «sin cupo» en esta ejecución
+
+
+def llm(mensajes, temperatura=0.7):
+    """Prueba los modelos gratuitos por turnos: si uno está saturado (503), sin cupo (429) o retirado (404),
+    pasa al siguiente al momento. Hasta 3 vueltas completas con pausas crecientes."""
     ultimo = None
-    for i in range(6):
-        try:
-            r = requests.post(url, json=cuerpo, headers=cab, timeout=120)
-            if r.status_code == 200:
-                try:
-                    t = r.json()['choices'][0]['message']['content']
-                    return json.loads(t[t.index('{'):t.rindex('}') + 1])
-                except (ValueError, KeyError, IndexError, TypeError):
-                    ultimo = f'200 con respuesta rara: {r.text[:300]!r}'
-                    print('  IA:', ultimo, flush=True)
-            else:
-                ultimo = f'{r.status_code} {r.text[:300]}'
-                print('  IA:', ultimo, flush=True)
-                # Google renombra modelos: si el aviso sugiere otro, se usa ese y se reintenta al momento
-                sug = re.search(r'use (?:models/)?([a-z0-9][a-z0-9.\-]+)', r.text)
-                if r.status_code == 404 and sug and cuerpo.get('model') != sug.group(1):
-                    cuerpo['model'] = sug.group(1); print('  IA: cambio de modelo a', sug.group(1), flush=True)
-                    continue
-                if r.status_code == 404 and cuerpo.get('model') != 'gemini-flash-latest' and 'generativelanguage' in url:
-                    cuerpo['model'] = 'gemini-flash-latest'; continue
-        except (requests.RequestException, ValueError, KeyError) as e:
-            ultimo = repr(e)
-        time.sleep(min(60, 15 * (i + 1)))
-    raise RuntimeError(f'La IA no responde: {ultimo}')
+    for vuelta in range(3):
+        for nombre, url, cab, cuerpo in _proveedores(mensajes, temperatura):
+            if nombre in _AGOTADOS:
+                continue
+            try:
+                r = requests.post(url, json=cuerpo, headers=cab, timeout=120)
+                if r.status_code == 200:
+                    try:
+                        t = r.json()['choices'][0]['message']['content']
+                        return json.loads(t[t.index('{'):t.rindex('}') + 1])
+                    except (ValueError, KeyError, IndexError, TypeError):
+                        ultimo = f'{nombre}: respuesta rara {r.text[:150]!r}'
+                else:
+                    ultimo = f'{nombre}: {r.status_code} {r.text[:160]}'
+                    if r.status_code in (404, 400) or (r.status_code == 429 and 'quota' in r.text.lower()):
+                        _AGOTADOS.add(nombre)
+            except requests.RequestException as e:
+                ultimo = f'{nombre}: {e!r}'[:200]
+            print('  IA:', ultimo.replace('\n', ' '), flush=True)
+            time.sleep(3)
+        time.sleep(20 * (vuelta + 1))
+    raise RuntimeError(f'Ninguna IA responde: {ultimo}')
 
 
 SISTEMA = """Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
@@ -77,6 +108,14 @@ FORMATO = """Devuelve este JSON:
 
 
 def elegir(candidatos, dia, mes, evitar_temas):
+    try:
+        return _elegir(candidatos, dia, mes, evitar_temas)
+    except Exception as e:
+        print('  elegir sin IA:', str(e)[:120], flush=True)
+        return [c for c in candidatos if c['destacado']][:3] or candidatos[:3]
+
+
+def _elegir(candidatos, dia, mes, evitar_temas):
     lista = '\n'.join(f"#{c['id']} ({c['año']}){' [destacado]' if c['destacado'] else ''}: {c['texto']}"
                       for c in candidatos[:30])
     r = llm([
