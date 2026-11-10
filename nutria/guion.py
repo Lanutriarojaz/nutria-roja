@@ -10,10 +10,11 @@ MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto
 
 
 def llm(mensajes, temperatura=0.7):
-    """GitHub Models (gratis con el token de GitHub Actions); Groq si hay clave; si no, Pollinations."""
-    if os.environ.get('GITHUB_TOKEN') and not os.environ.get('NUTRIA_LLM_POLLINATIONS'):
-        url, cab = 'https://models.github.ai/inference/chat/completions', {'Authorization': f"Bearer {os.environ['GITHUB_TOKEN']}"}
-        cuerpo = {'model': os.environ.get('NUTRIA_MODELO', 'openai/gpt-4.1-mini'), 'messages': mensajes,
+    """Gemini (plan gratuito, clave GEMINI_API_KEY); si no, Groq; si no, Pollinations (gratis sin clave)."""
+    if os.environ.get('GEMINI_API_KEY'):
+        url, cab = ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+                    {'Authorization': f"Bearer {os.environ['GEMINI_API_KEY']}"})
+        cuerpo = {'model': os.environ.get('NUTRIA_MODELO', 'gemini-2.5-flash'), 'messages': mensajes,
                   'temperature': temperatura, 'response_format': {'type': 'json_object'}}
     elif os.environ.get('GROQ_API_KEY'):
         url, cab = 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"}
