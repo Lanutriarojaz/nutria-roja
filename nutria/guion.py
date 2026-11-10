@@ -40,10 +40,13 @@ def _modelos_gemini(clave):
     return _MODELOS_GEMINI[clave]
 
 
-def _proveedores(mensajes, temperatura):
+def _proveedores(mensajes, temperatura, rol='escribir'):
     rf = {'type': 'json_object'}
     for n, clave in enumerate(_claves_gemini(), 1):
-        for m in _modelos_gemini(clave):
+        modelos = _modelos_gemini(clave)
+        if rol != 'escribir':   # cadena: el que escribe usa los modelos grandes; el que revisa/elige, los «lite» primero
+            modelos = sorted(modelos, key=lambda x: 'lite' not in x)
+        for m in modelos:
             yield (f'gemini{n}:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
                    {'Authorization': f"Bearer {clave}"},
                    {'model': m, 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
@@ -57,12 +60,12 @@ def _proveedores(mensajes, temperatura):
 _AGOTADOS = set()   # modelos que ya han dicho «sin cupo» en esta ejecución
 
 
-def llm(mensajes, temperatura=0.7):
+def llm(mensajes, temperatura=0.7, rol='escribir'):
     """Prueba los modelos gratuitos por turnos: si uno está saturado (503), sin cupo (429) o retirado (404),
     pasa al siguiente al momento. Hasta 3 vueltas completas con pausas crecientes."""
     ultimo = None
     for vuelta in range(3):
-        for nombre, url, cab, cuerpo in _proveedores(mensajes, temperatura):
+        for nombre, url, cab, cuerpo in _proveedores(mensajes, temperatura, rol):
             if nombre in _AGOTADOS:
                 continue
             try:
@@ -127,7 +130,7 @@ def _elegir(candidatos, dia, mes, evitar_temas):
         {'role': 'user', 'content': f"Hechos del {dia} de {MESES[mes - 1]}:\n{lista}\n\nElige los 3 con más potencial viral y visual "
                                    f"(sorprendentes, conocidos o curiosos; evita tragedias con muchas víctimas, política actual divisiva y temas ya usados esta semana: {', '.join(evitar_temas) or 'ninguno'}). "
                                    'Responde {"ids":[id1,id2,id3]} en orden de preferencia.'},
-    ], temperatura=0.4)
+    ], temperatura=0.4, rol='elegir')
     ids = [int(i) for i in r.get('ids', []) if str(i).isdigit() or isinstance(i, int)]
     return [c for i in ids for c in candidatos if c['id'] == i] or candidatos[:3]
 
@@ -168,6 +171,6 @@ def verificar(g, fuente, hecho):
                                    'Lista cada afirmación factual del guion (fechas, cifras, nombres, causas, superlativos) que NO esté respaldada por la fuente. '
                                    'Las frases de estilo, preguntas y ganchos sin datos no cuentan. '
                                    'Responde {"inventado": ["..."], "ok": true|false} (ok=true solo si la lista está vacía).'},
-    ], temperatura=0)
+    ], temperatura=0, rol='verificar')
     malos = [x for x in r.get('inventado', []) if x]
     return (bool(r.get('ok')) and not malos), malos
