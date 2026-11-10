@@ -34,13 +34,14 @@ def _modelos_gemini(clave):
                          params={'key': clave, 'pageSize': 200}, timeout=30)
         for m in r.json().get('models', []):
             n = m['name'].split('/')[-1]
-            if 'generateContent' in m.get('supportedGenerationMethods', []) and 'flash' in n \
-                    and not re.search(r'(image|tts|audio|live|exp|preview|thinking)', n):
+            if 'generateContent' in m.get('supportedGenerationMethods', []) and ('flash' in n or n.startswith('gemma')) \
+                    and not re.search(r'(image|tts|audio|live|exp|preview|thinking|embed|-e\d|-1b|-4b)', n):
                 hay.append(n)
     except Exception as e:
         print('  IA: no pude listar los modelos de Gemini:', repr(e)[:120], flush=True)
-    hay.sort(key=lambda n: [int(x) if x.isdigit() else 0 for x in re.findall(r'\d+', n)], reverse=True)
-    _MODELOS_GEMINI[clave] = list(dict.fromkeys(pref + hay))[:8]
+    flash = sorted([n for n in hay if 'flash' in n], key=lambda n: [int(x) for x in re.findall(r'\d+', n)], reverse=True)
+    gemma = sorted([n for n in hay if n.startswith('gemma')], key=lambda n: [int(x) for x in re.findall(r'\d+', n)], reverse=True)
+    _MODELOS_GEMINI[clave] = list(dict.fromkeys(pref + flash))[:7] + gemma[:2]
     print('  IA: modelos Gemini en rotación:', ', '.join(_MODELOS_GEMINI[clave]), flush=True)
     return _MODELOS_GEMINI[clave]
 
@@ -53,14 +54,16 @@ def _proveedores(mensajes, temperatura, rol='escribir'):
         if rol != 'escribir':   # cadena: el que escribe usa los modelos grandes; el que revisa/elige, los «lite» primero
             modelos = sorted(modelos, key=lambda x: 'lite' not in x)
         for m in modelos:
+            cuerpo = {'model': m, 'messages': mensajes, 'temperature': temperatura}
+            if not m.startswith('gemma'):
+                cuerpo['response_format'] = rf
             yield (f'{n}:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-                   {'Authorization': f"Bearer {clave}"},
-                   {'model': m, 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
+                   {'Authorization': f"Bearer {clave}"}, cuerpo)
     if os.environ.get('GROQ_API_KEY'):
         yield ('groq', 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"},
                {'model': 'llama-3.3-70b-versatile', 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
     yield ('pollinations', 'https://text.pollinations.ai/openai', {},
-           {'model': 'openai', 'messages': mensajes, 'response_format': rf})
+           {'model': 'openai', 'messages': mensajes, 'response_format': rf, 'max_tokens': 8000})
 
 
 _AGOTADOS = set()   # modelos que ya han dicho «sin cupo» en esta ejecución
@@ -70,7 +73,7 @@ def llm(mensajes, temperatura=0.7, rol='escribir'):
     """Prueba los modelos gratuitos por turnos: si uno está saturado (503), sin cupo (429) o retirado (404),
     pasa al siguiente al momento. Hasta 3 vueltas completas con pausas crecientes."""
     ultimo = None
-    for vuelta in range(3):
+    for vuelta in range(5):
         for nombre, url, cab, cuerpo in _proveedores(mensajes, temperatura, rol):
             if nombre in _AGOTADOS:
                 continue
@@ -90,7 +93,7 @@ def llm(mensajes, temperatura=0.7, rol='escribir'):
                 ultimo = f'{nombre}: {e!r}'[:200]
             print('  IA:', ultimo.replace('\n', ' '), flush=True)
             time.sleep(3)
-        time.sleep(20 * (vuelta + 1))
+        time.sleep(30 * (vuelta + 1))
     raise RuntimeError(f'Ninguna IA responde: {ultimo}')
 
 
