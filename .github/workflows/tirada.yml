@@ -50,7 +50,19 @@ jobs:
         run: |
           python -m nutria.semana --dias "${{ inputs.dias || '7' }}" ${{ inputs.desde && format('--desde {0}', inputs.desde) || '' }}
 
+      - name: Guardar los vídeos para revisarlos (descargables 14 días)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos
+          path: |
+            salida/*/video.mp4
+            salida/*/info.json
+            salida/tirada.json
+          retention-days: 14
+
       - name: Subir los vídeos a la web pública (rama media → GitHub Pages)
+        if: ${{ github.event_name == 'schedule' || inputs.publicar }}
         run: |
           mkdir -p /tmp/media && cd /tmp/media && git init -q -b media
           for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && cp "$d/video.mp4" "$f.mp4"; done
