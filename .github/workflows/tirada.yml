@@ -66,14 +66,19 @@ jobs:
       - name: Subir los vídeos a la web pública (rama media → GitHub Pages)
         if: ${{ github.event_name == 'schedule' || inputs.publicar }}
         run: |
-          mkdir -p /tmp/media && cd /tmp/media && git init -q -b media
-          for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && cp "$d/video.mp4" "$f.mp4"; done
+          # Se conservan los vídeos que siguen en cola (no se pisan) y se borran los de hace más de 8 días.
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 -b media "$REMOTO" /tmp/media || mkdir -p /tmp/media
+          cd /tmp/media && rm -rf .git
+          limite=$(date -d '8 days ago' +%F)
+          for f in 20*.mp4; do [ -f "$f" ] && [ "${f%.mp4}" \< "$limite" ] && rm -f "$f"; done
+          for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && cp -n "$d/video.mp4" "$f.mp4"; done
           cp $GITHUB_WORKSPACE/salida/tirada.json .
           echo "La Nutria Roja — vídeos de la semana" > index.html
-          git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos $(date +%F)"
-          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" media
+          git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos $(date +%F)"
+          git push -qf "$REMOTO" media
           # Esperar a que GitHub Pages sirva los vídeos antes de dárselos a Buffer
-          primero=$(ls *.mp4 | head -1)
+          primero=$(basename $(ls -d $GITHUB_WORKSPACE/salida/*/ | head -1)).mp4; [ -f "$primero" ] || primero=$(ls *.mp4 | tail -1)
           for i in $(seq 1 40); do
             [ "$(curl -s -o /dev/null -w '%{http_code}' "$PAGES/$primero")" = 200 ] && echo "Pages listo" && exit 0
             sleep 15

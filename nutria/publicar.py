@@ -39,6 +39,25 @@ def canales():
     return out
 
 
+def ya_programados(chs):
+    """(canal, día) que ya tienen un vídeo en cola, para no duplicar si se relanza la tirada."""
+    hechos = set()
+    try:
+        orgs = gql('query { account { organizations { id } } }')['account']['organizations']
+        ids = {c['id'] for c in chs.values()}
+        for o in orgs:
+            d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}) '
+                    '{ edges { node { id dueAt channelId } } } }', {'o': o['id']})
+            for e in d['posts']['edges']:
+                n = e['node']
+                if n.get('dueAt') and n.get('channelId') in ids:
+                    dia = dt.datetime.fromisoformat(n['dueAt'].replace('Z', '+00:00')).astimezone(ZoneInfo('Europe/Madrid')).date()
+                    hechos.add((n['channelId'], dia.isoformat()))
+    except Exception as e:
+        print(f'⚠️ No pude leer la cola de Buffer ({str(e)[:120]}); sigo sin comprobar duplicados')
+    return hechos
+
+
 CREAR = '''mutation($input: CreatePostInput!) { createPost(input: $input) {
   ... on PostActionSuccess { post { id dueAt } }
   ... on MutationError { message } } }'''
@@ -68,17 +87,20 @@ def main():
     if faltan and not a.prueba:
         print(f'⚠️ Canales sin conectar en Buffer: {", ".join(faltan)}')
     hh, mm = map(int, a.hora.split(':'))
+    en_cola = ya_programados(chs) if chs else set()
     resultado = []
     for v in tirada:
         if not v.get('ok'):
             continue
         dia = dt.date.fromisoformat(v['fecha'])
         cuando = dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid'))
-        if cuando < dt.datetime.now(ZoneInfo('Europe/Madrid')) + dt.timedelta(minutes=20):
+        if cuando < dt.datetime.now(ZoneInfo('Europe/Madrid')) + dt.timedelta(minutes=3):
             print(f"⏭ {v['fecha']}: la hora ya ha pasado, no se programa"); continue
         url = f"{base}/{v['fecha']}.mp4"
         texto = v['descripcion']
         for servicio, c in chs.items():
+            if (c['id'], v['fecha']) in en_cola:
+                print(f"⏭ {v['fecha']} {servicio}: ya había un vídeo en cola ese día"); continue
             entrada = {'channelId': c['id'], 'text': texto, 'schedulingType': 'automatic', 'mode': 'customScheduled',
                        'dueAt': cuando.astimezone(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
                        'assets': [{'video': {'url': url, 'metadata': {'thumbnailOffset': 1500}}}],

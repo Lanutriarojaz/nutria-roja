@@ -1,0 +1,39 @@
+name: Publicar un vídeo suelto
+
+on:
+  workflow_dispatch:
+    inputs:
+      fecha:
+        description: 'Fecha del vídeo ya subido a la web (AAAA-MM-DD)'
+        required: true
+      hora:
+        description: 'Hora de publicación en Madrid (HH:MM)'
+        required: true
+      titulo:
+        description: 'Título (YouTube)'
+        required: true
+      descripcion:
+        description: 'Texto de la publicación'
+        required: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: Programar en Buffer
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MEDIA_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          FECHA: ${{ inputs.fecha }}
+          TITULO: ${{ inputs.titulo }}
+          DESCRIPCION: ${{ inputs.descripcion }}
+        run: |
+          [ "$(curl -s -o /dev/null -w '%{http_code}' "$MEDIA_BASE/$FECHA.mp4")" = 200 ] || { echo "::error::El vídeo no está en la web"; exit 1; }
+          mkdir -p salida
+          python -c "import json,os; json.dump([{'ok': True, 'fecha': os.environ['FECHA'], 'titulo': os.environ['TITULO'], 'descripcion': os.environ['DESCRIPCION']}], open('salida/tirada.json','w'), ensure_ascii=False)"
+          python -m nutria.publicar salida/tirada.json --hora "${{ inputs.hora }}"
