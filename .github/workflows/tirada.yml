@@ -46,6 +46,12 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
           pip install -q -r requirements.txt
 
+      - name: Comprobar la IA gratuita
+        run: |
+          curl -s -w '\nHTTP %{http_code}\n' -X POST https://models.github.ai/inference/chat/completions \
+            -H "Authorization: Bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' \
+            -d '{"model":"openai/gpt-4.1-mini","messages":[{"role":"user","content":"Responde solo JSON {\"ok\":true}"}],"response_format":{"type":"json_object"}}' | head -c 800
+
       - name: Generar los vídeos (con control de calidad)
         run: |
           python -m nutria.semana --dias "${{ inputs.dias || '7' }}" ${{ inputs.desde && format('--desde {0}', inputs.desde) || '' }}

@@ -27,9 +27,15 @@ def llm(mensajes, temperatura=0.7):
         try:
             r = requests.post(url, json=cuerpo, headers=cab, timeout=120)
             if r.status_code == 200:
-                t = r.json()['choices'][0]['message']['content']
-                return json.loads(t[t.index('{'):t.rindex('}') + 1])
-            ultimo = f'{r.status_code} {r.text[:200]}'
+                try:
+                    t = r.json()['choices'][0]['message']['content']
+                    return json.loads(t[t.index('{'):t.rindex('}') + 1])
+                except (ValueError, KeyError, IndexError, TypeError):
+                    ultimo = f'200 con respuesta rara: {r.text[:300]!r}'
+                    print('  IA:', ultimo, flush=True)
+            else:
+                ultimo = f'{r.status_code} {r.text[:300]}'
+                print('  IA:', ultimo, flush=True)
         except (requests.RequestException, ValueError, KeyError) as e:
             ultimo = repr(e)
         time.sleep(min(60, 15 * (i + 1)))
