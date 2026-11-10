@@ -12,9 +12,14 @@ MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto
 _MODELOS_GEMINI = {}
 
 
-def _claves_gemini():
-    """Claves de Gemini por orden: GEMINI_API_KEY_2 (cuenta personal) primero y luego la de la Nutria. Cada una tiene su cupo."""
-    return [k for k in [os.environ.get('GEMINI_API_KEY_2'), os.environ.get('GEMINI_API_KEY_3'), os.environ.get('GEMINI_API_KEY')] if k]
+def _claves_gemini(rol='escribir'):
+    """Reparto de trabajo entre cuentas de Google (cada una con su cupo):
+    - escribir el guion: clave 2 (cuenta personal) → clave 3 → Nutria
+    - elegir / revisar:  clave 3 → clave 2 → Nutria
+    La de la Nutria (GEMINI_API_KEY) solo entra si las otras fallan."""
+    e = os.environ.get
+    orden = [e('GEMINI_API_KEY_2'), e('GEMINI_API_KEY_3')] if rol == 'escribir' else [e('GEMINI_API_KEY_3'), e('GEMINI_API_KEY_2')]
+    return list(dict.fromkeys(k for k in orden + [e('GEMINI_API_KEY')] if k))
 
 
 def _modelos_gemini(clave):
@@ -42,12 +47,13 @@ def _modelos_gemini(clave):
 
 def _proveedores(mensajes, temperatura, rol='escribir'):
     rf = {'type': 'json_object'}
-    for n, clave in enumerate(_claves_gemini(), 1):
+    for clave in _claves_gemini(rol):
+        n = {os.environ.get('GEMINI_API_KEY_2'): 'personal', os.environ.get('GEMINI_API_KEY_3'): 'clave3'}.get(clave, 'nutria')
         modelos = _modelos_gemini(clave)
         if rol != 'escribir':   # cadena: el que escribe usa los modelos grandes; el que revisa/elige, los «lite» primero
             modelos = sorted(modelos, key=lambda x: 'lite' not in x)
         for m in modelos:
-            yield (f'gemini{n}:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+            yield (f'{n}:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
                    {'Authorization': f"Bearer {clave}"},
                    {'model': m, 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
     if os.environ.get('GROQ_API_KEY'):
