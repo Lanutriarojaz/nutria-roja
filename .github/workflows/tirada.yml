@@ -72,7 +72,7 @@ jobs:
           cd /tmp/media && rm -rf .git
           limite=$(date -d '8 days ago' +%F)
           for f in 20*.mp4; do [ -f "$f" ] && [ "${f%.mp4}" \< "$limite" ] && rm -f "$f"; done
-          for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && cp -n "$d/video.mp4" "$f.mp4"; done
+          for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && { [ -f "$f.mp4" ] || cp "$d/video.mp4" "$f.mp4"; }; done
           cp $GITHUB_WORKSPACE/salida/tirada.json .
           echo "La Nutria Roja — vídeos de la semana" > index.html
           git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos $(date +%F)"
