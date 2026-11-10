@@ -1,0 +1,94 @@
+name: Tirada semanal
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'        # cada lunes 06:00 en Madrid (invierno) / 07:00 (verano)
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: 'Primer día (AAAA-MM-DD). Vacío = hoy'
+        required: false
+      dias:
+        description: 'Cuántos días'
+        required: false
+        default: '7'
+      publicar:
+        description: 'Programar en Buffer'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+  models: read
+
+concurrency: tirada
+
+jobs:
+  tirada:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TZ: Europe/Madrid
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar ffmpeg y dependencias
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          pip install -q -r requirements.txt
+
+      - name: Generar los vídeos (con control de calidad)
+        run: |
+          python -m nutria.semana --dias "${{ inputs.dias || '7' }}" ${{ inputs.desde && format('--desde {0}', inputs.desde) || '' }}
+
+      - name: Subir los vídeos a la web pública (rama media → GitHub Pages)
+        run: |
+          mkdir -p /tmp/media && cd /tmp/media && git init -q -b media
+          for d in $GITHUB_WORKSPACE/salida/*/; do f=$(basename "$d"); [ -f "$d/video.mp4" ] && cp "$d/video.mp4" "$f.mp4"; done
+          cp $GITHUB_WORKSPACE/salida/tirada.json .
+          echo "La Nutria Roja — vídeos de la semana" > index.html
+          git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos $(date +%F)"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" media
+          # Esperar a que GitHub Pages sirva los vídeos antes de dárselos a Buffer
+          primero=$(ls *.mp4 | head -1)
+          for i in $(seq 1 40); do
+            [ "$(curl -s -o /dev/null -w '%{http_code}' "$PAGES/$primero")" = 200 ] && echo "Pages listo" && exit 0
+            sleep 15
+          done
+          echo "::error::GitHub Pages no sirve los vídeos"; exit 1
+
+      - name: Programar en Buffer (TikTok, YouTube, Instagram)
+        if: ${{ github.event_name == 'schedule' || inputs.publicar }}
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m nutria.publicar salida/tirada.json
+
+      - name: Registro (mantiene vivo el repositorio)
+        if: always()
+        run: |
+          echo "$(date '+%F %H:%M') run ${{ github.run_id }} ${{ job.status }}" >> registro.log
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qam "Registro $(date +%F)" && git push -q || true
+
+      - name: Correo con el resumen de la semana
+        if: always()
+        run: |
+          [ -f salida/tirada.json ] || exit 0
+          python -m nutria.informe salida "$PAGES" > informe.md
+          echo "" >> informe.md; echo "[Ejecución completa](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> informe.md
+          gh issue create --title "🦦 Tirada del $(date +%d/%m)" --body-file informe.md
+
+      - name: Correo de aviso si algo ha fallado
+        if: failure()
+        run: |
+          gh issue create --title "❌ La tirada del $(date +%d/%m) ha fallado" \
+            --body "Algo ha fallado. Mira los detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
