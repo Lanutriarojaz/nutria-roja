@@ -9,20 +9,24 @@ MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto
          'octubre', 'noviembre', 'diciembre']
 
 
-_MODELOS_GEMINI = None
+_MODELOS_GEMINI = {}
 
 
-def _modelos_gemini():
+def _claves_gemini():
+    """Claves de Gemini por orden: GEMINI_API_KEY_2 (cuenta personal) primero y luego la de la Nutria. Cada una tiene su cupo."""
+    return [k for k in [os.environ.get('GEMINI_API_KEY_2'), os.environ.get('GEMINI_API_KEY')] if k]
+
+
+def _modelos_gemini(clave):
     """Modelos «flash» que la clave puede usar ahora mismo, del preferido al de reserva (cada uno tiene su propio cupo gratis)."""
-    global _MODELOS_GEMINI
-    if _MODELOS_GEMINI is not None:
-        return _MODELOS_GEMINI
+    if clave in _MODELOS_GEMINI:
+        return _MODELOS_GEMINI[clave]
     pref = [m for m in [os.environ.get('NUTRIA_MODELO'), 'gemini-3.8-flash', 'gemini-flash-latest',
                         'gemini-flash-lite-latest'] if m]
     hay = []
     try:
         r = requests.get('https://generativelanguage.googleapis.com/v1beta/models',
-                         params={'key': os.environ['GEMINI_API_KEY'], 'pageSize': 200}, timeout=30)
+                         params={'key': clave, 'pageSize': 200}, timeout=30)
         for m in r.json().get('models', []):
             n = m['name'].split('/')[-1]
             if 'generateContent' in m.get('supportedGenerationMethods', []) and 'flash' in n \
@@ -31,17 +35,17 @@ def _modelos_gemini():
     except Exception as e:
         print('  IA: no pude listar los modelos de Gemini:', repr(e)[:120], flush=True)
     hay.sort(key=lambda n: [int(x) if x.isdigit() else 0 for x in re.findall(r'\d+', n)], reverse=True)
-    _MODELOS_GEMINI = list(dict.fromkeys(pref + hay))[:8]
-    print('  IA: modelos Gemini en rotación:', ', '.join(_MODELOS_GEMINI), flush=True)
-    return _MODELOS_GEMINI
+    _MODELOS_GEMINI[clave] = list(dict.fromkeys(pref + hay))[:8]
+    print('  IA: modelos Gemini en rotación:', ', '.join(_MODELOS_GEMINI[clave]), flush=True)
+    return _MODELOS_GEMINI[clave]
 
 
 def _proveedores(mensajes, temperatura):
     rf = {'type': 'json_object'}
-    if os.environ.get('GEMINI_API_KEY'):
-        for m in _modelos_gemini():
-            yield (f'gemini:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-                   {'Authorization': f"Bearer {os.environ['GEMINI_API_KEY']}"},
+    for n, clave in enumerate(_claves_gemini(), 1):
+        for m in _modelos_gemini(clave):
+            yield (f'gemini{n}:{m}', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+                   {'Authorization': f"Bearer {clave}"},
                    {'model': m, 'messages': mensajes, 'temperature': temperatura, 'response_format': rf})
     if os.environ.get('GROQ_API_KEY'):
         yield ('groq', 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"},
