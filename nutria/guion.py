@@ -14,7 +14,7 @@ def llm(mensajes, temperatura=0.7):
     if os.environ.get('GEMINI_API_KEY'):
         url, cab = ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
                     {'Authorization': f"Bearer {os.environ['GEMINI_API_KEY']}"})
-        cuerpo = {'model': os.environ.get('NUTRIA_MODELO', 'gemini-2.5-flash'), 'messages': mensajes,
+        cuerpo = {'model': os.environ.get('NUTRIA_MODELO', 'gemini-3.8-flash'), 'messages': mensajes,
                   'temperature': temperatura, 'response_format': {'type': 'json_object'}}
     elif os.environ.get('GROQ_API_KEY'):
         url, cab = 'https://api.groq.com/openai/v1/chat/completions', {'Authorization': f"Bearer {os.environ['GROQ_API_KEY']}"}
@@ -37,6 +37,13 @@ def llm(mensajes, temperatura=0.7):
             else:
                 ultimo = f'{r.status_code} {r.text[:300]}'
                 print('  IA:', ultimo, flush=True)
+                # Google renombra modelos: si el aviso sugiere otro, se usa ese y se reintenta al momento
+                sug = re.search(r'use (?:models/)?([a-z0-9][a-z0-9.\-]+)', r.text)
+                if r.status_code == 404 and sug and cuerpo.get('model') != sug.group(1):
+                    cuerpo['model'] = sug.group(1); print('  IA: cambio de modelo a', sug.group(1), flush=True)
+                    continue
+                if r.status_code == 404 and cuerpo.get('model') != 'gemini-flash-latest' and 'generativelanguage' in url:
+                    cuerpo['model'] = 'gemini-flash-latest'; continue
         except (requests.RequestException, ValueError, KeyError) as e:
             ultimo = repr(e)
         time.sleep(min(60, 15 * (i + 1)))
