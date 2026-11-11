@@ -301,10 +301,15 @@ def nombre(e):
 
 
 def desde_idea(idea, semilla=None):
-    """Un sorteo construido a partir de una idea del banco (ChatGPT o Claude)."""
+    """Un sorteo construido a partir de una idea del banco (ChatGPT o Claude). Lo que la idea no trae, no se fuerza."""
     rng = random.Random(semilla) if semilla is not None else random.SystemRandom()
     base = sorteo(semilla)
-    return dict(base, elementos=[libre(e) for e in idea['elementos']][:3], concepto=idea['concepto'],
-                concepto_idea=idea.get('premisa', ''), formato=idea['formato'] if idea['formato'] in FORMATOS else base['formato'],
-                conflicto=idea.get('conflicto') or base['conflicto'], idea={k: idea.get(k, '') for k in ('titulo', 'premisa', 'chiste', 'giro', 'gancho')},
-                idea_clave=idea.get('clave'), idea_fuente=idea.get('fuente'), paleta=rng.randrange(8))
+    campos = ('titulo', 'premisa', 'chiste', 'giro', 'gancho', 'protagonista', 'desarrollo', 'audiovisual', 'genero', 'formato_texto')
+    s = dict(base, elementos=[libre(e) for e in idea.get('elementos') or []][:3], concepto=idea.get('concepto') or '',
+             concepto_idea=idea.get('premisa', ''), formato=idea.get('formato') if idea.get('formato') in FORMATOS else base['formato'],
+             conflicto=idea.get('conflicto') or idea.get('desarrollo') or base['conflicto'],
+             idea={k: idea.get(k, '') for k in campos}, idea_clave=idea.get('clave'), idea_fuente=idea.get('fuente'),
+             paleta=rng.randrange(8))
+    if idea.get('universo'):
+        s['contexto'] = idea['universo']
+    return s

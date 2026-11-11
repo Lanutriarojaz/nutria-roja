@@ -133,7 +133,12 @@ def _opcionales(s):
               "tú pones el diálogo, el ritmo y los recursos):"
               + (f"\n- Título provisional: {i['titulo']}" if i.get('titulo') else '')
               + f"\n- Premisa: {i.get('premisa', '')}\n- Chiste central: {i.get('chiste', '')}\n- Giro final: {i.get('giro', '')}"
-              + (f"\n- Gancho (primera frase): {i['gancho']}" if i.get('gancho') else ''))
+              + (f"\n- Gancho (primera frase): {i['gancho']}" if i.get('gancho') else '')
+              + (f"\n- Protagonista: {i['protagonista']}" if i.get('protagonista') else '')
+              + (f"\n- Desarrollo previsto: {i['desarrollo']}" if i.get('desarrollo') else '')
+              + (f"\n- Tono y género: {i['genero']}" if i.get('genero') else '')
+              + (f"\n- Formato original de la idea: {i['formato_texto']} (adáptalo al programa de tele indicado)" if i.get('formato_texto') else '')
+              + (f"\n- Imagen que tiene en la cabeza: {i['audiovisual']}" if i.get('audiovisual') else ''))
     if s.get('contexto'):
         t += f"\n- Universo donde pasa todo: {s['contexto']}"
     if s.get('fijo'):
@@ -144,13 +149,24 @@ def _opcionales(s):
     return t
 
 
+def _sin_sorteo(texto, s):
+    """Si la idea no trae objetos o concepto, se quitan esas exigencias del encargo."""
+    if not s['elementos']:
+        texto = re.sub(r'- Elementos cotidianos:.*', '- Elementos cotidianos: los que salgan de la idea (personajes con cualquier palabra)', texto)
+        texto = re.sub(r'Los tres elementos del sorteo tienen estos identificadores:.*?alguna escena\.', '', texto, flags=re.S)
+    if not s.get('concepto'):
+        texto = re.sub(r'- Concepto filosófico:.*', '- Concepto filosófico: el que ya lleva dentro la idea; no añadas otro', texto)
+    return texto
+
+
 def _pedir(s, extra=''):
     f = FORMATOS[s['formato']]
     usuario = PLANTILLA.format(
         elementos=', '.join(nombre(e) for e in s['elementos']), concepto=s['concepto'], idea=s['concepto_idea'],
         genero=f[0], plato=f[1], conflicto=s['conflicto'], opcionales=_opcionales(s), ids=', '.join(ELEMENTOS), ids_sorteo=', '.join(s['elementos']),
         voces=', '.join(f'{v} ({VOCES[v][3]})' for v in VOCES_PERSONAJE), efectos=', '.join(EFECTOS),
-        emociones=', '.join(EMOCIONES)) + extra
+        emociones=', '.join(EMOCIONES))
+    usuario = _sin_sorteo(usuario, s) + extra
     return llm([{'role': 'system', 'content': SISTEMA}, {'role': 'user', 'content': _ejemplo() + usuario}], temperatura=1.0, espera=300)
 
 
