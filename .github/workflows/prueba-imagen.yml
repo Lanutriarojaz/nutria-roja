@@ -1,4 +1,4 @@
-name: Prueba de imagen con Gemini
+name: Prueba de imagen (Cloudflare)
 
 on:
   workflow_dispatch:
@@ -13,10 +13,9 @@ jobs:
           python-version: '3.12'
       - run: pip install -q requests
       - env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
-          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
-        run: python tele/pruebas/imagen.py gemini-3.1-flash-image gemini-2.5-flash-image gemini-3-pro-image
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: python tele/pruebas/cloudflare.py
       - uses: actions/upload-artifact@v4
         with:
           name: imagenes
