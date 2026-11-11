@@ -26,6 +26,20 @@ def main():
     for s, fechas in cola.items():
         fechas.sort(); peor = max(peor, len(fechas))
         print(f"- {s}: {len(fechas)}/{LIMITE_COLA}  " + ', '.join(f'{f:%d/%m %H:%M}' for f in fechas))
+    print('\n## Buffer: últimas publicaciones con error o ya enviadas')
+    for estado in ('error', 'sent'):
+        try:
+            for o in gql('query { account { organizations { id } } }')['account']['organizations']:
+                d = gql('query($o: OrganizationId!, $s: [PostStatus!]) { posts(input: {organizationId: $o, filter: {status: $s}}, first: 12) '
+                        '{ edges { node { dueAt channelId error { message } } } } }', {'o': o['id'], 's': [estado]})
+                for e in d['posts']['edges'][:12]:
+                    n = e['node']
+                    if n.get('channelId') in ids:
+                        f = dt.datetime.fromisoformat(n['dueAt'].replace('Z', '+00:00')).astimezone(ZoneInfo('Europe/Madrid')) if n.get('dueAt') else None
+                        msg = ((n.get('error') or {}).get('message') or '')[:140]
+                        print(f"- {'❌' if estado == 'error' else '✅'} {ids[n['channelId']]} {f:%d/%m %H:%M}  {msg}" if f else f"- {estado} {ids[n['channelId']]}")
+        except Exception as ex:
+            print(f'- (no pude leer «{estado}»: {str(ex)[:150]})')
     faltan = [r for r in ('tiktok', 'youtube', 'instagram') if r not in chs]
     if faltan:
         print(f"- ⚠️ Canales desconectados o en pausa: {', '.join(faltan)}")
