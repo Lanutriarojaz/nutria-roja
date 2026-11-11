@@ -45,7 +45,8 @@ jobs:
 
       - name: Instalar ffmpeg y dependencias
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null && break; echo "apt falló (intento $i), reintento"; sleep 30; done
+          ffmpeg -version | head -1
           pip install -q -r requirements.txt
 
       - name: Generar los vídeos (con control de calidad)
