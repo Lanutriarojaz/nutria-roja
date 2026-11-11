@@ -13,8 +13,9 @@ import numpy as np
 from PIL import Image
 
 from nutria import calidad
-from . import audio, dibujo as D, ficha, guion
-from .catalogo import ELEMENTOS, FORMATOS, HISTORIAL, historial, sorteo
+from . import audio, cartoon as C, dibujo as D, ficha, guion
+from .catalogo import ELEMENTOS, FORMATOS, HISTORIAL, desde_idea, historial, sorteo
+from . import ideas as banco
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 FPS = 30
@@ -132,7 +133,7 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
     cab = D.cabecera(p, s['dimension'])
     carta = D.Carta(p, g['titulo'], FORMATOS[s['formato']][0].split(' ', 1)[1], s['dimension'])
     faldones = [D.faldon(e['rotulo'], p) for e in g['escenas']]
-    pers = {q['id']: dict(q, color=D.COLORES_VOZ[i % 5], fase=i * 1.9, cara=bool(ELEMENTOS[q['cuerpo']][2]), orden=i)
+    pers = {q['id']: dict(q, color=D.COLORES_VOZ[i % 5], fase=i * 1.9, ficha=C.criatura(q['nombre'], q['cuerpo']), orden=i)
             for i, q in enumerate(g['personajes'])}
     sellos = {i: D.sello(l['sello'], p['ac2']) for i, l in enumerate(lineas) if l['sello']}
     # quién está en el plató en cada escena, y en cuál entra por primera vez
@@ -206,6 +207,7 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
         cx = cam[0] + 7 * math.sin(t * 0.9) + (rng.normal() * 16 * golpe if golpe else 0)
         cy = cam[1] + 5 * math.sin(t * 1.3 + 1) + (rng.normal() * 16 * golpe if golpe else 0)
         esc = D.escenario(lejos, medio, cx)
+        D.vida(esc, t, p, s['semilla'], medio is not None)
         if e['prop']:
             D.prop(esc, e['prop'], p, t, t - inicios[ei] - 0.25)
         for i in sorted(ids, key=lambda i: i == quien):          # quien habla se dibuja el último, delante
@@ -224,8 +226,8 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
                 mira = (math.copysign(0.9, pos[quien] - pos[i]), 0.0) if quien in pos else (0, 0.2)
                 if golpe:
                     salto = math.sin(math.pi * (1 - golpe)) * tam * 0.12
-            D.personaje(esc, q['cuerpo'], x, tam * (1.06 if habla else 1.0), t, amp=float(env[f]) if habla else 0.0, emo=emo,
-                        mira=mira, habla=habla, color=q['color'], fase=q['fase'], con_cara=q['cara'], salto=salto)
+            C.dibujar(esc, q['ficha'], x, tam * (1.06 if habla else 1.0), t, amp=float(env[f]) if habla else 0.0, emo=emo,
+                      mira=mira, habla=habla, fase=q['fase'], salto=salto, color=q['color'])
         if modo == 'tension':
             D.penumbra(esc, (110, 0, 24), 0.35 + 0.3 * av + 0.12 * math.sin(t * 7))
         elif modo == 'silencio':
@@ -233,6 +235,7 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
         cw, ch = W / z, H / z
         x0 = min(max(cx - cw / 2, 0), W - cw); y0 = min(max(cy - ch / 2, 0), H - ch)
         esc = esc.resize((W, H), Image.BICUBIC, box=(x0, y0, x0 + cw, y0 + ch))
+        D.publico(esc, t, p, s['semilla'], bote=golpe)
         # ---- fallos de señal: al sintonizar, en cada cambio de escena y alguno suelto ----
         gl = max(0.0, 1 - t / 0.4)
         for tb in inicios[2:]:
@@ -284,7 +287,10 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
         dato = json.load(open(guion_fijo))
         s, g = dato['sorteo'], guion.validar(dato['guion'], dato['sorteo'])
     else:
-        s = sorteo(semilla)
+        pend = banco.pendientes()
+        s = desde_idea(pend[0], semilla) if pend else sorteo(semilla)
+        if pend:
+            print(f"▶ Idea de {pend[0]['fuente']}: {pend[0].get('titulo') or pend[0]['premisa'][:70]}", flush=True)
         print(f"▶ Sorteo: {', '.join(s['elementos'])} · {s['concepto']} · {s['formato']} · {s['conflicto']}", flush=True)
         g = guion.escribir(s)
     salida = os.path.join(carpeta, 'video.mp4')
@@ -320,6 +326,8 @@ def registrar(info):
     """Apunta el episodio en el historial (para no repetir) y guarda su ficha en el repositorio."""
     h = historial()
     s = info['sorteo']
+    if s.get('idea_clave'):
+        banco.gastar(s['idea_clave'])
     h.append({'fecha': info['fecha'], 'titulo': info['titulo'], 'elementos': s['elementos'], 'concepto': s['concepto'],
               'formato': s['formato'], 'conflicto': s['conflicto'], 'nota': info['guion'].get('nota')})
     json.dump(h, open(HISTORIAL, 'w'), ensure_ascii=False, indent=1)

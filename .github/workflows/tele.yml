@@ -9,6 +9,10 @@ on:
         description: 'Programar en Buffer'
         type: boolean
         default: false
+      guion:
+        description: 'Prueba sin IA: fichero de guion ya escrito (p. ej. tele/piloto.json). Vacío = sorteo normal'
+        required: false
+        default: ''
       hora:
         description: 'Hora de publicación en Madrid (HH:MM)'
         required: false
@@ -46,7 +50,9 @@ jobs:
           pip install -q -r requirements.txt
 
       - name: Sorteo, guion, animación y control de calidad
-        run: python -m tele.episodio --fecha "$(date +%F)" --registrar
+        run: |
+          if [ -n "${{ inputs.guion }}" ]; then python -m tele.episodio --fecha "$(date +%F)" --guion "${{ inputs.guion }}"
+          else python -m tele.episodio --fecha "$(date +%F)" --registrar; fi
 
       - name: Guardar el episodio para revisarlo (descargable 14 días)
         if: always()
@@ -91,7 +97,7 @@ jobs:
       - name: Apuntar el episodio (historial para no repetir + ficha)
         if: ${{ success() && (github.event_name == 'schedule' || inputs.publicar) }}
         run: |
-          git add tele/historial.json tele/episodios
+          git add tele/historial.json tele/episodios tele/ideas
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Tele-Dimensional $(date +%F)" || exit 0
           git pull -q --rebase && git push -q
 

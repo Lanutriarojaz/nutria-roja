@@ -313,6 +313,104 @@ MARGEN = 130                      # la capa lejana es más ancha que la pantalla
 CERRADOS = ('reality', 'debate', 'cocina', 'late', 'consultorio', 'deportes')   # platós con pared: tapan el cielo
 
 
+UNIVERSOS = ('cosmos', 'planeta', 'nave', 'laboratorio', 'piso')
+
+
+def _universo(L, p, rng, tipo):
+    """Lo que se ve detrás del plató: cambia con cada sorteo."""
+    x0, x1 = -MARGEN, W + MARGEN
+    if tipo == 'planeta':
+        L.elip(160, 470, 150, 150, osc(p['ac'], 0.9), TINTA, 6)
+        L.elip(160, 470, 150, 150, borde=TINTA, w=6)
+        L.d.arc([(160 - 260 + L.dx) * L.k, (470 - 50) * L.k, (160 + 260 + L.dx) * L.k, (470 + 50) * L.k], 160, 380, fill=p['ac2'], width=10 * L.k)
+        for (x, y, r) in ((880, 420, 46), (990, 520, 22)):
+            L.elip(x, y, r, r, LUZ, TINTA, 4)
+        pts = [(x0, HOR)]
+        x = x0
+        while x < x1:
+            pts.append((x, HOR - rng.uniform(140, 330))); x += rng.uniform(50, 110)
+        pts += [(x1, HOR - 200), (x1, HOR)]
+        L.poly(pts, osc(p['b'], 0.45))
+        x = x0 + 40
+        while x < x1 - 40:                                       # ciudad alienígena
+            an, al = rng.uniform(40, 90), rng.uniform(150, 380)
+            c = osc(p['a'], 1.6)
+            L.rect(x, HOR - al, x + an, HOR, fill=c, borde=TINTA, w=3)
+            if rng.random() < 0.5:
+                L.elip(x + an / 2, HOR - al, an * 0.6, an * 0.45, fill=c, borde=TINTA, w=3)
+            else:
+                L.linea([(x + an / 2, HOR - al), (x + an / 2, HOR - al - 50)], TINTA, 4); L.elip(x + an / 2, HOR - al - 54, 8, 8, fill=p['ac2'])
+            for yy in np.arange(HOR - al + 20, HOR - 20, 34):
+                if rng.random() < 0.6:
+                    L.elip(x + an / 2, yy, 6, 9, fill=p['ac2'])
+            x += an + rng.uniform(10, 50)
+    elif tipo == 'nave':
+        metal = osc(p['a'], 1.8) if sum(p['a']) < 200 else osc(p['a'], 0.8)
+        for (a, b, c, d) in ((x0, 340, x1, 420), (x0, 900, x1, HOR), (x0, 340, 60, HOR), (1020, 340, x1, HOR)):
+            L.rect(a, b, c, d, fill=metal)
+        for xx in (60, 380, 700, 1020):
+            L.rect(xx - 22, 400, xx + 22, 920, fill=osc(metal, 0.8), borde=TINTA, w=4)
+            for yy in range(430, 900, 60):
+                L.elip(xx, yy, 6, 6, fill=osc(metal, 1.3), borde=TINTA, w=2)
+        L.rect(60, 420, 1020, 900, borde=TINTA, w=8, r=30)
+        for i in range(int((x1 - x0) / 60) + 2):                  # franja de peligro
+            xa = x0 + i * 60
+            L.poly([(xa, 930), (xa + 30, 930), (xa + 10, 975), (xa - 20, 975)], (240, 200, 40) if i % 2 else TINTA)
+        for yy in (1010, 1050):
+            L.linea([(x0, yy), (x1, yy + 10)], osc(metal, 0.6), 18)
+    elif tipo == 'laboratorio':
+        base = mez(LUZ, p['ac'], 0.25)
+        L.rect(x0, 340, x1, HOR, fill=base)
+        for xx in range(int(x0), int(x1), 70):
+            L.linea([(xx, 340), (xx, HOR)], osc(base, 0.85), 3)
+        for yy in range(340, HOR, 70):
+            L.linea([(x0, yy), (x1, yy)], osc(base, 0.85), 3)
+        for xx in (90, 330, 750, 990):                              # tanques con bichos
+            L.rect(xx - 80, 440, xx + 80, 960, fill=mez(p['ac'], (40, 80, 40), 0.3) + (230,), borde=TINTA, w=6, r=40)
+            L.elip(xx, 700 + rng.uniform(-60, 60), 48, 70, fill=osc(p['ac'], 0.45))
+            L.elip(xx - 14, 680, 9, 9, fill=LUZ); L.elip(xx + 12, 672, 6, 6, fill=LUZ)
+            for _ in range(5):
+                L.elip(xx + rng.uniform(-50, 50), rng.uniform(470, 930), 8, 8, borde=LUZ, w=2)
+            L.rect(xx - 90, 420, xx + 90, 456, fill=osc(base, 0.6), borde=TINTA, w=5, r=8)
+            L.rect(xx - 90, 950, xx + 90, 990, fill=osc(base, 0.6), borde=TINTA, w=5, r=8)
+        L.linea([(x0, 380), (x1, 380)], (120, 120, 130), 22); L.linea([(x0, 380), (x1, 380)], TINTA, 3)
+    elif tipo == 'piso':
+        papel = mez(p['b'], LUZ, 0.45)
+        L.rect(x0, 340, x1, HOR, fill=papel)
+        for xx in range(int(x0), int(x1), 48):
+            L.rect(xx, 340, xx + 20, HOR, fill=osc(papel, 0.9))
+            for yy in range(370, HOR, 64):
+                L.elip(xx + 34, yy + (xx // 48 % 2) * 32, 6, 6, fill=osc(papel, 0.75))
+        for _ in range(5):                                          # manchas de humedad
+            L.elip(rng.uniform(x0, x1), rng.uniform(380, 700), rng.uniform(40, 110), rng.uniform(30, 80), fill=(110, 80, 40, 60))
+        L.rect(620, 440, 960, 760, fill=osc(p['a'], 0.8), borde=TINTA, w=10)          # ventana a la noche
+        L.elip(860, 520, 34, 34, fill=LUZ)
+        L.linea([(790, 440), (790, 760)], TINTA, 8); L.linea([(620, 600), (960, 600)], TINTA, 8)
+        L.poly([(150, 470), (430, 450), (440, 690), (160, 710)], (168, 105, 47), TINTA, 6)   # cuadro torcido
+        L.poly([(176, 495), (412, 478), (418, 668), (184, 684)], mez(p['ac'], LUZ, 0.3))
+        L.elip(300, 600, 70, 40, fill=osc(p['ac'], 0.6)); L.elip(360, 540, 24, 24, fill=p['ac2'])
+        L.linea([(540, 340), (540, 420)], TINTA, 4)
+        L.poly([(500, 420), (580, 420), (560, 380), (520, 380)], p['ac2'], TINTA, 4)
+        L.poly([(x1 - 120, 340), (x1, 340), (x1, 420)], osc(papel, 0.7), TINTA, 3)        # papel despegado
+
+
+def _mugre(L, p, rng):
+    """Suciedad, cables y basurilla en el suelo del plató."""
+    for _ in range(9):
+        x, y = rng.uniform(0, W), rng.uniform(HOR + 40, H - 80)
+        e = 0.4 + (y - HOR) / (H - HOR)
+        L.elip(x, y, rng.uniform(30, 90) * e, rng.uniform(10, 26) * e, fill=(60, 40, 20, int(rng.uniform(40, 80))))
+    for _ in range(2):
+        y0 = rng.uniform(HOR + 120, H - 150)
+        pts = [(-20, y0)]
+        for k in range(1, 8):
+            pts.append((k * W / 7, y0 + rng.uniform(-60, 60)))
+        L.linea(pts, TINTA, 9)
+    for _ in range(3):
+        x, y = rng.uniform(60, W - 60), rng.uniform(HOR + 300, H - 60)
+        L.poly([(x - 18, y), (x + 14, y - 12), (x + 22, y + 8), (x - 6, y + 16)], LUZ, TINTA, 3)
+
+
 def decorado(formato, p, rng):
     """Devuelve (capa lejana RGB, capa del plató RGBA o None). Si el plató tiene pared, va todo en una sola capa."""
     k = 2; WL = W + 2 * MARGEN
@@ -325,7 +423,10 @@ def decorado(formato, p, rng):
     for _ in range(190):
         r = rng.uniform(1, 3.4)
         L.elip(rng.uniform(-MARGEN, W + MARGEN), rng.uniform(0, HOR - 60), r, r, fill=(255, 255, 255, int(rng.uniform(90, 255))))
-    _imposibles(L, p, rng)
+    universo = UNIVERSOS[int(rng.integers(0, len(UNIVERSOS)))]
+    _universo(L, p, rng, universo)
+    if universo in ('cosmos', 'planeta'):
+        _imposibles(L, p, rng)
     medio = Image.new('RGBA', (W * k, H * k), (0, 0, 0, 0)); L = Lienzo(medio, k)
     PLATOS.get(formato, _documental)(L, p, rng)
     n = 9                                              # suelo de damero en perspectiva
@@ -335,6 +436,7 @@ def decorado(formato, p, rng):
         for j in range(-15, 15):
             L.poly([(X(j, ys[f]), ys[f]), (X(j + 1, ys[f]), ys[f]), (X(j + 1, ys[f + 1]), ys[f + 1]), (X(j, ys[f + 1]), ys[f + 1])],
                    p['s1'] if (j + f) % 2 == 0 else p['s2'])
+    _mugre(L, p, rng)
     L.linea([(0, HOR), (W, HOR)], TINTA, 8)
     for x0, x1 in ((120, 620), (960, 460)):            # focos
         L.poly([(x0 - 40, 0), (x0 + 40, 0), (x1 + 330, PIE + 40), (x1 - 330, PIE + 40)], (255, 255, 255, 20))
@@ -651,3 +753,64 @@ def interferencia(arr, g, rng):
             f = int(min(g, 1) * 150)
             arr[:] = ((arr.astype(np.uint16) * (256 - f) + ruido.astype(np.uint16) * f) >> 8).astype(np.uint8)
     return ((arr.astype(np.uint16) * _mascara()) >> 8).astype(np.uint8)
+
+
+# ---------- vida del plató (cada fotograma) ----------
+_VIDA = {}
+
+
+def _cabeza_publico(rng, color, borde):
+    k = 2; w, h = int(rng.uniform(150, 220)), int(rng.uniform(170, 240))
+    im = Image.new('RGBA', ((w + 60) * k, (h + 90) * k), (0, 0, 0, 0)); L = Lienzo(im, k)
+    cx, cy = (w + 60) / 2, h * 0.55 + 70
+    L.elip(cx, cy + h * 0.6, w * 0.75, h * 0.4, fill=color)                     # hombros
+    tipo = int(rng.integers(0, 5))
+    if tipo == 1:                                                               # antenas
+        for s in (-1, 1):
+            L.linea([(cx + s * w * 0.15, cy - h * 0.3), (cx + s * w * 0.3, cy - h * 0.62)], color, 6)
+            L.elip(cx + s * w * 0.3, cy - h * 0.62, 9, 9, fill=borde)
+    elif tipo == 2:                                                             # tupé
+        L.elip(cx + w * 0.1, cy - h * 0.38, w * 0.35, h * 0.16, fill=color)
+    elif tipo == 3:                                                             # cuernecillos
+        for s in (-1, 1):
+            L.poly([(cx + s * w * 0.18, cy - h * 0.3), (cx + s * w * 0.32, cy - h * 0.3), (cx + s * w * 0.32, cy - h * 0.6)], color)
+    L.elip(cx, cy, w / 2, h / 2 * (1.1 if tipo == 4 else 1), fill=color)
+    L.d.arc([(cx - w / 2) * k, (cy - h / 2) * k, (cx + w / 2) * k, (cy + h / 2) * k], 200, 300, fill=borde, width=4 * k)
+    return im.resize((w + 60, h + 90), Image.LANCZOS)
+
+
+def vida(esc, t, p, semilla, abierto):
+    """Bombillas que parpadean y, si se ve el cielo, algo que cruza flotando."""
+    d = ImageDraw.Draw(esc)
+    for i, y in enumerate(range(420, 1100, 56)):
+        for x in (16, W - 16):
+            on = (int(t * 5) + i + (x > 500)) % 3 != 0
+            d.ellipse([x - 10, y - 10, x + 10, y + 10], fill=p['ac2'] if on else osc(p['ac2'], 0.35), outline=TINTA, width=3)
+    if abierto:
+        clave = ('flota', semilla % 7)
+        if clave not in _VIDA:
+            nombre = ['ovni', 'cohete', 'planeta', 'ballena', 'pez', 'nube', 'cometa'][semilla % 7]
+            _VIDA[clave] = sprite(nombre)[0].resize((130, 130), Image.LANCZOS)
+        s = _VIDA[clave]
+        ciclo = 16.0
+        a = (t + semilla % 9) % ciclo / ciclo
+        x = int(-150 + a * (W + 300)); y = int(470 + math.sin(t * 1.3) * 40)
+        esc.paste(s, (x, y), s)
+
+
+def publico(im, t, p, semilla, bote=0.0):
+    """Cabezas del público en primer plano, abajo, como en un plató de verdad."""
+    clave = ('publico', semilla)
+    if clave not in _VIDA:
+        rng = np.random.default_rng(semilla)
+        cols = [osc(p['a'], 0.55), osc(p['s2'], 0.7), (24, 14, 34)]
+        cab = []
+        x = -40
+        while x < W + 40:
+            c = cols[int(rng.integers(0, 3))]
+            cab.append((x, rng.uniform(0, 6.28), _cabeza_publico(rng, c, p['ac'])))
+            x += rng.uniform(150, 210)
+        _VIDA[clave] = cab
+    for x, fase, s in _VIDA[clave]:
+        dy = math.sin(t * 2.2 + fase) * 4 - bote * abs(math.sin(t * 18 + fase)) * 40
+        im.paste(s, (int(x - s.size[0] / 2), int(H - s.size[1] * 0.5 + dy)), s)

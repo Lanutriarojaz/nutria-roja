@@ -6,7 +6,7 @@ import re
 
 from nutria.guion import llm
 from .audio import EFECTOS
-from .catalogo import ELEMENTOS, FORMATOS, VOCES
+from .catalogo import ELEMENTOS, FORMATOS, VOCES, libre, nombre
 
 EMOCIONES = ('neutral', 'enfado', 'sorpresa', 'miedo', 'risa', 'triste')
 VOCES_PERSONAJE = [v for v in VOCES if v not in ('locutor', 'presentador_canal')]
@@ -68,8 +68,10 @@ PLANTILLA = """SORTEO DE HOY (no lo cambies):
 - Programa de tele: {genero} (plató: {plato})
 - Conflicto: {conflicto}{opcionales}
 
-DIBUJOS DISPONIBLES para el campo "cuerpo" de cada personaje y para "prop" (usa el identificador exacto):
+CUERPOS DE LOS PERSONAJES: "cuerpo" puede ser un dibujo de esta lista (identificador exacto) o CUALQUIER otra palabra
+(una sola, en minúsculas: «patrocinador», «alienigena», «vecina»…), que se dibuja como criatura de cartoon:
 {ids}
+"prop" (objeto que se enseña flotando) solo puede ser uno de esa lista, o null.
 Los tres elementos del sorteo tienen estos identificadores: {ids_sorteo}. Cada uno debe aparecer como "cuerpo" de un personaje
 o como "prop" de alguna escena.
 
@@ -125,6 +127,13 @@ def _ejemplo():
 
 def _opcionales(s):
     t = ''
+    if s.get('idea'):
+        i = s['idea']
+        t += ("\n\nIDEA DE LA SEMANA (la ha pensado el jefe de ideas: desarróllala tal cual, respetando premisa, chiste y giro; "
+              "tú pones el diálogo, el ritmo y los recursos):"
+              + (f"\n- Título provisional: {i['titulo']}" if i.get('titulo') else '')
+              + f"\n- Premisa: {i.get('premisa', '')}\n- Chiste central: {i.get('chiste', '')}\n- Giro final: {i.get('giro', '')}"
+              + (f"\n- Gancho (primera frase): {i['gancho']}" if i.get('gancho') else ''))
     if s.get('contexto'):
         t += f"\n- Universo donde pasa todo: {s['contexto']}"
     if s.get('fijo'):
@@ -138,7 +147,7 @@ def _opcionales(s):
 def _pedir(s, extra=''):
     f = FORMATOS[s['formato']]
     usuario = PLANTILLA.format(
-        elementos=', '.join(ELEMENTOS[e][0] for e in s['elementos']), concepto=s['concepto'], idea=s['concepto_idea'],
+        elementos=', '.join(nombre(e) for e in s['elementos']), concepto=s['concepto'], idea=s['concepto_idea'],
         genero=f[0], plato=f[1], conflicto=s['conflicto'], opcionales=_opcionales(s), ids=', '.join(ELEMENTOS), ids_sorteo=', '.join(s['elementos']),
         voces=', '.join(f'{v} ({VOCES[v][3]})' for v in VOCES_PERSONAJE), efectos=', '.join(EFECTOS),
         emociones=', '.join(EMOCIONES)) + extra
@@ -164,12 +173,7 @@ def validar(g, s):
         if not p['id'] or p['id'] in ids or p['id'] == 'narrador' or not p.get('nombre'):
             raise ValueError('personaje sin id o repetido')
         ids.add(p['id'])
-        if p.get('cuerpo') not in ELEMENTOS:
-            usados = {q.get('cuerpo') for q in pers} | {e.get('prop') for e in g['escenas']}
-            libre = [x for x in s['elementos'] if x not in usados]
-            if not libre:
-                raise ValueError(f"cuerpo desconocido: {p.get('cuerpo')}")
-            p['cuerpo'] = libre[0]
+        p['cuerpo'] = libre(p.get('cuerpo') or p['nombre'])      # cualquier palabra vale: se dibuja como criatura
         if p.get('voz') not in VOCES_PERSONAJE or p['voz'] in vistos:
             p['voz'] = libres.pop(0)
         vistos.add(p['voz'])
@@ -182,7 +186,8 @@ def validar(g, s):
             raise ValueError('escena sin líneas o con demasiadas')
         e['sfx'] = e.get('sfx') if e.get('sfx') in EFECTOS else None
         e['musica'] = e.get('musica') if e.get('musica') in MUSICAS else 'normal'
-        e['prop'] = e.get('prop') if e.get('prop') in ELEMENTOS else None
+        e['prop'] = libre(e['prop']) if e.get('prop') else None
+        e['prop'] = e['prop'] if e['prop'] in ELEMENTOS else None
         e['rotulo'] = str(e.get('rotulo') or g['titulo'])[:44]
         for k in ('plano', 'prompt_visual', 'movimiento'):
             e[k] = str(e.get(k) or '')
@@ -234,7 +239,7 @@ def revisar(g, s):
         r = llm([
             {'role': 'system', 'content': 'Eres un jefe de guion de comedia muy exigente. Responde solo JSON.'},
             {'role': 'user', 'content': f"Serie de humor absurdo de ciencia ficción en vídeos de un minuto.\nElementos obligatorios: "
-             f"{', '.join(ELEMENTOS[e][0] for e in s['elementos'])}. Concepto: {s['concepto']} ({s['concepto_idea']}). "
+             f"{', '.join(nombre(e) for e in s['elementos'])}. Concepto: {s['concepto']} ({s['concepto_idea']}). "
              f"Programa: {FORMATOS[s['formato']][0]}.\n\nGUION:\n{texto}\n\nGiro: {g['giro']}\n\n"
              'Puntúa de 1 a 10, siendo duro. Lo primero: ¿alguien que no sabe nada entiende en el primer tercio quién quiere qué y '
              'qué se lo impide? Si no, la nota no pasa de 5. Después: ¿hay tensión que sube hasta el final?, ¿el diálogo suena a '

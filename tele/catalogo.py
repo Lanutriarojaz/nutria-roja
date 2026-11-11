@@ -3,6 +3,8 @@ conflictos y voces. El sorteo evita repetir lo usado en los últimos episodios."
 import json
 import os
 import random
+import re
+import unicodedata
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 HISTORIAL = os.path.join(AQUI, 'historial.json')
@@ -265,3 +267,44 @@ def sorteo(semilla=None):
     return {**extra, 'elementos': tres, 'concepto': c[0], 'concepto_idea': c[1], 'formato': rng.choice(formatos),
             'conflicto': rng.choice(conflictos), 'paleta': rng.randrange(8), 'dimension': f"{rng.choice('BDFGHJKLMNPQRTVXZ')}-{rng.randrange(100, 9999)}",
             'semilla': rng.randrange(1 << 30)}
+
+
+def _norma(t):
+    t = ''.join(c for c in unicodedata.normalize('NFD', str(t).lower()) if unicodedata.category(c) != 'Mn')
+    return re.sub(r'[^a-z0-9ñ]+', '_', t).strip('_')
+
+
+_ARTICULOS = re.compile(r'^(un|una|unos|unas|el|la|los|las)_')
+
+
+def buscar(palabra):
+    """Id del catálogo que corresponde a una palabra libre («Paraguas», «un limón»), o None."""
+    n = _norma(palabra)
+    if n in ELEMENTOS:
+        return n
+    n2 = _ARTICULOS.sub('', n)
+    for k, v in ELEMENTOS.items():
+        nombre = _ARTICULOS.sub('', _norma(v[0]))
+        if n2 in (k, nombre) or (len(n2) > 3 and nombre.startswith(n2)):
+            return k
+    return None
+
+
+def libre(palabra):
+    """Id para cualquier palabra: la del catálogo si existe, si no la palabra limpia (se dibuja como criatura)."""
+    return buscar(palabra) or _norma(palabra)[:24] or 'cosa'
+
+
+def nombre(e):
+    """Cómo se dice un elemento: «un limón» si está en el catálogo, la palabra tal cual si es libre."""
+    return ELEMENTOS[e][0] if e in ELEMENTOS else e.replace('_', ' ')
+
+
+def desde_idea(idea, semilla=None):
+    """Un sorteo construido a partir de una idea del banco (ChatGPT o Claude)."""
+    rng = random.Random(semilla) if semilla is not None else random.SystemRandom()
+    base = sorteo(semilla)
+    return dict(base, elementos=[libre(e) for e in idea['elementos']][:3], concepto=idea['concepto'],
+                concepto_idea=idea.get('premisa', ''), formato=idea['formato'] if idea['formato'] in FORMATOS else base['formato'],
+                conflicto=idea.get('conflicto') or base['conflicto'], idea={k: idea.get(k, '') for k in ('titulo', 'premisa', 'chiste', 'giro', 'gancho')},
+                idea_clave=idea.get('clave'), idea_fuente=idea.get('fuente'), paleta=rng.randrange(8))

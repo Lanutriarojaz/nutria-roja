@@ -1,5 +1,5 @@
 """La ficha de cada episodio, con los 15 apartados del formato de la serie."""
-from .catalogo import ELEMENTOS, FORMATOS, VOCES
+from .catalogo import ELEMENTOS, FORMATOS, VOCES, nombre
 from .guion import ESTILO_VISUAL
 
 FLUJO = """1. **Sorteo** (código propio): tres elementos, concepto, programa y conflicto al azar, sin repetir los recientes.
@@ -19,12 +19,12 @@ def escribir(info):
     pers = {p['id']: p for p in g['personajes']}
     L = [f"# {g['titulo']}", '', f"_Tele-Dimensional · {info['fecha']} · dimensión {s['dimension']} · {info['calidad']['duracion']} s_", '',
          '## 1. Título', g['titulo'], '',
-         '## 2. Elementos aleatorios', ', '.join(ELEMENTOS[e][0] for e in s['elementos']), '',
+         '## 2. Elementos aleatorios' + (f" (idea de {s['idea_fuente']})" if s.get('idea_fuente') else ''), ', '.join(nombre(e) for e in s['elementos']), '',
          '## 3. Concepto filosófico', f"{s['concepto']}: {s['concepto_idea']}.", '',
          '## 4. Programa', f"{FORMATOS[s['formato']][0].capitalize()}. Conflicto: {s['conflicto']}.", '',
          '## 5. Premisa', g['premisa'], '',
          '## 6. Personajes']
-    L += [f"- **{p['nombre']}** ({ELEMENTOS[p['cuerpo']][0]}): {p['personalidad']}" for p in g['personajes']]
+    L += [f"- **{p['nombre']}** ({nombre(p['cuerpo'])}): {p['personalidad']}" for p in g['personajes']]
     L += ['', '## 7. Guion']
     for i, e in enumerate(g['escenas'], 1):
         L += [f'### Escena {i}', f"- **Imagen:** {e['plano']}", f"- **Texto en pantalla:** {e['rotulo']}",
