@@ -1,0 +1,23 @@
+name: Prueba de imagen con Gemini
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prueba:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+        run: python tele/pruebas/imagen.py gemini-3.1-flash-image gemini-2.5-flash-image gemini-3-pro-image
+      - uses: actions/upload-artifact@v4
+        with:
+          name: imagenes
+          path: salida-img/
