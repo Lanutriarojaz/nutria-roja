@@ -86,9 +86,11 @@ Devuelve este JSON:
  "titulo": "título del episodio, con gracia, máximo 45 caracteres",
  "titulo_corto": "título para TikTok/Reels/Shorts, máximo 55 caracteres, que dé ganas de pulsar, como mucho 1 emoji",
  "premisa": "la premisa en dos frases",
- "personajes": [{{"id": "corto_sin_espacios", "nombre": "Nombre inventado", "cuerpo": "identificador de dibujo", "personalidad": "una frase, con su manera de hablar", "voz": "una de las voces"}}],
+ "personajes": [{{"id": "corto_sin_espacios", "nombre": "Nombre inventado", "cuerpo": "identificador de dibujo", "personalidad": "una frase, con su manera de hablar", "voz": "una de las voces",
+   "aspecto": "IN ENGLISH, 25-45 words: what this character looks like for an illustrator (species or object, body shape, face, clothes, colours, one memorable absurd detail). Make each character very different from the others"}}],
  "escenas": [
   {{"plano": "qué se ve y qué pasa en esta escena (una idea visual clara)",
+    "decorado": "IN ENGLISH, 25-50 words: the empty background set of this scene for an illustrator, faithful to the TV genre (a cooking show looks like a real cooking show set, a newscast like a news desk, a trial like a courtroom...) but twisted by the alternate universe. Reuse the same text in scenes that happen in the same place",
     "rotulo": "texto del faldón en pantalla, máximo 30 caracteres, que ayude a seguir la historia",
     "musica": "normal | tension | silencio | triunfo",
     "sfx": "efecto o null",
@@ -194,6 +196,7 @@ def validar(g, s):
             p['voz'] = libres.pop(0)
         vistos.add(p['voz'])
         p.setdefault('personalidad', '')
+        p['aspecto'] = str(p.get('aspecto') or '')[:400]
     esc = g['escenas']
     if not 3 <= len(esc) <= 6:
         raise ValueError(f'{len(esc)} escenas')
@@ -205,7 +208,7 @@ def validar(g, s):
         e['prop'] = libre(e['prop']) if e.get('prop') else None
         e['prop'] = e['prop'] if e['prop'] in ELEMENTOS else None
         e['rotulo'] = str(e.get('rotulo') or g['titulo'])[:44]
-        for k in ('plano', 'prompt_visual', 'movimiento'):
+        for k in ('plano', 'prompt_visual', 'movimiento', 'decorado'):
             e[k] = str(e.get(k) or '')
         for l in e['lineas']:
             l['quien'] = str(l.get('quien', '')).lower()

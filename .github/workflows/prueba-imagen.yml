@@ -2,6 +2,10 @@ name: Prueba de imagen (Cloudflare)
 
 on:
   workflow_dispatch:
+    inputs:
+      guion:
+        description: 'Guion del que generar decorados y personajes'
+        default: 'tele/piloto.json'
 
 jobs:
   prueba:
@@ -11,11 +15,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -q requests
+      - uses: actions/cache@v4
+        with:
+          path: ~/.u2net
+          key: u2net-isnet-anime
+      - run: pip install -q requests pillow numpy edge-tts "rembg[cpu]"
       - env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: python tele/pruebas/cloudflare.py
+        run: |
+          python -c "
+          import json, os, time
+          from tele import ia_imagen
+          d = json.load(open('${{ inputs.guion }}'))
+          t = time.time(); r = ia_imagen.preparar(d['guion'], d['sorteo'], 'salida-img')
+          print('decorados', len(set(r['decorados'])), 'personajes', list(r['personajes']), f'{time.time()-t:.0f} s')"
       - uses: actions/upload-artifact@v4
         with:
           name: imagenes

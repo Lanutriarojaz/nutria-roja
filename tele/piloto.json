@@ -1,84 +1,298 @@
 {
- "sorteo": {"elementos": ["mariquita", "fuego", "tirita"], "concepto": "el zombi filosófico",
-            "concepto_idea": "alguien que actúa igual que tú pero no siente nada por dentro: ¿cómo lo distingues?",
-            "formato": "documental", "conflicto": "hay que elegir a quién salvar antes de la publicidad",
-            "paleta": 2, "dimension": "H-1858", "semilla": 35339174},
+ "sorteo": {
+  "elementos": [
+   "mariquita",
+   "fuego",
+   "tirita"
+  ],
+  "concepto": "el zombi filosófico",
+  "concepto_idea": "alguien que actúa igual que tú pero no siente nada por dentro: ¿cómo lo distingues?",
+  "formato": "documental",
+  "conflicto": "hay que elegir a quién salvar antes de la publicidad",
+  "paleta": 2,
+  "dimension": "H-1858",
+  "semilla": 35339174
+ },
  "guion": {
   "resumen": "Una llama que se apaga y una mariquita sin un lunar quieren la última tirita, pero la tirita solo cura a quien sufre de verdad y no hay forma de mirar por dentro.",
   "titulo": "La última tirita de la sabana",
   "titulo_corto": "Solo queda una tirita. ¿A quién le duele de verdad? 🔥",
   "premisa": "En la sabana de la dimensión H-1858 solo queda una tirita, y por norma solo se pega a quien sufre de verdad. Una llama que se apaga y una mariquita que ha perdido un lunar dicen «ay» exactamente igual.",
   "personajes": [
-   {"id": "pirra", "nombre": "Pirra", "cuerpo": "fuego", "personalidad": "Llama dramática y nerviosa: grita, exagera y todo le parece el fin del mundo.", "voz": "aguda"},
-   {"id": "lunares", "nombre": "Doña Lunares", "cuerpo": "mariquita", "personalidad": "Mariquita mayor, seca y retranquera: habla poco, despacio, y siempre gana la discusión.", "voz": "anciana"},
-   {"id": "adhesio", "nombre": "Adhesio", "cuerpo": "tirita", "personalidad": "Tirita funcionaria de un solo uso: frases de ventanilla, cero emoción aparente.", "voz": "robot"}
+   {
+    "id": "pirra",
+    "nombre": "Pirra",
+    "cuerpo": "fuego",
+    "personalidad": "Llama dramática y nerviosa: grita, exagera y todo le parece el fin del mundo.",
+    "voz": "aguda",
+    "aspecto": "a small living flame creature with stubby arms and legs, huge panicked eyes, orange and yellow fire body flickering, wearing a tiny blue necktie, dramatic and nervous posture"
+   },
+   {
+    "id": "lunares",
+    "nombre": "Doña Lunares",
+    "cuerpo": "mariquita",
+    "personalidad": "Mariquita mayor, seca y retranquera: habla poco, despacio, y siempre gana la discusión.",
+    "voz": "anciana",
+    "aspecto": "an elderly ladybug lady standing upright, red shell with black spots like a coat, one spot visibly missing, pearl necklace, reading glasses on the tip of her nose, unimpressed expression"
+   },
+   {
+    "id": "adhesio",
+    "nombre": "Adhesio",
+    "cuerpo": "tirita",
+    "personalidad": "Tirita funcionaria de un solo uso: frases de ventanilla, cero emoción aparente.",
+    "voz": "robot",
+    "aspecto": "a tall anthropomorphic adhesive bandage with a bored bureaucrat face, beige plastic body with tiny holes, clip-on ID badge, clipboard in hand, short arms and legs"
+   }
   ],
   "escenas": [
-   {"plano": "Sabana alienígena al atardecer. Una llama con patas tiembla sola en el centro, cada vez más pequeña.",
-    "rotulo": "Fauna salvaje de H-1858", "musica": "normal", "sfx": "whoosh", "prop": null,
+   {
+    "plano": "Sabana alienígena al atardecer. Una llama con patas tiembla sola en el centro, cada vez más pequeña.",
+    "rotulo": "Fauna salvaje de H-1858",
+    "musica": "normal",
+    "sfx": "whoosh",
+    "prop": null,
     "lineas": [
-     {"quien": "narrador", "texto": "Esta llama dice que le duele. Nadie puede comprobarlo.", "emocion": "neutral"},
-     {"quien": "pirra", "texto": "¡Que me apago! ¡Que alguien haga algo!", "emocion": "miedo"}],
+     {
+      "quien": "narrador",
+      "texto": "Esta llama dice que le duele. Nadie puede comprobarlo.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "pirra",
+      "texto": "¡Que me apago! ¡Que alguien haga algo!",
+      "emocion": "miedo"
+     }
+    ],
     "prompt_visual": "Una pequeña llama con ojos enormes, brazos y patas finas, temblando sola en una sabana alienígena roja con un volcán y setas gigantes al fondo; plano general, luz de atardecer.",
-    "movimiento": "Travelling lento hacia la llama mientras parpadea y pierde chispas."},
-   {"plano": "Llegan dando saltitos una mariquita mayor y una tirita con cara de funcionario. Las tres frente a frente.",
-    "rotulo": "Solo queda UNA tirita", "musica": "normal", "sfx": "ding", "prop": null,
-    "presentes": ["pirra", "lunares", "adhesio"],
+    "movimiento": "Travelling lento hacia la llama mientras parpadea y pierde chispas.",
+    "decorado": "an alien red savanna at sunset with two suns, giant mushrooms, a smoking volcano in the distance, nature documentary look"
+   },
+   {
+    "plano": "Llegan dando saltitos una mariquita mayor y una tirita con cara de funcionario. Las tres frente a frente.",
+    "rotulo": "Solo queda UNA tirita",
+    "musica": "normal",
+    "sfx": "ding",
+    "prop": null,
+    "presentes": [
+     "pirra",
+     "lunares",
+     "adhesio"
+    ],
     "lineas": [
-     {"quien": "adhesio", "texto": "Buenas. Tirita de guardia. Me queda una.", "emocion": "neutral"},
-     {"quien": "lunares", "texto": "Pues yo he perdido un lunar. Y duele, ¿eh?", "emocion": "triste"},
-     {"quien": "pirra", "texto": "¿Un lunar? ¡Yo me estoy apagando!", "emocion": "enfado"},
-     {"quien": "adhesio", "texto": "Norma de la sabana: solo me pego a quien sufre de verdad.", "emocion": "neutral"},
-     {"quien": "pirra", "texto": "¡Pues yo! ¡Mírame la cara!", "emocion": "miedo"},
-     {"quien": "adhesio", "texto": "Ya. Ella pone la misma.", "emocion": "neutral"}],
+     {
+      "quien": "adhesio",
+      "texto": "Buenas. Tirita de guardia. Me queda una.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "lunares",
+      "texto": "Pues yo he perdido un lunar. Y duele, ¿eh?",
+      "emocion": "triste"
+     },
+     {
+      "quien": "pirra",
+      "texto": "¿Un lunar? ¡Yo me estoy apagando!",
+      "emocion": "enfado"
+     },
+     {
+      "quien": "adhesio",
+      "texto": "Norma de la sabana: solo me pego a quien sufre de verdad.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "pirra",
+      "texto": "¡Pues yo! ¡Mírame la cara!",
+      "emocion": "miedo"
+     },
+     {
+      "quien": "adhesio",
+      "texto": "Ya. Ella pone la misma.",
+      "emocion": "neutral"
+     }
+    ],
     "prompt_visual": "Una llama asustada, una mariquita mayor con cara de pocos amigos y una tirita con gesto de funcionario, frente a frente en la sabana alienígena; plano general frontal, luz dura.",
-    "movimiento": "La mariquita y la tirita entran a saltitos por los lados; la cámara va de una cara a otra."},
-   {"plano": "La tirita saca un termómetro gigante: el dolorímetro. Las dos pujan como en una subasta.",
-    "rotulo": "Dolorímetro oficial", "musica": "tension", "sfx": "redoble", "prop": "termometro",
-    "presentes": ["pirra", "lunares", "adhesio"],
+    "movimiento": "La mariquita y la tirita entran a saltitos por los lados; la cámara va de una cara a otra.",
+    "decorado": "an alien red savanna clearing with giant mushrooms and a smoking volcano, a lone first aid kit on a rock, nature documentary look"
+   },
+   {
+    "plano": "La tirita saca un termómetro gigante: el dolorímetro. Las dos pujan como en una subasta.",
+    "rotulo": "Dolorímetro oficial",
+    "musica": "tension",
+    "sfx": "redoble",
+    "prop": "termometro",
+    "presentes": [
+     "pirra",
+     "lunares",
+     "adhesio"
+    ],
     "lineas": [
-     {"quien": "adhesio", "texto": "Del uno al diez. ¿Cuánto os duele?", "emocion": "neutral"},
-     {"quien": "pirra", "texto": "¡Once!", "emocion": "enfado"},
-     {"quien": "lunares", "texto": "Doce.", "emocion": "neutral", "pausa": 0.5},
-     {"quien": "pirra", "texto": "¡El doce no existe!", "emocion": "enfado"},
-     {"quien": "lunares", "texto": "El once tampoco, bonita.", "emocion": "risa"}],
+     {
+      "quien": "adhesio",
+      "texto": "Del uno al diez. ¿Cuánto os duele?",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "pirra",
+      "texto": "¡Once!",
+      "emocion": "enfado"
+     },
+     {
+      "quien": "lunares",
+      "texto": "Doce.",
+      "emocion": "neutral",
+      "pausa": 0.5
+     },
+     {
+      "quien": "pirra",
+      "texto": "¡El doce no existe!",
+      "emocion": "enfado"
+     },
+     {
+      "quien": "lunares",
+      "texto": "El once tampoco, bonita.",
+      "emocion": "risa"
+     }
+    ],
     "prompt_visual": "Un termómetro gigante flotando en un destello dorado entre la llama, que grita con los brazos en alto, y la mariquita, impasible; plano medio, luces rojas de tensión.",
-    "movimiento": "El termómetro gira; cortes rápidos entre la llama y la mariquita en cada puja."},
-   {"plano": "Prueba definitiva: la tirita las pincha a las dos. Las dos dicen «ay». La llama se queda helada.",
-    "rotulo": "Prueba definitiva: el pinchazo", "musica": "tension", "sfx": "error", "prop": null,
-    "presentes": ["pirra", "lunares", "adhesio"],
+    "movimiento": "El termómetro gira; cortes rápidos entre la llama y la mariquita en cada puja.",
+    "decorado": "a makeshift field hospital tent in an alien savanna, cot, medical charts pinned to poles, giant mushrooms outside"
+   },
+   {
+    "plano": "Prueba definitiva: la tirita las pincha a las dos. Las dos dicen «ay». La llama se queda helada.",
+    "rotulo": "Prueba definitiva: el pinchazo",
+    "musica": "tension",
+    "sfx": "error",
+    "prop": null,
+    "presentes": [
+     "pirra",
+     "lunares",
+     "adhesio"
+    ],
     "lineas": [
-     {"quien": "adhesio", "texto": "Prueba definitiva. Pinchazo.", "emocion": "neutral"},
-     {"quien": "pirra", "texto": "¡Ay!", "emocion": "miedo"},
-     {"quien": "lunares", "texto": "Ay.", "emocion": "neutral"},
-     {"quien": "pirra", "texto": "Espera. ¿Tú dices ay porque te duele, o porque toca?", "emocion": "sorpresa", "golpe": true, "sello": "¿CÓMO?"},
-     {"quien": "lunares", "texto": "¿Y tú?", "emocion": "risa"},
-     {"quien": "pirra", "texto": "Pues ahora no lo sé.", "emocion": "miedo", "pausa": 0.7}],
+     {
+      "quien": "adhesio",
+      "texto": "Prueba definitiva. Pinchazo.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "pirra",
+      "texto": "¡Ay!",
+      "emocion": "miedo"
+     },
+     {
+      "quien": "lunares",
+      "texto": "Ay.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "pirra",
+      "texto": "Espera. ¿Tú dices ay porque te duele, o porque toca?",
+      "emocion": "sorpresa",
+      "golpe": true,
+      "sello": "¿CÓMO?"
+     },
+     {
+      "quien": "lunares",
+      "texto": "¿Y tú?",
+      "emocion": "risa"
+     },
+     {
+      "quien": "pirra",
+      "texto": "Pues ahora no lo sé.",
+      "emocion": "miedo",
+      "pausa": 0.7
+     }
+    ],
     "prompt_visual": "La llama mira horrorizada a la mariquita, que sonríe tranquila; la tirita entre ambas con una aguja; primer plano compartido, fondo de volcán humeante.",
-    "movimiento": "Zoom brusco a la cara de la llama; la mariquita sonríe sin moverse."},
-   {"plano": "Silencio. Cuenta atrás para la publicidad. La tirita decide.",
-    "rotulo": "Publicidad en diez segundos", "musica": "silencio", "sfx": "latido", "prop": null,
-    "presentes": ["pirra", "lunares", "adhesio"],
+    "movimiento": "Zoom brusco a la cara de la llama; la mariquita sonríe sin moverse.",
+    "decorado": "a makeshift field hospital tent in an alien savanna, cot, medical charts pinned to poles, giant mushrooms outside"
+   },
+   {
+    "plano": "Silencio. Cuenta atrás para la publicidad. La tirita decide.",
+    "rotulo": "Publicidad en diez segundos",
+    "musica": "silencio",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "pirra",
+     "lunares",
+     "adhesio"
+    ],
     "lineas": [
-     {"quien": "narrador", "texto": "Diez segundos para la publicidad.", "emocion": "neutral"},
-     {"quien": "adhesio", "texto": "Ya he decidido.", "emocion": "neutral", "pausa": 0.6},
-     {"quien": "pirra", "texto": "¿A quién?", "emocion": "miedo"},
-     {"quien": "adhesio", "texto": "A mí. Me pego a mí misma.", "emocion": "triste", "pausa": 0.9},
-     {"quien": "lunares", "texto": "¡Pero si tú no tienes herida!", "emocion": "enfado"},
-     {"quien": "adhesio", "texto": "Me duele por dentro. Demuéstrame que no.", "emocion": "neutral", "golpe": true, "sello": "DEMUÉSTRALO"}],
+     {
+      "quien": "narrador",
+      "texto": "Diez segundos para la publicidad.",
+      "emocion": "neutral"
+     },
+     {
+      "quien": "adhesio",
+      "texto": "Ya he decidido.",
+      "emocion": "neutral",
+      "pausa": 0.6
+     },
+     {
+      "quien": "pirra",
+      "texto": "¿A quién?",
+      "emocion": "miedo"
+     },
+     {
+      "quien": "adhesio",
+      "texto": "A mí. Me pego a mí misma.",
+      "emocion": "triste",
+      "pausa": 0.9
+     },
+     {
+      "quien": "lunares",
+      "texto": "¡Pero si tú no tienes herida!",
+      "emocion": "enfado"
+     },
+     {
+      "quien": "adhesio",
+      "texto": "Me duele por dentro. Demuéstrame que no.",
+      "emocion": "neutral",
+      "golpe": true,
+      "sello": "DEMUÉSTRALO"
+     }
+    ],
     "prompt_visual": "La tirita, sola en el centro con gesto triste, se pega a sí misma mientras la llama y la mariquita la miran boquiabiertas; luz casi apagada, solo un foco.",
-    "movimiento": "La imagen se oscurece y late; zoom lento a la tirita hasta el golpe."},
-   {"plano": "Los tres miran a cámara, quietos. La señal empieza a fallar y la tele se apaga.",
-    "rotulo": "¿Y a ti? ¿Te duele algo?", "musica": "normal", "sfx": "laser", "prop": null,
-    "presentes": ["pirra", "lunares", "adhesio"],
+    "movimiento": "La imagen se oscurece y late; zoom lento a la tirita hasta el golpe.",
+    "decorado": "an alien savanna at dusk under a red sky, a giant countdown clock floating in the air, dramatic spotlight on the ground"
+   },
+   {
+    "plano": "Los tres miran a cámara, quietos. La señal empieza a fallar y la tele se apaga.",
+    "rotulo": "¿Y a ti? ¿Te duele algo?",
+    "musica": "normal",
+    "sfx": "laser",
+    "prop": null,
+    "presentes": [
+     "pirra",
+     "lunares",
+     "adhesio"
+    ],
     "lineas": [
-     {"quien": "narrador", "texto": "Esta tirita dice que le duele. Nadie puede comprobarlo.", "emocion": "neutral", "pausa": 0.4, "golpe": true, "sello": "NADIE"}],
+     {
+      "quien": "narrador",
+      "texto": "Esta tirita dice que le duele. Nadie puede comprobarlo.",
+      "emocion": "neutral",
+      "pausa": 0.4,
+      "golpe": true,
+      "sello": "NADIE"
+     }
+    ],
     "prompt_visual": "La llama, la mariquita y la tirita (con una tirita pegada encima) mirando fijamente al espectador, inmóviles, con la sabana deshaciéndose en interferencias; plano frontal simétrico.",
-    "movimiento": "Zoom muy lento hacia los tres hasta que la imagen se apaga como una tele vieja."}
+    "movimiento": "Zoom muy lento hacia los tres hasta que la imagen se apaga como una tele vieja.",
+    "decorado": "an alien red savanna at night, glitching and dissolving into TV static at the edges, two moons"
+   }
   ],
   "giro": "La tirita, la que debía juzgar quién sufre de verdad, se queda la cura para sí misma alegando un dolor interior que nadie puede refutar.",
   "relacion": "Es el zombi filosófico: desde fuera, quien siente y quien solo actúa como si sintiera son idénticos. La tirita aprovecha justo eso, y la última frase repite la primera para que ya no te creas a nadie, tampoco a la llama.",
   "descripcion": "En la dimensión H-1858 solo queda una tirita, y dos heridas que dicen «ay» exactamente igual.\n¿Tú a quién se la habrías dado: a la que grita, a la que aguanta o a la tirita?",
-  "hashtags": ["#teledimensional", "#humorabsurdo", "#filosofia", "#cienciaficcion", "#animacion"]
+  "hashtags": [
+   "#teledimensional",
+   "#humorabsurdo",
+   "#filosofia",
+   "#cienciaficcion",
+   "#animacion"
+  ]
  }
 }
