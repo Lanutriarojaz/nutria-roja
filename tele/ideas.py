@@ -18,7 +18,6 @@ from .catalogo import FORMATOS
 AQUI = os.path.dirname(os.path.abspath(__file__))
 CARPETA = os.path.join(AQUI, 'ideas')
 USADAS = os.path.join(CARPETA, 'usadas.json')
-CAMPOS = ('elementos', 'concepto', 'formato', 'premisa', 'chiste', 'giro')
 
 PROMPT = """Eres el jefe de ideas de TELE-DIMENSIONAL, una serie de vídeos de un minuto (TikTok, Reels, Shorts) en español de España:
 un canal de televisión ficticio que emite desde universos alternativos. Humor absurdo y seco para adultos, ciencia ficción,
@@ -57,25 +56,46 @@ def _json(texto):
     return json.loads(t[a:b + 1])
 
 
+# palabras del «formato» libre de la IA → plató del motor
+_PLATOS = [('deport', 'deportes'), ('carrera', 'deportes'), ('partido', 'deportes'), ('concurso', 'concurso'), ('juicio', 'juicio'),
+           ('tribunal', 'juicio'), ('informativ', 'informativo'), ('noticia', 'informativo'), ('telediario', 'informativo'),
+           ('document', 'documental'), ('naturaleza', 'documental'), ('reality', 'reality'), ('convivencia', 'reality'),
+           ('cámara de seguridad', 'reality'), ('debate', 'debate'), ('parlamento', 'debate'), ('asamblea', 'debate'),
+           ('tertulia', 'debate'), ('cocina', 'cocina'), ('receta', 'cocina'), ('teletienda', 'teletienda'), ('anuncio', 'teletienda'),
+           ('venta', 'teletienda'), ('tutorial', 'teletienda'), ('influencer', 'teletienda'), ('tiempo', 'tiempo'), ('meteo', 'tiempo'),
+           ('entrevista', 'late'), ('late', 'late'), ('talk', 'late'), ('consultorio', 'consultorio'), ('vidente', 'consultorio'),
+           ('llamada', 'consultorio'), ('funeral', 'documental'), ('drama', 'reality')]
+
+
+def _plato(texto):
+    t = str(texto).strip().lower()
+    if t in FORMATOS:
+        return t
+    for clave, plato in _PLATOS:
+        if clave in t:
+            return plato
+    return next((k for k, v in FORMATOS.items() if k in t or t in v[0]), None)
+
+
 def limpiar(dato):
     ideas = dato.get('ideas', dato) if isinstance(dato, dict) else dato
     if not isinstance(ideas, list):
         raise ValueError('No hay una lista de ideas')
     buenas = []
     for i in ideas:
-        if not isinstance(i, dict) or any(not i.get(k) for k in CAMPOS):
+        if not isinstance(i, dict):
             continue
-        el = [str(e).strip().lower() for e in i['elementos'] if str(e).strip()][:3]
-        if len(el) < 3:
+        g = lambda *ks: next((str(i[k]).strip() for k in ks if i.get(k) and str(i[k]).strip()), '')
+        premisa, giro = g('premisa'), g('giro', 'final')
+        if not premisa or not giro:                      # sin premisa o sin final no hay episodio
             continue
-        f = str(i['formato']).strip().lower()
-        if f not in FORMATOS:      # admite el nombre largo («un juicio televisado») o parecido
-            f = next((k for k, v in FORMATOS.items() if k in f or f in v[0]), None)
-        if not f:
-            continue
-        buenas.append({'titulo': str(i.get('titulo', ''))[:80], 'elementos': el, 'concepto': str(i['concepto'])[:120],
-                       'formato': f, 'conflicto': str(i.get('conflicto', ''))[:200], 'premisa': str(i['premisa'])[:300],
-                       'chiste': str(i['chiste'])[:300], 'giro': str(i['giro'])[:300], 'gancho': str(i.get('gancho', ''))[:120]})
+        el = [str(e).strip().lower() for e in (i.get('elementos') or []) if str(e).strip()][:3]
+        buenas.append({
+            'titulo': g('titulo')[:80], 'elementos': el, 'concepto': g('concepto')[:120],
+            'formato': _plato(g('formato')) or '', 'formato_texto': g('formato')[:120], 'genero': g('genero')[:120],
+            'conflicto': g('conflicto')[:200], 'premisa': premisa[:300], 'chiste': g('chiste', 'humor')[:300],
+            'giro': giro[:300], 'gancho': g('gancho')[:200], 'protagonista': g('protagonista')[:200],
+            'universo': g('universo')[:300], 'desarrollo': g('desarrollo')[:600], 'audiovisual': g('audiovisual')[:300]})
     if len(buenas) < 3:
         raise ValueError(f'Solo {len(buenas)} ideas válidas')
     return buenas
@@ -86,6 +106,9 @@ def guardar(texto, fuente, fecha=None):
     os.makedirs(CARPETA, exist_ok=True)
     fecha = fecha or dt.date.today().isoformat()
     ruta = os.path.join(CARPETA, f'{fecha}-{fuente}.json')
+    n = 2
+    while os.path.exists(ruta):                      # nunca pisa una tanda anterior
+        ruta = os.path.join(CARPETA, f'{fecha}-{fuente}-{n}.json'); n += 1
     json.dump({'fuente': fuente, 'fecha': fecha, 'ideas': ideas}, open(ruta, 'w'), ensure_ascii=False, indent=1)
     return ruta, len(ideas)
 
