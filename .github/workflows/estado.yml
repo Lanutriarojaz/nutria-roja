@@ -1,0 +1,20 @@
+name: Estado (cuotas y colas)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * 0'        # cada domingo por la tarde, por si algo se acerca al límite
+
+jobs:
+  estado:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: Buffer y GitHub Pages
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python -m nutria.estado | tee -a "$GITHUB_STEP_SUMMARY"
