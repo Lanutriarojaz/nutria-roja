@@ -1,0 +1,22 @@
+name: Prueba de gestos (FLUX.2)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prueba:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests pillow
+      - env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: python tele/pruebas/gestos.py tele/pruebas/base/adhesio.png tele/pruebas/base/pirra.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gestos
+          path: salida-img/
