@@ -1,0 +1,46 @@
+name: Tele-Dimensional (recibir ideas)
+
+# El atajo del iPhone (ChatGPT) o la reserva (Claude) mandan aquí las ideas de la semana.
+on:
+  repository_dispatch:
+    types: [ideas]
+  workflow_dispatch:
+    inputs:
+      texto:
+        description: 'Respuesta de la IA con las ideas (JSON)'
+        required: true
+      fuente:
+        description: 'chatgpt o claude'
+        default: 'chatgpt'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: ideas
+
+jobs:
+  guardar:
+    runs-on: ubuntu-latest
+    env:
+      TEXTO: ${{ github.event.client_payload.texto || inputs.texto }}
+      FUENTE: ${{ github.event.client_payload.fuente || inputs.fuente || 'chatgpt' }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q edge-tts pillow requests numpy
+      - name: Guardar las ideas
+        run: |
+          case "$FUENTE" in chatgpt|claude) ;; *) FUENTE=otra ;; esac
+          printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
+          git add tele/ideas
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Ideas de la semana ($FUENTE)"
+          for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
+      - name: Aviso si las ideas no valían
+        if: failure()
+        run: |
+          gh issue create --title "💡 Las ideas de Tele-Dimensional no se han podido guardar" \
+            --body "Ha llegado una respuesta que no se ha podido leer. Esa semana el guion tirará del sorteo. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
