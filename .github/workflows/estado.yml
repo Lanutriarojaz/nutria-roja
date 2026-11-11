@@ -18,3 +18,14 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
         run: python -m nutria.estado | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Modelos de Gemini disponibles (texto e imagen)
+        env:
+          K1: ${{ secrets.GEMINI_API_KEY }}
+          K2: ${{ secrets.GEMINI_API_KEY_2 }}
+          K3: ${{ secrets.GEMINI_API_KEY_3 }}
+        run: |
+          for n in 1 2 3; do k=$(eval echo \$K$n); [ -z "$k" ] && continue
+            echo "### Clave $n" | tee -a "$GITHUB_STEP_SUMMARY"
+            curl -s "https://generativelanguage.googleapis.com/v1beta/models?pageSize=300&key=$k" \
+              | python -c "import json,sys; [print('-', m['name'].split('/')[-1], m.get('supportedGenerationMethods')) for m in json.load(sys.stdin).get('models',[]) if any(w in m['name'] for w in ('image','imagen','veo'))]" | tee -a "$GITHUB_STEP_SUMMARY"
+          done
