@@ -6,106 +6,106 @@
    "titulo": "El juicio de la última croqueta",
    "elementos": [
     "croqueta",
-    "tenedor",
-    "servilleta"
+    "táper",
+    "tenedor"
    ],
-   "concepto": "Paradoja sorites: el problema de los límites imprecisos",
+   "concepto": "Paradoja de Newcomb: elegir sabiendo que alguien ya ha predicho tu elección",
    "formato": "juicio",
-   "conflicto": "Determinar cuándo una croqueta deja de ser croqueta.",
-   "premisa": "Una croqueta quiere conservar su denominación de origen, pero cada mordisco obliga al tribunal a reconsiderar su identidad.",
-   "chiste": "El juez exige que el acusado permanezca entero mientras el fiscal se lo come para presentar pruebas y el abogado intenta reconstruirlo con una servilleta.",
-   "giro": "El tribunal declara que nunca existió una última croqueta porque nadie puede establecer en qué mordisco dejó de serlo; por tanto, el juicio tampoco ha terminado y el juez ordena traer otra.",
-   "gancho": "Hoy juzgamos una croqueta por dejar de ser croqueta."
+   "conflicto": "Un acusado debe decidir si comerse una croqueta que podría demostrar su inocencia.",
+   "premisa": "Un hombre quiere demostrar que no robó la última croqueta, pero el tribunal ya ha dictado sentencia basándose en lo que va a hacer durante el juicio.",
+   "chiste": "El juez le ofrece un tenedor y un táper cerrado, mientras el fiscal insiste en que cualquier decisión constituye una confesión anticipada.",
+   "giro": "El acusado decide no comer y el juez abre el táper: está vacío porque el tribunal predijo que, al declararse inocente, alguien tendría que haberse comido la prueba.",
+   "gancho": "Hoy juzgamos un robo que todavía no se ha cometido."
   },
   {
-   "titulo": "El concursante que ya había ganado",
+   "titulo": "El campeón mundial de quedarse quieto",
    "elementos": [
-    "despertador",
-    "calcetín",
+    "sofá",
+    "mando a distancia",
+    "calcetines"
+   ],
+   "concepto": "Paradoja de Zenón: el movimiento dividido en infinitas etapas",
+   "formato": "deportes",
+   "conflicto": "Un deportista necesita alcanzar el mando sin abandonar el sofá.",
+   "premisa": "Un atleta quiere batir el récord de coger el mando a distancia, pero el reglamento exige recorrer primero la mitad de cada distancia restante.",
+   "chiste": "Dos comentaristas retransmiten durante horas cómo un señor en calcetines acerca el brazo milimétricamente mientras el público celebra cada nueva mitad.",
+   "giro": "Cuando por fin parece tocar el mando, el árbitro anuncia que la competición jamás podrá terminar porque siempre quedará otra mitad por recorrer.",
+   "gancho": "Continúa la final olímpica de alcanzar el mando del sofá."
+  },
+  {
+   "titulo": "Alquiler de recuerdos de segunda mano",
+   "elementos": [
+    "cepillo de dientes",
+    "fotografía",
     "tostadora"
    ],
-   "concepto": "Eterno retorno: repetición infinita de una misma existencia",
-   "formato": "concurso",
-   "conflicto": "Escapar de un concurso que se reinicia después de cada victoria.",
-   "premisa": "Un concursante quiere llevarse el premio y volver a casa, pero cada vez que gana despierta en la primera prueba.",
-   "chiste": "El público aplaude con resignación mientras el presentador le exige identificar su calcetín, programar el despertador y sacar una tostada que lleva tres millones de temporadas quemándose.",
-   "giro": "Cuando decide perder deliberadamente, el presentador anuncia que esa era la única respuesta ganadora y que, como siempre, mañana volverán a empezar.",
-   "gancho": "Nuestro concursante lleva ganando este programa desde antes del universo."
+   "concepto": "Paradoja de la teletransportación: continuidad psicológica frente a identidad personal",
+   "formato": "teletienda",
+   "conflicto": "Una clienta quiere recuperar su infancia sin convertirse en otra persona.",
+   "premisa": "Una mujer quiere comprar recuerdos felices, pero cada recuerdo adquirido sustituye una parte de su personalidad original.",
+   "chiste": "El vendedor ofrece recuerdos premium de desayunos familiares y regala una tostadora que reconoce a sus antiguos propietarios mejor que ellos mismos.",
+   "giro": "La clienta compra todos los recuerdos y descubre en una fotografía que es una copia mental de la vendedora anterior, que ahora presenta el programa desde su cuerpo.",
+   "gancho": "Esta noche liquidamos infancias usadas con garantía de identidad."
   },
   {
-   "titulo": "Previsión de arrepentimientos",
+   "titulo": "La receta que cocina al cocinero",
+   "elementos": [
+    "huevo",
+    "sartén",
+    "delantal"
+   ],
+   "concepto": "Autopoiesis: sistemas que producen y mantienen su propia organización",
+   "formato": "cocina",
+   "conflicto": "Un chef intenta preparar un desayuno que se produce a sí mismo.",
+   "premisa": "Un cocinero quiere freír un huevo perfecto, pero la receta exige que todos sus ingredientes fabriquen al siguiente ingrediente, incluido el cocinero.",
+   "chiste": "El huevo fabrica una sartén, la sartén cose un delantal y el delantal empieza a dar órdenes al chef, que suspende por no estar suficientemente cocinado.",
+   "giro": "El delantal termina de fabricar al cocinero, que rompe un huevo para iniciar el programa: nunca hubo un primer chef, solo una cocina que se reproduce a sí misma.",
+   "gancho": "Hoy prepararemos un desayuno que contrata a su propio cocinero."
+  },
+  {
+   "titulo": "El pronóstico de ayer para mañana",
    "elementos": [
     "paraguas",
-    "café",
-    "zapatos"
+    "tendedero",
+    "maceta"
    ],
-   "concepto": "Contrafácticos y mundos posibles: realidades alternativas de decisiones no tomadas",
+   "concepto": "Causalidad inversa: acontecimientos futuros que influyen en el pasado",
    "formato": "tiempo",
-   "conflicto": "Evitar que las decisiones descartadas invadan la realidad.",
-   "premisa": "Una meteoróloga quiere ofrecer una previsión tranquila, pero los arrepentimientos de los ciudadanos están provocando tormentas entre universos.",
-   "chiste": "Se anuncian chubascos de cafés que nadie pidió, vientos de zapatos que nadie compró y paraguas obligatorios para protegerse de conversaciones que nunca ocurrieron.",
-   "giro": "La presentadora recomienda quedarse en casa para evitar decisiones equivocadas, pero inmediatamente aparece un frente devastador procedente de todas las vidas que habrían existido si hubieran salido.",
-   "gancho": "Mañana lloverán las decisiones que usted no tomó ayer."
+   "conflicto": "Una meteoróloga intenta impedir una tormenta que ya ha mojado el pasado.",
+   "premisa": "Una presentadora quiere anunciar un día soleado, pero cada pronóstico modifica retroactivamente el tiempo que hizo ayer.",
+   "chiste": "Cada vez que dice 'lluvia', aparecen paraguas mojados en el plató, la ropa del tendedero gotea y una maceta reclama daños por una sequía que todavía no se ha anunciado.",
+   "giro": "La presentadora decide no pronosticar nada, pero descubre que el silencio de mañana fue precisamente lo que provocó ayer la primera tormenta.",
+   "gancho": "Mañana lloverá tanto que ayer ya suspendimos la barbacoa."
   },
   {
-   "titulo": "Alquiler de conciencia por horas",
+   "titulo": "Gran Hermetismo: el concursante invisible",
    "elementos": [
     "espejo",
-    "cepillo de dientes",
-    "factura"
+    "almohada",
+    "cepillo de pelo"
    ],
-   "concepto": "Problema de las otras mentes: imposibilidad de verificar directamente la conciencia ajena",
-   "formato": "teletienda",
-   "conflicto": "Demostrar que una conciencia alquilada es auténtica.",
-   "premisa": "Un vendedor quiere comercializar conciencias de alquiler, pero los clientes exigen demostrar que realmente sienten algo.",
-   "chiste": "El presentador enseña una conciencia que se mira al espejo, se cepilla los dientes y protesta por una factura, mientras el público discute si está sufriendo o simplemente imitando a un adulto.",
-   "giro": "El vendedor ofrece una garantía de satisfacción, pero la conciencia recién alquilada pregunta cómo sabe el comprador que él mismo no es una demostración comercial.",
-   "gancho": "Desde hoy puede alquilar una conciencia sin aportar nómina."
-  },
-  {
-   "titulo": "El restaurante de los deseos cumplidos",
-   "elementos": [
-    "sopa",
-    "cuchara",
-    "salero"
-   ],
-   "concepto": "Máquina de experiencias: diferencia entre sentir satisfacción y vivir algo real",
-   "formato": "cocina",
-   "conflicto": "Servir felicidad perfecta sin preparar comida real.",
-   "premisa": "Un chef quiere conseguir la máxima satisfacción de sus comensales, pero su nueva receta elimina la necesidad de comer.",
-   "chiste": "El cocinero sirve un plato vacío, acerca una cuchara limpia a la boca del cliente y cobra 180 euros por el recuerdo implantado de la mejor sopa de su vida.",
-   "giro": "Cuando el cliente descubre que nunca ha comido, exige una sopa verdadera; el chef le ofrece sal para hacer más convincente el recuerdo, y el cliente acepta encantado.",
-   "gancho": "Hoy cocinamos la mejor sopa que jamás existirá."
-  },
-  {
-   "titulo": "Gran Hermano de las plantas inmortales",
-   "elementos": [
-    "cactus",
-    "regadera",
-    "calendario"
-   ],
-   "concepto": "Paradoja de la inmortalidad: el conflicto entre duración infinita y sentido de la existencia",
+   "concepto": "Problema de las otras mentes: imposibilidad de verificar directamente la experiencia consciente ajena",
    "formato": "reality",
-   "conflicto": "Eliminar a un concursante que no puede morir ni abandonar el programa.",
-   "premisa": "Un cactus inmortal quiere ser expulsado de un reality, pero su contrato exige que permanezca hasta el final de su vida.",
-   "chiste": "El cactus lleva cuarenta mil años nominado, recibe una regadera como castigo semanal y tacha los días de un calendario que ya ocupa tres continentes.",
-   "giro": "La productora anuncia que por fin ha encontrado cómo terminar su contrato: concederle la inmortalidad también al programa, de modo que el cactus acaba de convertirse en el primer concursante con permanencia garantizada.",
-   "gancho": "El concursante expulsado esta noche lleva cuarenta mil años esperando."
+   "conflicto": "Un concursante quiere demostrar que existe aunque nadie pueda observarlo.",
+   "premisa": "Un participante quiere ganar un reality de convivencia, pero sus compañeros creen que es un personaje inventado por la producción.",
+   "chiste": "El concursante duerme en una almohada, empaña el espejo y deja pelos en el cepillo, mientras el programa penaliza sus pruebas por falta de consentimiento del supuesto fantasma.",
+   "giro": "En la gala final, el presentador revela que el concursante era el único ser consciente y que todos los demás, incluido el público, eran simulaciones creadas para comprobar si podía demostrarlo.",
+   "gancho": "Esta semana expulsaremos al único concursante que asegura estar vivo."
   },
   {
-   "titulo": "Servicio técnico del libre albedrío",
+   "titulo": "Atención al cliente del destino",
    "elementos": [
-    "mando a distancia",
-    "pila",
-    "sofá"
+    "ticket de turno",
+    "plátano",
+    "reloj despertador"
    ],
-   "concepto": "Compatibilismo: posibilidad de actuar libremente dentro de un universo causalmente determinado",
+   "concepto": "Argumento perezoso: confundir un destino inevitable con la inutilidad de actuar",
    "formato": "consultorio",
-   "conflicto": "Reparar un mando que aparentemente decide por su propietario.",
-   "premisa": "Un espectador quiere recuperar el control de su vida, pero su mando a distancia cambia sus decisiones antes de que pueda tomarlas.",
-   "chiste": "El técnico le ordena cambiar las pilas y levantarse del sofá, pero cada instrucción aparece en la pantalla del mando cinco segundos antes de que el espectador decida obedecerla.",
-   "giro": "El técnico revela que el mando nunca ha controlado nada, solo predice lo que hará; el espectador decide tirarlo por la ventana y la pantalla muestra: 'Decisión libre prevista correctamente'.",
-   "gancho": "Su libre albedrío tiene las pilas gastadas."
+   "conflicto": "Un ciudadano quiere evitar un accidente predestinado sin realizar ningún esfuerzo.",
+   "premisa": "Un hombre quiere impedir que mañana resbale con un plátano, pero la oficina del destino le asegura que cualquier precaución ya está incluida en su expediente.",
+   "chiste": "El funcionario le entrega un ticket para recurrir el accidente, le recomienda poner el despertador y le cobra una tasa por cada intento de no levantarse de la cama.",
+   "giro": "El hombre decide quedarse dormido para desafiar al destino, pero al apagar el despertador pisa el plátano que él mismo había colocado junto a la cama para recordar que debía evitarlo.",
+   "gancho": "Su accidente de mañana ya está disponible para reclamaciones."
   }
  ]
 }
