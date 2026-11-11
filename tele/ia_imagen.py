@@ -41,8 +41,7 @@ def generar(prompt, ruta, semilla=0):
     ultimo = ''
     for intento in range(4):
         try:
-            r = requests.post(url, headers=cab, json={'prompt': prompt[:2000], 'steps': 8, 'seed': (semilla + intento * 7919) % 2**31},
-                              timeout=120)
+            r = requests.post(url, headers=cab, json={'prompt': prompt[:2000], 'steps': 8}, timeout=120)
             if r.status_code == 200:
                 if r.headers.get('content-type', '').startswith('image'):
                     datos = r.content
