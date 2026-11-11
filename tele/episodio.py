@@ -36,7 +36,6 @@ def _grupos(texto, palabras):
     return grupos
 
 
-CORT = 1.25          # lo que dura la cortinilla, justo después del gancho
 
 
 def _norma(w):
@@ -60,7 +59,15 @@ def sonido(g, s, carpeta, extra=0):
     lineas, inicios, cort, t, k = [], [], None, 0.45, 0
     for ei, e in enumerate(g['escenas']):
         if ei == 1:
-            c0 = lineas[-1]['t1'] + 0.28; cort = (c0, c0 + CORT); t = cort[1] + 0.4
+            c0 = lineas[-1]['t1'] + 0.28
+            genero = FORMATOS[s['formato']][0]
+            texto = f"Esto es Tele-Dimensional, la tele que emite desde otros universos. Hoy, desde la dimensión {s['dimension']}: {genero}."
+            x, palabras = audio.decir(texto, 'presentador_canal', carpeta, 99, extra)
+            v0 = c0 + 0.75                                   # primero suena la sintonía, luego habla
+            hoy = next((p[0] for p in palabras if p[2].lower().startswith('hoy')), len(x) / audio.SR * 0.55)
+            lema = next((p[0] for p in palabras if p[2].lower().startswith('la')), 1.2)
+            entrada = {'audio': x, 'v0': v0, 't_lema': v0 + lema - c0, 't_hoy': v0 + hoy - c0}
+            cort = (c0, v0 + len(x) / audio.SR + 0.55, entrada); t = cort[1] + 0.4
         elif ei > 1:
             t = lineas[-1]['t1'] + 0.6
         inicios.append(0.0 if ei == 0 else cort[1] if ei == 1 else t - 0.28)
@@ -83,6 +90,9 @@ def mezclar(g, lineas, inicios, cort, dur, rng, carpeta):
         audio.poner(voz, l['audio'], l['t0'])
     audio.poner(fx, audio.efecto('estatica', rng), 0, 0.45)
     audio.poner(fx, audio.efecto('cortinilla', rng), cort[0], 0.85)
+    audio.poner(voz, cort[2]['audio'], cort[2]['v0'])
+    audio.poner(fx, audio.efecto('golpe', rng), cort[0] + cort[2]['t_hoy'] - 0.03, 0.3)
+    audio.poner(fx, audio.efecto('cortinilla', rng), cort[1] - 0.95, 0.55)
     for ei, (e, t) in enumerate(zip(g['escenas'], inicios)):
         if ei > 1:
             audio.poner(fx, audio.efecto('estatica', rng)[:int(0.2 * audio.SR)], t - 0.1, 0.3)
@@ -93,7 +103,7 @@ def mezclar(g, lineas, inicios, cort, dur, rng, carpeta):
     audio.poner(fx, audio.efecto('apagado', rng), apagado, 0.8)
     # música: cada escena tiene su momento; se calla en la cortinilla y se agacha en los golpes
     tramos = [(inicios[i], inicios[i + 1] if i + 1 < len(inicios) else dur, e.get('musica') or 'normal') for i, e in enumerate(g['escenas'])]
-    tramos = [(cort[0], cort[1] + 0.1, 'mudo')] + tramos
+    tramos = [(cort[0], cort[2]['v0'], 'mudo'), (cort[2]['v0'], cort[1] - 0.95, 'triunfo'), (cort[1] - 0.95, cort[1] + 0.1, 'mudo')] + tramos
     m = audio.musica(dur, rng, tramos)[:n] * 0.115
     tt = np.arange(n) / audio.SR
     m *= np.clip(tt / 0.6, 0, 1) * np.clip((apagado - tt) / 0.8, 0, 1)
@@ -120,7 +130,7 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
     p = D.paleta(s['paleta'])
     lejos, medio = D.decorado(s['formato'], p, rng)
     cab = D.cabecera(p, s['dimension'])
-    carta = D.carta(p, g['titulo'], FORMATOS[s['formato']][0].split(' ', 1)[1])
+    carta = D.Carta(p, g['titulo'], FORMATOS[s['formato']][0].split(' ', 1)[1], s['dimension'])
     faldones = [D.faldon(e['rotulo'], p) for e in g['escenas']]
     pers = {q['id']: dict(q, color=D.COLORES_VOZ[i % 5], fase=i * 1.9, cara=bool(ELEMENTOS[q['cuerpo']][2]), orden=i)
             for i, q in enumerate(g['personajes'])}
@@ -153,11 +163,13 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida):
         t = f / FPS
         # ---- cortinilla ----
         if cort[0] <= t < cort[1]:
-            a = (t - cort[0]) / CORT
-            z = 1.22 - 0.22 * _suave(a / 0.22) + 0.03 * a
-            cw, ch = W / z, H / z
-            im = carta.resize((W, H), Image.BICUBIC, box=((W - cw) / 2, (H - ch) / 2, (W + cw) / 2, (H + ch) / 2))
-            gl = max(1 - a / 0.13, (a - 0.87) / 0.13, 0)
+            tc, largo = t - cort[0], cort[1] - cort[0]
+            im = carta.cuadro(tc, cort[2]['t_lema'], cort[2]['t_hoy'])
+            z = 1.0 + 0.035 * tc / largo + 0.06 * max(0.0, 1 - abs(tc - cort[2]['t_hoy']) / 0.18)
+            if z > 1.001:
+                cw, ch = W / z, H / z
+                im = im.resize((W, H), Image.BICUBIC, box=((W - cw) / 2, (H - ch) / 2, (W + cw) / 2, (H + ch) / 2))
+            gl = max(1 - tc / 0.2, 1 - (cort[1] - t) / 0.2, 0)
             ff.stdin.write(D.interferencia(np.array(im), gl, rng).tobytes())
             cam = None
             continue

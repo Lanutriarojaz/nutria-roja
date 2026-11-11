@@ -7,7 +7,7 @@ from .audio import EFECTOS
 from .catalogo import ELEMENTOS, FORMATOS, VOCES
 
 EMOCIONES = ('neutral', 'enfado', 'sorpresa', 'miedo', 'risa', 'triste')
-VOCES_PERSONAJE = [v for v in VOCES if v != 'locutor']
+VOCES_PERSONAJE = [v for v in VOCES if v not in ('locutor', 'presentador_canal')]
 
 ESTILO_VISUAL = ('animación 2D original de trazo grueso, ciencia ficción retro, plató de televisión interdimensional, colores '
                  'intensos y contrastados, personajes expresivos y ligeramente grotescos, interferencias de señal, decorado '

@@ -354,37 +354,76 @@ def escenario(lejos, medio, camx):
     return esc
 
 
-def carta(p, titulo, genero):
-    """La cortinilla: logo del canal y título del episodio."""
-    k = 2
-    im = Image.new('RGB', (W * k, H * k), p['a']); L = Lienzo(im, k)
-    cx, cy = 540, 800
-    for i in range(28):
-        a0, a1 = i / 28 * 2 * math.pi, (i + 1) / 28 * 2 * math.pi
-        L.poly([(cx, cy), (cx + math.cos(a0) * 2200, cy + math.sin(a0) * 2200), (cx + math.cos(a1) * 2200, cy + math.sin(a1) * 2200)],
-               p['b'] if i % 2 else osc(p['b'], 0.55))
-    L.pega('tele', 540, 470, 400)
-    L.poly([(-20, 700), (W + 20, 640), (W + 20, 900), (-20, 960)], TINTA)
-    im = im.resize((W, H), Image.LANCZOS); d = ImageDraw.Draw(im)
-    logo = Image.new('RGBA', (W, 260), (0, 0, 0, 0)); dl = ImageDraw.Draw(logo); f = fuente(150)
-    for dx, c in ((-9, (0, 240, 255, 255)), (9, (255, 40, 160, 255))):
-        dl.text((W / 2 + dx, 130), 'TELE-DIMENSIONAL', font=f, fill=c, anchor='mm')
-    dl.text((W / 2, 130), 'TELE-DIMENSIONAL', font=f, fill=(255, 255, 255, 255), anchor='mm')
-    logo = logo.rotate(3.2, resample=Image.BICUBIC)
-    im.paste(logo, (0, 670), logo)
-    d.rounded_rectangle([W / 2 - 330, 1010, W / 2 + 330, 1084], radius=22, fill=p['ac2'], outline=TINTA, width=6)
-    d.text((W / 2, 1047), f'HOY: {genero}'.upper()[:40], font=fuente(44), fill=TINTA, anchor='mm')
-    palabras, lineas, act = titulo.upper().split(), [], ''
-    f = fuente(98)
-    for w in palabras:
-        if d.textlength((act + ' ' + w).strip(), font=f) > 960 and act:
-            lineas.append(act); act = w
-        else:
-            act = (act + ' ' + w).strip()
-    lineas.append(act)
-    for i, l in enumerate(lineas[:3]):
-        d.text((W / 2, 1180 + i * 116), l, font=f, fill=LUZ, anchor='mm', stroke_width=10, stroke_fill=TINTA)
-    return im
+class Carta:
+    """La entradilla del canal, por capas: rayos que giran, logo, lema y, al final, el programa y el título de hoy."""
+
+    def __init__(self, p, titulo, genero, dimension):
+        k = 2; R = 1150
+        im = Image.new('RGBA', (2 * R * k, 2 * R * k), (0, 0, 0, 0)); L = Lienzo(im, k)
+        for i in range(28):
+            a0, a1 = i / 28 * 2 * math.pi, (i + 1) / 28 * 2 * math.pi
+            L.poly([(R, R), (R + math.cos(a0) * 2 * R, R + math.sin(a0) * 2 * R), (R + math.cos(a1) * 2 * R, R + math.sin(a1) * 2 * R)],
+                   p['b'] if i % 2 else osc(p['b'], 0.55))
+        self.rayos = im.resize((2 * R, 2 * R), Image.LANCZOS).convert('RGB'); self.R = R
+        # capa 1: tele y logo
+        c1 = Image.new('RGBA', (W, H), (0, 0, 0, 0)); L = Lienzo(c1, 1)
+        L.pega('tele', 540, 470, 400)
+        d = ImageDraw.Draw(c1)
+        d.polygon([(-20, 700), (W + 20, 640), (W + 20, 900), (-20, 960)], fill=TINTA + (255,))
+        logo = Image.new('RGBA', (W, 260), (0, 0, 0, 0)); dl = ImageDraw.Draw(logo); f = fuente(150)
+        for dx, c in ((-9, (0, 240, 255, 255)), (9, (255, 40, 160, 255))):
+            dl.text((W / 2 + dx, 130), 'TELE-DIMENSIONAL', font=f, fill=c, anchor='mm')
+        dl.text((W / 2, 130), 'TELE-DIMENSIONAL', font=f, fill=(255, 255, 255, 255), anchor='mm')
+        logo = logo.rotate(3.2, resample=Image.BICUBIC); c1.alpha_composite(logo, (0, 670))
+        self.c1 = c1
+        # capa 2: el lema
+        c2 = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(c2)
+        for i, l in enumerate(('LA TELE QUE EMITE', 'DESDE OTROS UNIVERSOS')):
+            d.text((W / 2, 1010 + i * 78), l, font=fuente(66), fill=p['ac2'] + (255,), anchor='mm', stroke_width=8, stroke_fill=TINTA + (255,))
+        self.c2 = c2
+        # capa 3: hoy, programa y título
+        c3 = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(c3)
+        d.rounded_rectangle([90, 1190, W - 90, 1290], radius=26, fill=p['ac'] + (255,), outline=TINTA + (255,), width=7)
+        t = f'HOY · {genero}'.upper(); ft = 52
+        while d.textlength(t, font=fuente(ft)) > W - 240 and ft > 30:
+            ft -= 2
+        d.text((W / 2, 1240), t, font=fuente(ft), fill=TINTA + (255,), anchor='mm')
+        d.text((W / 2, 1335), f'DESDE LA DIMENSIÓN {dimension}', font=fuente(40), fill=LUZ + (255,), anchor='mm', stroke_width=6, stroke_fill=TINTA + (255,))
+        f = fuente(104); lineas, act = [], ''
+        for w in titulo.upper().split():
+            if d.textlength((act + ' ' + w).strip(), font=f) > 960 and act:
+                lineas.append(act); act = w
+            else:
+                act = (act + ' ' + w).strip()
+        lineas.append(act)
+        for i, l in enumerate(lineas[:3]):
+            d.text((W / 2, 1460 + i * 122), l, font=f, fill=LUZ + (255,), anchor='mm', stroke_width=11, stroke_fill=TINTA + (255,))
+        self.c3 = c3
+
+    def cuadro(self, t, t_lema, t_hoy):
+        """Fotograma de la entradilla a los t segundos de empezar."""
+        R = self.R
+        r = self.rayos.rotate(t * 22, resample=Image.BILINEAR).crop((R - W // 2, R - 800 - 160, R + W // 2, R - 800 - 160 + H))
+        im = r.convert('RGBA')
+
+        def capa(c, t0, desde_abajo=False):
+            if t < t0:
+                return
+            a = 1 - (1 - min((t - t0) / 0.22, 1)) ** 3
+            if desde_abajo:
+                im.alpha_composite(c, (0, int((1 - a) * 260))) if a < 1 else im.alpha_composite(c)
+            else:
+                k = 1.6 - 0.6 * a
+                if k > 1.001:
+                    cc = c.resize((int(W * k), int(H * k)), Image.BILINEAR)
+                    im.alpha_composite(cc.crop((int((cc.size[0] - W) / 2), int((cc.size[1] - H) / 2) - int(800 * (k - 1)),
+                                                int((cc.size[0] + W) / 2), int((cc.size[1] + H) / 2) - int(800 * (k - 1)))))
+                else:
+                    im.alpha_composite(c)
+        capa(self.c1, 0.0)
+        capa(self.c2, t_lema, True)
+        capa(self.c3, t_hoy, True)
+        return im.convert('RGB')
 
 
 def sello(texto, color):

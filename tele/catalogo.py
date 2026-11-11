@@ -211,6 +211,7 @@ CONFLICTOS = [
 # preset: (voz de edge-tts, velocidad, tono, descripción para la ficha)
 VOCES = {
     'locutor': ('es-ES-AlvaroNeural', '+14%', '-6Hz', 'locutor de continuidad, grave y solemne'),
+    'presentador_canal': ('es-ES-AlvaroNeural', '+4%', '-10Hz', 'voz del canal, grave y épica'),
     'grave': ('es-MX-JorgeNeural', '+6%', '-22Hz', 'voz grave y lenta, de autoridad cansada'),
     'aguda': ('es-ES-ElviraNeural', '+16%', '+28Hz', 'voz aguda y acelerada, nerviosa'),
     'presentadora': ('es-ES-XimenaNeural', '+12%', '+4Hz', 'presentadora de tele, sonrisa de plástico'),
