@@ -40,7 +40,8 @@ def canales():
 
 
 def ya_programados(chs):
-    """(canal, día) que ya tienen un vídeo en cola, para no duplicar si se relanza la tirada."""
+    """(canal, día, hora) que ya tienen un vídeo en cola, para no duplicar si se relanza la tirada.
+    La hora distingue estos vídeos de los de Tele-Dimensional, que salen el mismo día a otra hora."""
     hechos = set()
     try:
         orgs = gql('query { account { organizations { id } } }')['account']['organizations']
@@ -52,7 +53,8 @@ def ya_programados(chs):
                 n = e['node']
                 if n.get('dueAt') and n.get('channelId') in ids:
                     dia = dt.datetime.fromisoformat(n['dueAt'].replace('Z', '+00:00')).astimezone(ZoneInfo('Europe/Madrid')).date()
-                    hechos.add((n['channelId'], dia.isoformat()))
+                    local = dt.datetime.fromisoformat(n['dueAt'].replace('Z', '+00:00')).astimezone(ZoneInfo('Europe/Madrid'))
+                    hechos.add((n['channelId'], dia.isoformat(), f'{local:%H:%M}'))
     except Exception as e:
         print(f'⚠️ No pude leer la cola de Buffer ({str(e)[:120]}); sigo sin comprobar duplicados')
     return hechos
@@ -99,7 +101,7 @@ def main():
         url = f"{base}/{v['fecha']}.mp4"
         texto = v['descripcion']
         for servicio, c in chs.items():
-            if (c['id'], v['fecha']) in en_cola:
+            if (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') in en_cola:
                 print(f"⏭ {v['fecha']} {servicio}: ya había un vídeo en cola ese día"); continue
             entrada = {'channelId': c['id'], 'text': texto, 'schedulingType': 'automatic', 'mode': 'customScheduled',
                        'dueAt': cuando.astimezone(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
