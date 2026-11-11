@@ -208,6 +208,14 @@ CONFLICTOS = [
     'el jurado tiene que juzgarse a sí mismo', 'falta un ingrediente que nadie sabe nombrar',
 ]
 
+# PUERTAS ABIERTAS (vacías = no se usan). Ver tele/COMO-EDITAR.md
+# Universos o contextos donde puede pasar el episodio: «una dimensión donde el tiempo va hacia atrás», …
+CONTEXTOS = []
+# Personajes que pueden repetir: {'nombre': 'Nutria Roja', 'cuerpo': 'nutria', 'voz': 'presentadora',
+#                                  'personalidad': 'presentadora del canal, sarcástica'}
+PERSONAJES_FIJOS = []
+PROB_FIJO = 0.5          # probabilidad de que salga uno de los personajes fijos en un episodio
+
 # preset: (voz de edge-tts, velocidad, tono, descripción para la ficha)
 VOCES = {
     'locutor': ('es-ES-AlvaroNeural', '+14%', '-6Hz', 'locutor de continuidad, grave y solemne'),
@@ -249,6 +257,11 @@ def sorteo(semilla=None):
     formatos = [f for f in FORMATOS if f not in fo_rec] or list(FORMATOS)
     conflictos = [c for c in CONFLICTOS if c not in cf_rec] or CONFLICTOS
     c = rng.choice(conceptos)
-    return {'elementos': tres, 'concepto': c[0], 'concepto_idea': c[1], 'formato': rng.choice(formatos),
+    extra = {}
+    if CONTEXTOS:
+        extra['contexto'] = rng.choice(CONTEXTOS)
+    if PERSONAJES_FIJOS and rng.random() < PROB_FIJO:
+        extra['fijo'] = rng.choice(PERSONAJES_FIJOS)
+    return {**extra, 'elementos': tres, 'concepto': c[0], 'concepto_idea': c[1], 'formato': rng.choice(formatos),
             'conflicto': rng.choice(conflictos), 'paleta': rng.randrange(8), 'dimension': f"{rng.choice('BDFGHJKLMNPQRTVXZ')}-{rng.randrange(100, 9999)}",
             'semilla': rng.randrange(1 << 30)}

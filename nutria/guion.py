@@ -69,7 +69,7 @@ def _proveedores(mensajes, temperatura, rol='escribir'):
 _AGOTADOS = set()   # modelos que ya han dicho «sin cupo» en esta ejecución
 
 
-def llm(mensajes, temperatura=0.7, rol='escribir'):
+def llm(mensajes, temperatura=0.7, rol='escribir', espera=120):
     """Prueba los modelos gratuitos por turnos: si uno está saturado (503), sin cupo (429) o retirado (404),
     pasa al siguiente al momento. Hasta 3 vueltas completas con pausas crecientes."""
     ultimo = None
@@ -78,7 +78,7 @@ def llm(mensajes, temperatura=0.7, rol='escribir'):
             if nombre in _AGOTADOS:
                 continue
             try:
-                r = requests.post(url, json=cuerpo, headers=cab, timeout=120)
+                r = requests.post(url, json=cuerpo, headers=cab, timeout=espera)
                 if r.status_code == 200:
                     try:
                         t = r.json()['choices'][0]['message']['content']

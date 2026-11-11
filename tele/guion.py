@@ -1,5 +1,7 @@
 """El guionista de Tele-Dimensional: una IA gratuita escribe el episodio a partir del sorteo, otra lo puntúa y,
 si flojea, se reescribe una vez. Todo se valida antes de dibujar nada."""
+import json
+import os
 import re
 
 from nutria.guion import llm
@@ -64,7 +66,7 @@ PLANTILLA = """SORTEO DE HOY (no lo cambies):
 - Elementos cotidianos: {elementos}
 - Concepto filosófico: {concepto} — {idea}
 - Programa de tele: {genero} (plató: {plato})
-- Conflicto: {conflicto}
+- Conflicto: {conflicto}{opcionales}
 
 DIBUJOS DISPONIBLES para el campo "cuerpo" de cada personaje y para "prop" (usa el identificador exacto):
 {ids}
@@ -103,14 +105,44 @@ LÍMITES: 2 o 3 personajes; 5 o 6 escenas; de 1 a 6 líneas por escena; de 16 a 
 de diálogo en total. La primera línea de la primera escena es el gancho. La última línea lleva "golpe": true."""
 
 
+def _ejemplo():
+    """El guion del piloto, en corto, como muestra de ritmo, longitud y diálogo."""
+    try:
+        d = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'piloto.json')))['guion']
+    except (OSError, ValueError, KeyError):
+        return ''
+    nombres = {p['id']: p['nombre'] for p in d['personajes']}
+    L = [f"EJEMPLO DEL NIVEL QUE SE ESPERA (es OTRO sorteo: no copies la historia, fíjate en el ritmo, la longitud, "
+         f"cómo se plantea el problema y cómo se contestan). «{d['titulo']}». Resumen: {d['resumen']}"]
+    for i, e in enumerate(d['escenas'], 1):
+        L.append(f"Escena {i} (música {e.get('musica', 'normal')}):")
+        for l in e['lineas']:
+            marca = (f" [pausa {l['pausa']}]" if l.get('pausa') else '') + (f" [GOLPE «{l['sello']}»]" if l.get('golpe') else '')
+            L.append(f"  {nombres.get(l['quien'], 'Narrador')}{marca}: {l['texto']}")
+    L.append(f"Giro: {d['giro']}")
+    return '\n'.join(L) + '\n\n'
+
+
+def _opcionales(s):
+    t = ''
+    if s.get('contexto'):
+        t += f"\n- Universo donde pasa todo: {s['contexto']}"
+    if s.get('fijo'):
+        q = s['fijo']
+        t += (f"\n- Personaje fijo de la serie que DEBE salir (con este mismo id, nombre, cuerpo y voz): "
+              f"id \"{q.get('id', q['nombre'].split()[0].lower())}\", nombre \"{q['nombre']}\", cuerpo \"{q['cuerpo']}\", "
+              f"voz \"{q.get('voz', '')}\". Personalidad: {q.get('personalidad', '')}")
+    return t
+
+
 def _pedir(s, extra=''):
     f = FORMATOS[s['formato']]
     usuario = PLANTILLA.format(
         elementos=', '.join(ELEMENTOS[e][0] for e in s['elementos']), concepto=s['concepto'], idea=s['concepto_idea'],
-        genero=f[0], plato=f[1], conflicto=s['conflicto'], ids=', '.join(ELEMENTOS), ids_sorteo=', '.join(s['elementos']),
+        genero=f[0], plato=f[1], conflicto=s['conflicto'], opcionales=_opcionales(s), ids=', '.join(ELEMENTOS), ids_sorteo=', '.join(s['elementos']),
         voces=', '.join(f'{v} ({VOCES[v][3]})' for v in VOCES_PERSONAJE), efectos=', '.join(EFECTOS),
         emociones=', '.join(EMOCIONES)) + extra
-    return llm([{'role': 'system', 'content': SISTEMA}, {'role': 'user', 'content': usuario}], temperatura=1.0)
+    return llm([{'role': 'system', 'content': SISTEMA}, {'role': 'user', 'content': _ejemplo() + usuario}], temperatura=1.0, espera=300)
 
 
 def _palabras(g):
@@ -133,7 +165,11 @@ def validar(g, s):
             raise ValueError('personaje sin id o repetido')
         ids.add(p['id'])
         if p.get('cuerpo') not in ELEMENTOS:
-            raise ValueError(f"cuerpo desconocido: {p.get('cuerpo')}")
+            usados = {q.get('cuerpo') for q in pers} | {e.get('prop') for e in g['escenas']}
+            libre = [x for x in s['elementos'] if x not in usados]
+            if not libre:
+                raise ValueError(f"cuerpo desconocido: {p.get('cuerpo')}")
+            p['cuerpo'] = libre[0]
         if p.get('voz') not in VOCES_PERSONAJE or p['voz'] in vistos:
             p['voz'] = libres.pop(0)
         vistos.add(p['voz'])
@@ -215,7 +251,7 @@ def revisar(g, s):
 def escribir(s):
     errores, mejor = [], None
     extra = ''
-    for intento in range(4):
+    for intento in range(5):
         try:
             g = validar(_pedir(s, extra), s)
         except (ValueError, KeyError, TypeError, AttributeError) as e:
@@ -226,7 +262,7 @@ def escribir(s):
         g['nota'] = nota
         if mejor is None or nota > mejor['nota']:
             mejor = g
-        if nota >= 7.5 or intento >= 2:
+        if nota >= 7.5:
             break
         extra = ('\n\nUn jefe de guion ha leído tu versión anterior y pide arreglar esto:\n- ' + '\n- '.join(fallos) +
                  '\nEscribe una versión nueva y mejor (puedes cambiar la historia entera).')

@@ -1,5 +1,5 @@
 """Programa el episodio del día en Buffer (TikTok, YouTube Shorts, Instagram Reels).
-Uso: BUFFER_API_KEY=... MEDIA_BASE=https://<usuario>.github.io/<repo> python -m tele.publicar salida-tele/tirada.json [--hora 21:30] [--prueba]"""
+Uso: BUFFER_API_KEY=... MEDIA_BASE=https://<usuario>.github.io/<repo> python -m tele.publicar salida-tele/tirada.json [--hora 13:00] [--prueba]"""
 import argparse
 import datetime as dt
 import json
@@ -40,7 +40,7 @@ def metadatos(servicio, v):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('tirada')
-    ap.add_argument('--hora', default=os.environ.get('TELE_HORA', '21:30'))
+    ap.add_argument('--hora', default=os.environ.get('TELE_HORA', '13:00'))
     ap.add_argument('--prueba', action='store_true')
     a = ap.parse_args()
     v = json.load(open(a.tirada))[0]

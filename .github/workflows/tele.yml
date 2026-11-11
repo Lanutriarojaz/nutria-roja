@@ -1,9 +1,8 @@
 name: Tele-Dimensional (episodio diario)
 
 on:
-  # Aún sin activar: cuando Álvaro dé el visto bueno, se añade
-  #   schedule:
-  #     - cron: '20 9 * * *'     # cada día 10:20 en Madrid (invierno); se publica a las 21:30
+  schedule:
+    - cron: '0 9 * * *'        # se prepara a las 10:00 de Madrid (11:00 en verano) y se publica a las 13:00
   workflow_dispatch:
     inputs:
       publicar:
@@ -13,7 +12,7 @@ on:
       hora:
         description: 'Hora de publicación en Madrid (HH:MM)'
         required: false
-        default: '21:30'
+        default: '13:00'
 
 permissions:
   contents: write
@@ -24,7 +23,7 @@ concurrency: tirada          # nunca a la vez que la tirada semanal: las dos esc
 jobs:
   episodio:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,7 +86,7 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           MEDIA_BASE: ${{ env.PAGES }}
-        run: python -m tele.publicar salida-tele/tirada.json --hora "${{ inputs.hora || '21:30' }}"
+        run: python -m tele.publicar salida-tele/tirada.json --hora "${{ inputs.hora || '13:00' }}"
 
       - name: Apuntar el episodio (historial para no repetir + ficha)
         if: ${{ success() && (github.event_name == 'schedule' || inputs.publicar) }}
