@@ -84,13 +84,36 @@ def recortar(ruta, salida):
     return im
 
 
+def tiene_texto(ruta):
+    """Gemini mira la imagen: ¿hay letras, números o carteles legibles? (si no se puede preguntar, se da por buena)."""
+    claves = [os.environ.get(k) for k in ('GEMINI_API_KEY_3', 'GEMINI_API_KEY_2', 'GEMINI_API_KEY') if os.environ.get(k)]
+    if not claves:
+        return False
+    buf = io.BytesIO(); Image.open(ruta).convert('RGB').resize((512, 512)).save(buf, 'JPEG', quality=85)
+    cuerpo = {'contents': [{'parts': [
+        {'inline_data': {'mime_type': 'image/jpeg', 'data': base64.b64encode(buf.getvalue()).decode()}},
+        {'text': 'Does this image contain any readable text, letters, words or numbers (signs, labels, clocks with digits, captions)? '
+                 'Answer only YES or NO.'}]}]}
+    for k in claves:
+        for modelo in ('gemini-flash-lite-latest', 'gemini-flash-latest'):
+            try:
+                r = requests.post(f'https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent',
+                                  params={'key': k}, json=cuerpo, timeout=60)
+                if r.status_code == 200:
+                    txt = r.json()['candidates'][0]['content']['parts'][0].get('text', '')
+                    return txt.strip().upper().startswith('Y')
+            except Exception:
+                pass
+    return False
+
+
 def _semilla(texto):
     return int(hashlib.sha1(texto.encode()).hexdigest()[:8], 16)
 
 
 def preparar(g, s, carpeta):
     """Genera y recorta todo lo del episodio. Devuelve {'decorados': [ruta por escena], 'personajes': {id: RGBA}}."""
-    d = os.path.join(carpeta, 'ia'); os.makedirs(d, exist_ok=True)
+    d = os.environ.get('TELE_IA_CACHE') or os.path.join(carpeta, 'ia'); os.makedirs(d, exist_ok=True)
     genero = s.get('formato', '')
     decorados, hechos = [], {}
     for i, e in enumerate(g['escenas']):
@@ -100,6 +123,10 @@ def preparar(g, s, carpeta):
             decorados.append(hechos[clave]); continue
         ruta = os.path.join(d, f'decorado{i}.png')
         generar(f'{desc}.{ESTILO_DECORADO}{ESTILO}', ruta, _semilla(desc + genero))
+        if tiene_texto(ruta):                                 # control de calidad: nada de letras raras
+            print(f'  decorado {i}: tiene texto, lo repinto', flush=True)
+            os.remove(ruta)
+            generar(f'{desc}. Absolutely no text, no numbers, no signs, no digits.{ESTILO_DECORADO}{ESTILO}', ruta, 1)
         hechos[clave] = ruta
         decorados.append(ruta)
     personajes = {}

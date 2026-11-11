@@ -13,12 +13,13 @@ import numpy as np
 from PIL import Image
 
 from nutria import calidad
-from . import audio, cartoon as C, dibujo as D, ficha, guion
+from . import audio, ia_imagen, montaje_ia, cartoon as C, dibujo as D, ficha, guion
 from .catalogo import ELEMENTOS, FORMATOS, HISTORIAL, desde_idea, historial, sorteo
 from . import ideas as banco
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 FPS = 30
+NOTA_MINIMA = 7
 W, H = D.W, D.H
 
 
@@ -288,12 +289,39 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
         s, g = dato['sorteo'], guion.validar(dato['guion'], dato['sorteo'])
     else:
         pend = banco.pendientes()
-        s = desde_idea(pend[0], semilla) if pend else sorteo(semilla)
-        if pend:
-            print(f"▶ Idea de {pend[0]['fuente']}: {pend[0].get('titulo') or pend[0]['premisa'][:70]}", flush=True)
-        print(f"▶ Sorteo: {', '.join(s['elementos'])} · {s['concepto']} · {s['formato']} · {s['conflicto']}", flush=True)
-        g = guion.escribir(s)
+        mejor, descartadas = None, []
+        for k in range(3):                                 # control de calidad: nota mínima 7 o se prueba otra idea
+            if k < len(pend):
+                s = desde_idea(pend[k], semilla)
+                print(f"▶ Idea de {pend[k]['fuente']}: {pend[k].get('titulo') or pend[k]['premisa'][:70]}", flush=True)
+            else:
+                s = sorteo(None if semilla is None else semilla + k)
+                print(f"▶ Sorteo: {', '.join(s['elementos'])} · {s['concepto']} · {s['formato']}", flush=True)
+            try:
+                g = guion.escribir(s)
+            except Exception as e:
+                print('  ✖ sin guion:', str(e)[:150], flush=True); g = None
+            if g and (mejor is None or g.get('nota', 0) > mejor[1].get('nota', 0)):
+                if mejor and mejor[0].get('idea_clave'):
+                    descartadas.append(mejor[0]['idea_clave'])
+                mejor = (s, g)
+            elif s.get('idea_clave'):
+                descartadas.append(s['idea_clave'])
+            if mejor and mejor[1].get('nota', 0) >= NOTA_MINIMA:
+                break
+            print(f"  nota {g.get('nota') if g else '—'} < {NOTA_MINIMA}: pruebo otra idea", flush=True)
+        if not mejor:
+            raise RuntimeError('Ninguna idea ha dado un guion válido')
+        s, g = mejor
+        s['ideas_descartadas'] = descartadas
     salida = os.path.join(carpeta, 'video.mp4')
+    imgs = None
+    if os.environ.get('CLOUDFLARE_API_TOKEN') or os.environ.get('TELE_IA_CACHE'):
+        try:
+            imgs = ia_imagen.preparar(g, s, carpeta)
+            print(f"  IA: {len(set(imgs['decorados']))} decorados y {len(imgs['personajes'])} personajes", flush=True)
+        except Exception as e:
+            print('  IA de imagen no disponible, uso el estilo dibujado:', str(e)[:160], flush=True)
     fallos = ['sin intentar']
     for extra in (-5, 8, 22):
         lineas, inicios, cort, dur = sonido(g, s, carpeta, extra)
@@ -301,7 +329,10 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
             print(f'  dura {dur:.0f} s: acelero las voces', flush=True); continue
         rng = np.random.default_rng(s['semilla'] + 1)
         wav, env = mezclar(g, lineas, inicios, cort, dur, rng, carpeta)
-        render(g, s, lineas, inicios, cort, dur, env, wav, salida)
+        if imgs:
+            montaje_ia.render(g, s, lineas, inicios, cort, dur, env, wav, salida, imgs)
+        else:
+            render(g, s, lineas, inicios, cort, dur, env, wav, salida)
         fallos, medidas = calidad.revisar(salida)
         if dur < 38:
             fallos.append(f'Demasiado corto: {dur:.0f} s')
@@ -326,8 +357,9 @@ def registrar(info):
     """Apunta el episodio en el historial (para no repetir) y guarda su ficha en el repositorio."""
     h = historial()
     s = info['sorteo']
-    if s.get('idea_clave'):
-        banco.gastar(s['idea_clave'])
+    for clave in [s.get('idea_clave')] + list(s.get('ideas_descartadas') or []):
+        if clave:
+            banco.gastar(clave)
     h.append({'fecha': info['fecha'], 'titulo': info['titulo'], 'elementos': s['elementos'], 'concepto': s['concepto'],
               'formato': s['formato'], 'conflicto': s['conflicto'], 'nota': info['guion'].get('nota')})
     json.dump(h, open(HISTORIAL, 'w'), ensure_ascii=False, indent=1)

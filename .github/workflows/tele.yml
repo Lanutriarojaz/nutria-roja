@@ -34,6 +34,9 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
       GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      U2NET_HOME: /home/runner/.u2net
       TZ: Europe/Madrid
       PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
     steps:
@@ -44,11 +47,16 @@ jobs:
           python-version: '3.12'
           cache: pip
 
+      - uses: actions/cache@v4
+        with:
+          path: /home/runner/.u2net
+          key: u2net-isnet-anime-v1
+
       - name: Instalar ffmpeg y dependencias
         run: |
           for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null && break; echo "apt falló (intento $i), reintento"; sleep 30; done
           ffmpeg -version | head -1
-          pip install -q -r requirements.txt
+          pip install -q -r requirements.txt "rembg[cpu]"
 
       - name: Sorteo, guion, animación y control de calidad
         run: |
