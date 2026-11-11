@@ -12,7 +12,7 @@ FIN = ' Plain flat light grey background, full body, 2D cartoon, thick black out
 for base in sys.argv[1:]:
     img = open(base, 'rb').read()
     small = io.BytesIO(); Image.open(io.BytesIO(img)).convert('RGB').resize((512, 512)).save(small, 'PNG'); small = small.getvalue()
-    for modelo in ('@cf/black-forest-labs/flux-2-klein-4b', '@cf/black-forest-labs/flux-2-klein-9b', '@cf/black-forest-labs/flux-2-dev'):
+    for modelo in ('@cf/black-forest-labs/flux-2-klein-4b', '@cf/black-forest-labs/flux-2-dev'):
         for gesto, txt in GESTOS.items():
             ok = False
             for campo in ('input_image_0', 'image', 'input_image'):
