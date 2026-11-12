@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "El campeón mundial de quedarse quieto",
- "elementos": [
-  "sofá",
-  "mando a distancia",
-  "calcetines"
- ],
- "concepto": "Paradoja de Zenón: el movimiento dividido en infinitas etapas",
- "conflicto": "Un deportista necesita alcanzar el mando sin abandonar el sofá.",
- "premisa": "Un atleta quiere batir el récord de coger el mando a distancia, pero el reglamento exige recorrer primero la mitad de cada distancia restante.",
- "chiste": "Dos comentaristas retransmiten durante horas cómo un señor en calcetines acerca el brazo milimétricamente mientras el público celebra cada nueva mitad.",
- "giro": "Cuando por fin parece tocar el mando, el árbitro anuncia que la competición jamás podrá terminar porque siempre quedará otra mitad por recorrer.",
- "gancho": "Continúa la final olímpica de alcanzar el mando del sofá.",
- "clave": "2026-11-11-chatgpt.json#1",
- "fuente": "chatgpt"
+ "titulo": "Concierto para Microondas Solista",
+ "formato_texto": "Videoclip musical",
+ "genero": "Comedia musical absurda",
+ "premisa": "El microondas interpreta una balada rock frente a una multitud de utensilios",
+ "chiste": "Se toma muy en serio su concierto, pero solo emite pitidos y luces intermitentes",
+ "giro": "El microondas hace un solo de 30 segundos y se desenchufa dramáticamente",
+ "gancho": "Plano detalle de una puerta de microondas que se abre como si entrara en escena",
+ "protagonista": "Un microondas que sueña con ser estrella de rock",
+ "universo": "Cocinas donde los electrodomésticos tienen carreras artísticas",
+ "desarrollo": "1) Preparativos de backstage con tostadoras dándole consejos; 2) Actuación épica con luces y humo; 3) El público (ollas y tazas) enloquece al explotar palomitas al ritmo",
+ "audiovisual": "Escenario miniatura con cubiertos haciendo pogos mientras caen chispas del microondas"
 }

@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "La receta que cocina al cocinero",
- "elementos": [
-  "huevo",
-  "sartén",
-  "delantal"
- ],
- "concepto": "Autopoiesis: sistemas que producen y mantienen su propia organización",
- "conflicto": "Un chef intenta preparar un desayuno que se produce a sí mismo.",
- "premisa": "Un cocinero quiere freír un huevo perfecto, pero la receta exige que todos sus ingredientes fabriquen al siguiente ingrediente, incluido el cocinero.",
- "chiste": "El huevo fabrica una sartén, la sartén cose un delantal y el delantal empieza a dar órdenes al chef, que suspende por no estar suficientemente cocinado.",
- "giro": "El delantal termina de fabricar al cocinero, que rompe un huevo para iniciar el programa: nunca hubo un primer chef, solo una cocina que se reproduce a sí misma.",
- "gancho": "Hoy prepararemos un desayuno que contrata a su propio cocinero.",
- "clave": "2026-11-11-chatgpt.json#3",
- "fuente": "chatgpt"
+ "titulo": "Vecinos del Inframundo",
+ "formato_texto": "Sitcom de falso directo",
+ "genero": "Comedia macarra y sobrenatural",
+ "premisa": "El fontanero solo quiere dormir la siesta, pero los demonios hacen comunidad de vecinos",
+ "chiste": "La cotidianidad de discusiones de escalera con seres infernales extremadamente formales",
+ "giro": "Se corta la luz y todos se quedan cantando sevillanas infernales",
+ "gancho": "Un demonio llama al timbre con una tortilla de patatas en la mano",
+ "protagonista": "Un obrero de fontanería que vive puerta con puerta con demonios educadísimos",
+ "universo": "Bloque de pisos donde los portales son entradas al inframundo",
+ "desarrollo": "1) El fontanero protesta por el ruido de un coro de almas; 2) Discusión en junta con demonios tomando actas; 3) Se ofrece sangría al protagonista como gesto de paz",
+ "audiovisual": "Escalera de vecinos con humo rojo, demonios con carpetas y un ventilador girando como si nada"
 }
