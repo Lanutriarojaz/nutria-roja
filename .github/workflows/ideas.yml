@@ -39,7 +39,7 @@ jobs:
           else
             printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
           fi
-          git add tele/ideas tele/guiones 2>/dev/null || git add tele/ideas
+          git add tele/ideas tele/encargos 2>/dev/null; git add tele/guiones 2>/dev/null; true
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "${{ github.event.action || 'ideas' }} de ChatGPT ($FUENTE)"
           for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
       - name: Aviso si las ideas no valían
