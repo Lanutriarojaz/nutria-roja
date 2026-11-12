@@ -1,0 +1,227 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "Gran Hermetismo: el concursante invisible",
+  "titulo_corto": "El concursante invisible 🪞",
+  "formato": "reality",
+  "resumen": "Un concursante quiere demostrar que existe, pero nadie puede percibirlo.",
+  "premisa": "Un participante intenta no ser expulsado de un reality, pero los demás creen que es un personaje inventado y cada prueba que hace la descartan como casualidad.",
+  "personajes": [
+   {
+    "id": "lumio",
+    "nombre": "Lumio",
+    "cuerpo": "espejo",
+    "personalidad": "Pedante y dramático, exige pruebas contundentes de todo.",
+    "voz": "grave",
+    "aspecto": "A tall mirror with ornate silver frame, slightly foggy glass, two cartoonish eyes on top corners, and a tiny crown of floating dust motes that orbit it."
+   },
+   {
+    "id": "palmira",
+    "nombre": "Palmira",
+    "cuerpo": "almohada",
+    "personalidad": "Seca y pragmática, siempre buscando la siesta perfecta.",
+    "voz": "anciana",
+    "aspecto": "A plump white pillow with soft wrinkles, embroidered floral edges, a tiny mouth mid-cushion, and one corner that twitches like an ear when annoyed."
+   },
+   {
+    "id": "cepillin",
+    "nombre": "Cepillín",
+    "cuerpo": "cepillo",
+    "personalidad": "Nervioso y parlanchín, tiembla ante cualquier sospecha.",
+    "voz": "aguda",
+    "aspecto": "A hairbrush with bright blue bristles, googly eyes glued to the handle, several stray hairs forming a messy wig, and a ribbon tied awkwardly to its neck."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Lumio y Palmira en el sofá del reality, Cepillín en la mesa, todo vacío.",
+    "rotulo": "Nominaciones en directo",
+    "decorado": "A surreal living room with pastel walls, floating sofas, framed portraits of static snow, and hovering cameras blinking red. The set imitates a cozy reality show house but objects float slightly and light bends oddly.",
+    "musica": "normal",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "lumio",
+     "palmira",
+     "cepillin"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Esta semana expulsaremos al único concursante que asegura estar vivo.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "lumio",
+      "texto": "¿Lo habéis visto? El espejo está empañado.",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "palmira",
+      "texto": "Bah, será humedad. Aquí nadie vive de verdad.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Cepillín tiembla mientras muestra pelos en sus cerdas.",
+    "rotulo": "Pruebas de existencia",
+    "decorado": "Same living room set with a low table covered in scattered hairbrushes, fogged glasses of water, and a scoreboard floating mid-air showing zero points for the invisible contestant.",
+    "musica": "normal",
+    "sfx": "ding",
+    "prop": null,
+    "presentes": [
+     "cepillin",
+     "lumio",
+     "palmira"
+    ],
+    "lineas": [
+     {
+      "quien": "cepillin",
+      "texto": "¡Mirad! Pelos nuevos. No son míos.",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "lumio",
+      "texto": "Eso no prueba nada. Podría ser viento con peluca.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "palmira",
+      "texto": "A mí que me lo cepille en la cara, y hablamos.",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "La almohada aparece hundida, como si alguien invisible durmiera sobre ella.",
+    "rotulo": "Última oportunidad",
+    "decorado": "Same surreal living room, now lights dim and a big red button flashes over the nomination booth, casting long warped shadows on the empty bed with the sunken pillow.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "palmira",
+     "lumio",
+     "cepillin"
+    ],
+    "lineas": [
+     {
+      "quien": "palmira",
+      "texto": "Pues sí, noto el hundido. Y está calentita.",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "lumio",
+      "texto": "Reglamento de la casa: sin consentimiento visible, no vale.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "cepillin",
+      "texto": "¿Entonces le echamos?",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Todos miran al centro vacío del salón, tensión máxima.",
+    "rotulo": "Gala final",
+    "decorado": "The living room now has a giant floating screen showing audience silhouettes clapping in loops, with confetti stuck midair, and a transparent podium for the 'invisible' contestant.",
+    "musica": "silencio",
+    "sfx": null,
+    "prop": null,
+    "presentes": [
+     "lumio",
+     "palmira",
+     "cepillin"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "El público ha votado. Se acabó.",
+      "emocion": "neutral",
+      "pausa": 0.4,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "lumio",
+      "texto": "Bueno… nadie puede demostrar que exista.",
+      "emocion": "neutral",
+      "pausa": 0.6,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "narrador",
+      "texto": "O quizá sí.",
+      "emocion": "neutral",
+      "pausa": 0.8,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "El espejo se agrieta solo, luces parpadean, la almohada flota.",
+    "rotulo": "Revelación",
+    "decorado": "Same gala setting, now distorted with bending walls, frozen confetti, and the floating podium glowing. The cameras spin slowly as if the house itself recognizes a winner.",
+    "musica": "silencio",
+    "sfx": "mazo",
+    "prop": null,
+    "presentes": [
+     "lumio",
+     "palmira",
+     "cepillin"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Él era el único ser consciente. Todos los demás, simulaciones.",
+      "emocion": "neutral",
+      "pausa": 0.9,
+      "golpe": true,
+      "sello": "¿CÓMO?"
+     }
+    ]
+   }
+  ],
+  "giro": "El concursante invisible era el único ser consciente; todos los demás eran simulaciones.",
+  "descripcion": "Un reality donde nadie cree que el concursante invisible exista.\n¿Y si es el único que está vivo?",
+  "hashtags": [
+   "#teledimensional",
+   "#realidadalternativa",
+   "#humorabdsurdo",
+   "#filosofiafacil",
+   "#seriescortas"
+  ]
+ }
+}
