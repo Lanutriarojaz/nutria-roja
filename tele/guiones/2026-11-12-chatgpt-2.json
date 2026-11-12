@@ -1,0 +1,227 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "El campeón mundial de quedarse quieto",
+  "titulo_corto": "Final olímpica: alcanzar el mando 🛋️",
+  "formato": "deportes",
+  "resumen": "Un atleta quiere el mando, pero siempre queda otra mitad por recorrer.",
+  "premisa": "Un atleta intenta batir el récord de coger el mando del sofá, pero el reglamento exige recorrer siempre la mitad de la distancia que queda, sin fin.",
+  "personajes": [
+   {
+    "id": "plomo",
+    "nombre": "Plomo",
+    "cuerpo": "sofá",
+    "personalidad": "Tranquilo y pedante, comenta todo como si fuera trascendental.",
+    "voz": "grave",
+    "aspecto": "A massive gray sofa with deep cushions, tiny blinking eyes on the armrests, and gold medals pinned to its fabric. One of the cushions is subtly breathing."
+   },
+   {
+    "id": "finta",
+    "nombre": "Finta",
+    "cuerpo": "calcetines",
+    "personalidad": "Nerviosa y chillona, celebra cada mínimo avance.",
+    "voz": "chillon",
+    "aspecto": "A pair of striped socks, bright red and yellow, each with a small cartoonish mouth and googly eyes, bouncing slightly as they speak."
+   },
+   {
+    "id": "cromo",
+    "nombre": "Cromo",
+    "cuerpo": "mando",
+    "personalidad": "Serio y funcionarial, aplica el reglamento sin emoción.",
+    "voz": "robot",
+    "aspecto": "A long black remote control standing upright, with a single glowing red button as an eye and tiny mechanical arms folded across its chest."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Plano general del salón de competición. Un hombre en calcetines se estira desde el sofá hacia el mando.",
+    "rotulo": "Final olímpica en directo",
+    "decorado": "A sports broadcast living room: large sofa center stage, spotlights over a tiny coffee table with the remote. Bleachers of silent spectators shaped like lamps. A giant screen shows 'DISTANCIA RESTANTE: 12 cm'.",
+    "musica": "normal",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "plomo",
+     "finta",
+     "cromo"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Continúa la final olímpica de alcanzar el mando del sofá.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plomo",
+      "texto": "Y ahí va… ha recorrido la mitad de la mitad.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "finta",
+      "texto": "¡Sííí! ¡Seis centímetros menos!",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Plano detalle del brazo temblando sobre el vacío.",
+    "rotulo": "12 espectadores conectados",
+    "decorado": "Same living room sports set with glowing scoreboard, small referee podium next to the coffee table.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "plomo",
+     "finta",
+     "cromo"
+    ],
+    "lineas": [
+     {
+      "quien": "cromo",
+      "texto": "Atención. Nueva distancia: seis centímetros.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plomo",
+      "texto": "Debe recorrer la mitad otra vez. Tres centímetros.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "finta",
+      "texto": "¿Tres solo? ¡Eso lo tiene hecho!",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "El atleta se inclina peligrosamente, casi tocando el mando.",
+    "rotulo": "Récord mundial en juego",
+    "decorado": "Same set, now the scoreboard flashes '3 cm' and slow-moving confetti drifts in the air.",
+    "musica": "tension",
+    "sfx": "redoble",
+    "prop": null,
+    "presentes": [
+     "plomo",
+     "finta",
+     "cromo"
+    ],
+    "lineas": [
+     {
+      "quien": "plomo",
+      "texto": "Está sudando. Medio temblor más…",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "finta",
+      "texto": "¡Vamos, medio temblor!",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "cromo",
+      "texto": "Nueva mitad: un centímetro y medio.",
+      "emocion": "neutral",
+      "pausa": 0.3,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Plano cerrado: el dedo tiembla a milímetros del botón rojo.",
+    "rotulo": "Silencio absoluto",
+    "decorado": "Same living room set, lights dimmed to a single spotlight over the remote, audience frozen like statues.",
+    "musica": "silencio",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "plomo",
+     "finta",
+     "cromo"
+    ],
+    "lineas": [
+     {
+      "quien": "finta",
+      "texto": "¡Ya lo toca!",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plomo",
+      "texto": "Pausa. Esto es historia.",
+      "emocion": "neutral",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "cromo",
+      "texto": "Competición interminable. Siempre quedará otra mitad.",
+      "emocion": "neutral",
+      "pausa": 0.7,
+      "golpe": true,
+      "sello": "¿CÓMO?"
+     }
+    ]
+   },
+   {
+    "plano": "El atleta se queda petrificado, el público aplaude sin saber por qué.",
+    "rotulo": "Final sin final",
+    "decorado": "Same living room sports set, lights flicker, confetti midair. Scoreboard now shows '0.75 cm'.",
+    "musica": "normal",
+    "sfx": "aplausos",
+    "prop": null,
+    "presentes": [
+     "plomo",
+     "finta",
+     "cromo"
+    ],
+    "lineas": [
+     {
+      "quien": "plomo",
+      "texto": "Continúa la final olímpica de alcanzar el mando del sofá.",
+      "emocion": "neutral",
+      "pausa": 0.6,
+      "golpe": true,
+      "sello": "BUCLE"
+     }
+    ]
+   }
+  ],
+  "giro": "El árbitro anuncia que la competición jamás terminará porque siempre quedará otra mitad por recorrer.",
+  "descripcion": "Un atleta olímpico intenta coger el mando sin levantarse del sofá…\n¿Serías capaz de terminar la prueba?",
+  "hashtags": [
+   "#teledimensional",
+   "#humorabSurdo",
+   "#deportes",
+   "#sofa",
+   "#filosofiaVisual"
+  ]
+ }
+}
