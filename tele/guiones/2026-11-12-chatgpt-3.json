@@ -1,0 +1,239 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "La receta que cocina al cocinero",
+  "titulo_corto": "El desayuno que se cocina solo 🍳",
+  "formato": "cocina",
+  "resumen": "Un cocinero quiere freír un huevo, pero la receta le cocina a él.",
+  "premisa": "Un chef quiere freír un huevo perfecto, pero la receta exige que los ingredientes fabriquen al siguiente, incluido el propio cocinero.",
+  "personajes": [
+   {
+    "id": "yolko",
+    "nombre": "Yolko",
+    "cuerpo": "huevo",
+    "personalidad": "Nervioso y quejica, se agrieta cuando discute.",
+    "voz": "aguda",
+    "aspecto": "A white egg with two tiny eyes and a hairnet, trembling slightly, with small cracks that glow yellow when speaking."
+   },
+   {
+    "id": "sartenio",
+    "nombre": "Sartenio",
+    "cuerpo": "sartén",
+    "personalidad": "Pedante y autoritario, habla lento como si todo fuera obvio.",
+    "voz": "grave",
+    "aspecto": "A black iron pan with a stern face on its surface, a handle like a necktie, and small mechanical legs tapping impatiently."
+   },
+   {
+    "id": "mandilon",
+    "nombre": "Mandilón",
+    "cuerpo": "delantal",
+    "personalidad": "Seco y mandón, como un profesor harto de sus alumnos.",
+    "voz": "robot",
+    "aspecto": "A red kitchen apron with square glasses floating above, strings moving like arms, and a timer embedded in the chest that blinks."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Mesa de cocina surrealista: ollas flotando y fogones en el techo.",
+    "rotulo": "Desayuno Autococinado",
+    "decorado": "A kitchen set with pastel tiles, floating stoves, and utensils orbiting slowly. The lights are too bright, and a giant clock made of toast counts down above the counter.",
+    "musica": "normal",
+    "sfx": "ding",
+    "prop": null,
+    "presentes": [
+     "yolko",
+     "sartenio",
+     "mandilon"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Hoy prepararemos un desayuno que contrata a su propio cocinero.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "yolko",
+      "texto": "Ejem… ¿y quién me casca a mí?",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "sartenio",
+      "texto": "Primero me fabricas a mí y luego hablamos.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Yolko gira y de su cáscara brota una sartén nueva.",
+    "rotulo": "Paso 1: El huevo fabrica",
+    "decorado": "Same surreal kitchen with floating stoves and pastel tiles, utensils orbiting slowly.",
+    "musica": "normal",
+    "sfx": "whoosh",
+    "prop": null,
+    "presentes": [
+     "yolko",
+     "sartenio"
+    ],
+    "lineas": [
+     {
+      "quien": "yolko",
+      "texto": "Vale… ¡plop!",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "sartenio",
+      "texto": "Correcto. Ahora me toca coser un delantal.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "yolko",
+      "texto": "¿Coser? Pero si eres una sartén.",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Sartenio hace girar su mango como aguja y cose un delantal flotante.",
+    "rotulo": "Paso 2: La sartén cose",
+    "decorado": "Same surreal kitchen set.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "sartenio",
+     "mandilon"
+    ],
+    "lineas": [
+     {
+      "quien": "sartenio",
+      "texto": "Y… listo. Mandilón activado.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "mandilon",
+      "texto": "Tú, huevo, a la plancha. Tú, sartén, más brillo.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "yolko",
+      "texto": "¿Perdón? ¿Y el chef?",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Mandilón flota frente a la cámara, con timer parpadeando.",
+    "rotulo": "Examen final",
+    "decorado": "Same surreal kitchen set.",
+    "musica": "tension",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "mandilon",
+     "yolko",
+     "sartenio"
+    ],
+    "lineas": [
+     {
+      "quien": "mandilon",
+      "texto": "El cocinero no está listo. Le falta estar… cocinado.",
+      "emocion": "neutral",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "yolko",
+      "texto": "¿Cómo que le falta? ¡Si ni existe!",
+      "emocion": "enfado",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "sartenio",
+      "texto": "Shhh… ahora viene lo divertido.",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "El delantal teje un muñeco que se vuelve un cocinero vivo.",
+    "rotulo": "Nace el Chef",
+    "decorado": "Same surreal kitchen set.",
+    "musica": "silencio",
+    "sfx": "redoble",
+    "prop": null,
+    "presentes": [
+     "mandilon"
+    ],
+    "lineas": [
+     {
+      "quien": "mandilon",
+      "texto": "Ahora, tú nos cocinas.",
+      "emocion": "neutral",
+      "pausa": 0.9,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "narrador",
+      "texto": "El chef se sirve a sí mismo…",
+      "emocion": "neutral",
+      "pausa": 0.7,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "mandilon",
+      "texto": "Hoy prepararemos un desayuno que contrata a su propio cocinero.",
+      "emocion": "neutral",
+      "pausa": 0.6,
+      "golpe": true,
+      "sello": "BUCLE"
+     }
+    ]
+   }
+  ],
+  "giro": "El delantal termina de fabricar al cocinero, que repite el programa desde cero: la cocina se reproduce sola.",
+  "descripcion": "Un huevo, una sartén y un delantal fabrican su propio chef.\n¿Quién cocina a quién al final?",
+  "hashtags": [
+   "#teledimensional",
+   "#cocinaabsurda",
+   "#humorsurreal",
+   "#filosofíaen1minuto",
+   "#bucleinfinito"
+  ]
+ }
+}
