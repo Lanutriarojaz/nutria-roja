@@ -158,15 +158,28 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida, imgs):
             debut.setdefault(i, ei)
     # cada personaje, escalado una vez para cada tamaño de plano (y su versión en sombra para cuando escucha)
     sprites = {}
+    gestos = imgs.get('gestos') or {}
     for n in range(1, 5):
         _, alto = _posiciones(n)
-        for i, im in imgs['personajes'].items():
-            k = alto / im.size[1]
-            if im.size[0] * k > 560:
-                k = 560 / im.size[0]
-            base = im.resize((max(int(im.size[0] * k), 2), max(int(im.size[1] * k), 2)), Image.LANCZOS)
-            oscura = ImageEnhance.Brightness(base.convert('RGB')).enhance(0.78).convert('RGBA'); oscura.putalpha(base.getchannel('A'))
-            sprites[(i, n)] = (base, oscura)
+        for i, im0 in imgs['personajes'].items():
+            for nombre, im in [('base', im0)] + list((gestos.get(i) or {}).items()):
+                k = alto / im.size[1]                      # todas las caras a la misma altura → no saltan al cambiar
+                if im.size[0] * k > 560:
+                    k = 560 / im.size[0]
+                base = im.resize((max(int(im.size[0] * k), 2), max(int(im.size[1] * k), 2)), Image.LANCZOS)
+                oscura = ImageEnhance.Brightness(base.convert('RGB')).enhance(0.78).convert('RGBA'); oscura.putalpha(base.getchannel('A'))
+                sprites[(i, n, nombre)] = (base, oscura)
+
+    def cara(i, n, emo, habla, amp, t):
+        """Qué versión del personaje toca: boca al ritmo de la voz y gesto según la emoción."""
+        hay = lambda g: (i, n, g) in sprites
+        if emo in ('enfado', 'miedo', 'risa') and hay(emo):
+            return emo
+        if emo == 'sorpresa' and not habla and hay('miedo'):
+            return 'miedo'
+        if habla and hay('boca') and (amp > 0.32 or (amp > 0.12 and int(t * 12) % 2)):
+            return 'boca'
+        return 'base'
     animo = [{} for _ in g['escenas']]
     for ei, e in enumerate(g['escenas']):
         for l in e['lineas']:
@@ -219,7 +232,8 @@ def render(g, s, lineas, inicios, cort, dur, env, wav, salida, imgs):
         # personajes
         for i in sorted(ids, key=lambda i: i == quien):
             habla = i == quien
-            base, oscura = sprites[(i, len(ids))]
+            emo_i = l['emo'] if habla else ('sorpresa' if golpe > 0.3 else animo[ei].get(i, 'neutral'))
+            base, oscura = sprites[(i, len(ids), cara(i, len(ids), emo_i, habla, float(env[f]) if habla else 0.0, t))]
             spr = base if (habla or quien is None) else oscura
             x = pos[i]; salto = 0.0
             if debut[i] == ei and ei > 0:

@@ -84,6 +84,47 @@ def recortar(ruta, salida):
     return im
 
 
+GESTO_MODELO = '@cf/black-forest-labs/flux-2-klein-4b'    # ~110 neuronas por edición (los otros FLUX.2 cuestan 15-20 veces más)
+GESTOS = {
+    'boca': 'with the mouth wide open as if talking, same expression otherwise',
+    'enfado': 'furious: angry eyebrows, shouting with the mouth wide open, clenched fists',
+    'miedo': 'terrified: huge eyes, trembling, hands near the face, mouth open in fear',
+    'risa': 'laughing hysterically with the eyes closed and the mouth wide open',
+}
+
+
+def gesto(base, ruta, cambio):
+    """Edita el personaje con FLUX.2 klein: el mismo personaje (diseño, colores, ropa), con otro gesto."""
+    if os.path.exists(ruta):
+        return ruta
+    cta, tok = os.environ.get('CLOUDFLARE_ACCOUNT_ID'), os.environ.get('CLOUDFLARE_API_TOKEN')
+    if not cta or not tok:
+        raise SinImagenes('Faltan las claves de Cloudflare')
+    buf = io.BytesIO(); Image.open(base).convert('RGB').resize((512, 512)).save(buf, 'PNG')
+    texto = (f'The exact same character, same design, same colors, same clothes, same proportions, same full body framing, but {cambio}. '
+             'Plain flat light grey background, 2D cartoon, thick black outlines, no text.')
+    ultimo = ''
+    for intento in range(3):
+        try:
+            r = requests.post(f'https://api.cloudflare.com/client/v4/accounts/{cta}/ai/run/{GESTO_MODELO}',
+                              headers={'Authorization': f'Bearer {tok}'}, timeout=120,
+                              files={'input_image_0': ('base.png', buf.getvalue(), 'image/png')},
+                              data={'prompt': texto, 'width': '768', 'height': '768', 'steps': '4'})
+            if r.status_code == 200:
+                datos = r.content if r.headers.get('content-type', '').startswith('image') else \
+                    base64.b64decode((r.json().get('result') or {}).get('image') or '')
+                if len(datos) > 5000:
+                    Image.open(io.BytesIO(datos)).convert('RGB').save(ruta)
+                    return ruta
+            ultimo = f'{r.status_code} {r.text[:120]}'
+            if r.status_code in (401, 403, 429):
+                break
+        except requests.RequestException as e:
+            ultimo = repr(e)[:120]
+        time.sleep(3 * (intento + 1))
+    raise SinImagenes(f'Gesto no generado: {ultimo}')
+
+
 def tiene_texto(ruta):
     """Gemini mira la imagen: ¿hay letras, números o carteles legibles? (si no se puede preguntar, se da por buena)."""
     claves = [os.environ.get(k) for k in ('GEMINI_API_KEY_3', 'GEMINI_API_KEY_2', 'GEMINI_API_KEY') if os.environ.get(k)]
@@ -146,4 +187,17 @@ def preparar(g, s, carpeta):
                         os.remove(f)
         else:
             raise SinImagenes(f"Personaje {p['nombre']}: {error}")
-    return {'decorados': decorados, 'personajes': personajes}
+    # gestos del mismo personaje (si alguno falla, se usa la imagen normal)
+    gestos = {}
+    for p in g['personajes']:
+        gestos[p['id']] = {}
+        for nombre, cambio in GESTOS.items():
+            bruto = os.path.join(d, f"pj_{p['id']}_{nombre}.png")
+            try:
+                gesto(os.path.join(d, f"pj_{p['id']}.png"), bruto, cambio)
+                gestos[p['id']][nombre] = recortar(bruto, os.path.join(d, f"pj_{p['id']}_{nombre}_recorte.png"))
+            except SinImagenes as ex:
+                print(f"  gesto {nombre} de {p['nombre']}: {ex}", flush=True)
+                if '429' in str(ex):
+                    break
+    return {'decorados': decorados, 'personajes': personajes, 'gestos': gestos}
