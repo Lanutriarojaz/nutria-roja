@@ -16,6 +16,7 @@ from nutria import calidad
 from . import audio, ia_imagen, montaje_ia, cartoon as C, dibujo as D, ficha, guion
 from .catalogo import ELEMENTOS, FORMATOS, HISTORIAL, desde_idea, historial, sorteo
 from . import ideas as banco
+from . import guiones as guiones_chatgpt
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 FPS = 30
@@ -288,9 +289,30 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
         dato = json.load(open(guion_fijo))
         s, g = dato['sorteo'], guion.validar(dato['guion'], dato['sorteo'])
     else:
-        pend = banco.pendientes()
         mejor, descartadas = None, []
-        for k in range(3):                                 # control de calidad: nota mínima 7 o se prueba otra idea
+        for cand in guiones_chatgpt.pendientes()[:3]:     # 1.º: guiones completos de ChatGPT (pasan el mismo control)
+            s0 = dict(sorteo(semilla), elementos=[], concepto='', guion_clave=cand['clave'],
+                      idea={'titulo': cand['guion'].get('titulo', ''), 'premisa': cand['guion'].get('premisa', '')})
+            if cand['guion'].get('formato') in FORMATOS:
+                s0['formato'] = cand['guion']['formato']
+            print(f"▶ Guion de ChatGPT: {cand['guion'].get('titulo')}", flush=True)
+            try:
+                g0 = guion.validar(cand['guion'], s0)
+                g0['nota'], fallos = guion.revisar(g0, s0)
+                print(f"  nota del jefe de guion: {g0['nota']} {fallos[:2]}", flush=True)
+            except Exception as e:
+                print('  ✖ guion no válido:', str(e)[:150], flush=True)
+                descartadas.append(('guion', cand['clave'])); continue
+            if mejor is None or g0['nota'] > mejor[1].get('nota', 0):
+                if mejor and mejor[0].get('guion_clave'):
+                    descartadas.append(('guion', mejor[0]['guion_clave']))
+                mejor = (s0, g0)
+            else:
+                descartadas.append(('guion', cand['clave']))
+            if mejor[1]['nota'] >= NOTA_MINIMA:
+                break
+        pend = [] if mejor and mejor[1].get('nota', 0) >= NOTA_MINIMA else banco.pendientes()
+        for k in range(3 if pend or not mejor else 0):                                 # control de calidad: nota mínima 7 o se prueba otra idea
             if k < len(pend):
                 s = desde_idea(pend[k], semilla)
                 print(f"▶ Idea de {pend[k]['fuente']}: {pend[k].get('titulo') or pend[k]['premisa'][:70]}", flush=True)
@@ -303,10 +325,12 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
                 print('  ✖ sin guion:', str(e)[:150], flush=True); g = None
             if g and (mejor is None or g.get('nota', 0) > mejor[1].get('nota', 0)):
                 if mejor and mejor[0].get('idea_clave'):
-                    descartadas.append(mejor[0]['idea_clave'])
+                    descartadas.append(('idea', mejor[0]['idea_clave']))
+                elif mejor and mejor[0].get('guion_clave'):
+                    descartadas.append(('guion', mejor[0]['guion_clave']))
                 mejor = (s, g)
             elif s.get('idea_clave'):
-                descartadas.append(s['idea_clave'])
+                descartadas.append(('idea', s['idea_clave']))
             if mejor and mejor[1].get('nota', 0) >= NOTA_MINIMA:
                 break
             print(f"  nota {g.get('nota') if g else '—'} < {NOTA_MINIMA}: pruebo otra idea", flush=True)
@@ -357,9 +381,9 @@ def registrar(info):
     """Apunta el episodio en el historial (para no repetir) y guarda su ficha en el repositorio."""
     h = historial()
     s = info['sorteo']
-    for clave in [s.get('idea_clave')] + list(s.get('ideas_descartadas') or []):
+    for tipo, clave in [('idea', s.get('idea_clave')), ('guion', s.get('guion_clave'))] + [tuple(x) for x in s.get('ideas_descartadas') or []]:
         if clave:
-            banco.gastar(clave)
+            (banco if tipo == 'idea' else guiones_chatgpt).gastar(clave)
     h.append({'fecha': info['fecha'], 'titulo': info['titulo'], 'elementos': s['elementos'], 'concepto': s['concepto'],
               'formato': s['formato'], 'conflicto': s['conflicto'], 'nota': info['guion'].get('nota')})
     json.dump(h, open(HISTORIAL, 'w'), ensure_ascii=False, indent=1)

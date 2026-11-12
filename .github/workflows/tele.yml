@@ -106,7 +106,7 @@ jobs:
       - name: Apuntar el episodio (historial para no repetir + ficha)
         if: ${{ success() && (github.event_name == 'schedule' || inputs.publicar) }}
         run: |
-          git add tele/historial.json tele/episodios tele/ideas
+          git add tele
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Tele-Dimensional $(date +%F)" || exit 0
           git pull -q --rebase && git push -q
 
