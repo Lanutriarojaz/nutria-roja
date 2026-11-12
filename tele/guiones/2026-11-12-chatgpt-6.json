@@ -1,0 +1,232 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "Atención al cliente del destino",
+  "titulo_corto": "Reclama tu accidente... si despiertas ⏰",
+  "formato": "consultorio",
+  "resumen": "Quiere esquivar un accidente, pero el destino ya lo ha contado.",
+  "premisa": "Un ciudadano quiere evitar resbalar mañana con un plátano, pero en la oficina del destino le explican que cualquier intento ya está previsto.",
+  "personajes": [
+   {
+    "id": "turnillo",
+    "nombre": "Turnillo",
+    "cuerpo": "ticket",
+    "personalidad": "Funcionario seco y literal, habla con calma irritante.",
+    "voz": "robot",
+    "aspecto": "A floating paper ticket with digital eyes and a tie, slightly crumpled, glowing numbers scrolling across its face, with a small speaker embedded in the edge."
+   },
+   {
+    "id": "plin",
+    "nombre": "Plin",
+    "cuerpo": "reloj",
+    "personalidad": "Nervioso y melodramático, siempre siente urgencia.",
+    "voz": "aguda",
+    "aspecto": "A small round alarm clock with spindly legs, wide cartoonish eyes on the bell tops, and tiny hands that wave whenever it speaks."
+   },
+   {
+    "id": "brugo",
+    "nombre": "Brugo",
+    "cuerpo": "plátano",
+    "personalidad": "Perezoso y resignado, habla arrastrando las palabras.",
+    "voz": "grave",
+    "aspecto": "A ripe yellow banana with drooping eyelids, a tiny bowler hat, and a faint bruise that slowly pulsates with light."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Un mostrador infinito con neones que dicen 'Atención al Cliente del Destino'. Brugo dormita en la esquina.",
+    "rotulo": "Oficina del Destino",
+    "decorado": "A massive hall of endless counters under flickering fluorescent lights, with conveyor belts carrying hourglasses. Each desk has floating holograms of calendars and warning signs. A lonely fan spins in slow motion.",
+    "musica": "normal",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "turnillo",
+     "brugo"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Su accidente de mañana ya está disponible para reclamaciones.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "turnillo",
+      "texto": "Número por favor.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "brugo",
+      "texto": "Pfff… ¿otra vez yo?",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Plin corre por el mostrador mientras Turnillo imprime un ticket brillante.",
+    "rotulo": "Ticket para recurrir",
+    "decorado": "The same hall, but a close-up of the counter with rolling holograms showing falling bananas and alarm clocks vibrating. A long queue of shadows stretches into infinity.",
+    "musica": "normal",
+    "sfx": "ding",
+    "prop": null,
+    "presentes": [
+     "turnillo",
+     "plin"
+    ],
+    "lineas": [
+     {
+      "quien": "plin",
+      "texto": "¡Mañana resbala! ¡Haz algo ya!",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "turnillo",
+      "texto": "Recoja su ticket. Cubre un intento de evitarlo.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plin",
+      "texto": "¿Solo uno? ¡Pero yo tiemblo todo el día!",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Brugo rueda perezoso, Plin vibra, y Turnillo despliega un formulario interminable.",
+    "rotulo": "Tasa por no moverse",
+    "decorado": "The counter surrounded by floating clipboards, pens that write by themselves, and a large sign: 'Dormir no exime de responsabilidades'.",
+    "musica": "tension",
+    "sfx": "redoble",
+    "prop": null,
+    "presentes": [
+     "turnillo",
+     "plin",
+     "brugo"
+    ],
+    "lineas": [
+     {
+      "quien": "turnillo",
+      "texto": "Si decide quedarse en la cama, debe pagar la tasa de inacción.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "brugo",
+      "texto": "Suena caro… y lento.",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plin",
+      "texto": "¿Y si ni siquiera me despierto?",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Turnillo teclea. Plin duda. Brugo bosteza más fuerte.",
+    "rotulo": "Última oportunidad",
+    "decorado": "Same hall, now dimmed lights and a giant holographic clock counting down slowly behind them.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "turnillo",
+     "plin",
+     "brugo"
+    ],
+    "lineas": [
+     {
+      "quien": "turnillo",
+      "texto": "Confirmo: su accidente sigue programado para las 07:04.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "plin",
+      "texto": "Pues… no me levanto.",
+      "emocion": "triste",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "brugo",
+      "texto": "Eso ya está en tu expediente.",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Oscuridad de dormitorio. Plin suena. El pie busca el suelo.",
+    "rotulo": "Clímax inevitable",
+    "decorado": "A small bedroom with floating calendars, the alarm clock on the nightstand, and a lone banana on the rug glowing faintly.",
+    "musica": "silencio",
+    "sfx": "null",
+    "prop": null,
+    "presentes": [
+     "plin",
+     "brugo"
+    ],
+    "lineas": [
+     {
+      "quien": "plin",
+      "texto": "Lo logramos… ¿no?",
+      "emocion": "miedo",
+      "pausa": 0.6,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "narrador",
+      "texto": "Al apagarlo, pisa el plátano que dejó anoche.",
+      "emocion": "neutral",
+      "pausa": 0.8,
+      "golpe": true,
+      "sello": "ZAS"
+     }
+    ]
+   }
+  ],
+  "giro": "El hombre pisa su propio plátano al intentar no levantarse para evitar el accidente.",
+  "descripcion": "¿Y si tu accidente ya está registrado en el sistema del destino?\n¿Intentarías evitarlo o te quedarías dormido?",
+  "hashtags": [
+   "#teledimensional",
+   "#humorabssurdo",
+   "#destino",
+   "#oficinadeltiempo",
+   "#microserie"
+  ]
+ }
+}
