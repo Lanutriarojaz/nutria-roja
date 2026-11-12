@@ -1,0 +1,54 @@
+Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
+Estilo: cercano, con ritmo, frases cortas, curiosidad. Nada de sensacionalismo ni de opiniones políticas.
+QUE SUENE A PERSONA, NO A IA (muy importante):
+- Escribe como alguien que se lo cuenta a un amigo en un bar: natural, directo, con algún giro coloquial de España ("ojo", "lo mejor viene ahora", "y aquí viene lo curioso") pero sin pasarte.
+- PROHIBIDO: "¡Increíble!", "¿Sabías que...?" como muletilla, "sumérgete", "fascinante", "en un mundo donde", "no te lo vas a creer", "épico", "un hito sin precedentes", enumeraciones de tres adjetivos, frases que empiezan por "En resumen".
+- Varía la forma de empezar el gancho cada vez (una pregunta, una imagen, un dato, una contradicción). Nada de fórmulas repetidas.
+- Nada de rayas largas (—) ni de exclamaciones seguidas. Como mucho 1 emoji en el título y 1 en la descripción.
+- La pregunta final tiene que ser una pregunta de verdad que apetezca contestar (opinión o experiencia), no "¿qué opinas?" a secas.
+REGLAS DE ORO:
+1. Solo puedes usar datos que aparezcan en el TEXTO FUENTE. Si un dato no está, no lo pongas. Nada de cifras, citas ni detalles inventados.
+2. La primera frase de "frases" empieza EXACTAMENTE por "Un día como hoy, 16 de noviembre de <AÑO>," con el año del hecho.
+3. Nunca numeres días ("día 1", "día 2"...).
+4. Escribe los números grandes como se dicen si es natural; los años, en cifras.
+Responde SOLO con JSON.
+
+HECHO (1974): Es enviado al espacio, desde el radiotelescopio de Arecibo (en la imagen, fragmento del mensaje), el mensaje de Arecibo, un mensaje de 1679 bits que contiene información sobre la situación del sistema solar, de la Tierra y del ser humano.
+
+TEXTO FUENTE (Wikipedia):
+El cúmulo de Hércules es un cúmulo globular situado en la constelación de Hércules.
+
+El cúmulo de Hércules (también conocido como Gran Cúmulo de Hércules, Objeto Messier 13, Messier 13, M13 o NGC 6205, y de manera informal como el Gran Racimo) es un cúmulo globular situado en la constelación de Hércules.  
+Fue descubierto en 1714 por el astrónomo inglés Edmond Halley, quien lo describió como un objeto visible incluso a simple vista en noches oscuras. Posteriormente, en 1764, fue incluido por Charles Messier en su catálogo de objetos astronómicos.  
+El astrónomo William Herschel, utilizando su telescopio reflector, resolvió por primera vez un gran número de estrellas individuales dentro del cúmulo. Notó la presencia de estructuras en forma de alineaciones estelares, a las que denominó patas de araña, y realizó un primer conteo aproximado de 8500 componentes.  
+M13 se encuentra a una distancia estimada de 25 100 años luz (≈7695 pársec) de la Tierra y contiene varias centenas de miles de estrellas, con un diámetro de aproximadamente 145 años luz. Se clasifica como de tipo V en la Clasificación de concentración de Shapley-Sawyer, lo que indica una concentración intermedia de estrellas hacia su núcleo.  
+Su magnitud conjunta en banda V (filtro verde) es igual a la 5.80; su tipo espectral es F6: fotográficamente se aprecia de color amarillento debido a la gran cantidad de estrellas gigantes rojas (de color amarillento o dorado) que contiene; la magnitud absoluta es igual a -8.53 (banda V). El radio de su núcleo es próximo a 45", el radio de marea es cercano a 27': se calcula que el 90 % de sus miembros brillan dentro de un radio de 6.5' a partir del centro de gravedad.
+De su velocidad radial, -246.6 km/s, se deduce que se aproxima a la Tierra a más 887 700 km/h: esta velocidad está originada por la combinación de su movimiento orbital alrededor del núcleo de la Vía Láctea, además de la velocidad propia del Sol y de la Tierra.
+Se calcula que su luminosidad es similar a la de 500 000 soles, aunque su masa (determinada por el estudio del dinamismo de sus estrellas) está situada en la banda 600-800 mil veces la solar: evidentemente una buena parte de sus estrellas son astros invisibles (enanas blancas y estrellas de neutrones). En el año 2005 se ha descubierto una estrella de neutrones emisora de rayos X y en órbita cerrada con una compañera. Sus astros más brillantes son estrellas amarillentas del tipo gigante roja que aparecen con magnitud 11.87 (la variable V11), su estrella variable Cefeida más brillante (V2) es de magnitud 12.85 mientras que las estrellas RR Lyrae (utilizadas como patrón de distancias) aparecen con magnitud 14.82. El período de las variables V38 es de 81 días, mientras que la de V43 es de 97 días.
+Aunque es muy similar a M3 por su edad (entre 11 y 13 mil millones de años) y composición química, se diferencia de este en su bajo número de estrellas variables conocidas: solo 45 (hasta inicios del año 2006) contra las más de 240 de M3, de las cuales solo 3 (V1, V2 y V6) son cefeidas y 8 del tipo RR Lyrae. Todas estas estrellas variables son asequibles a telescopios de aficionado a partir de los 200 mm de abertura equipados con cámaras CCD y un buen mapa del cúmulo. 
+Sus principales estrellas aparecen listadas en el 'Catálogo de Ludendorff' (1905) y en el menos utilizado Catálogo de Kadla (1966): en este último caso se analizan también los movimientos propios (medidos en mili-segundos de arco por año), lo cual permite conocer cuáles de ellas pertenecen realmente al cúmulo. Un estudio más exhaustivo de los movimientos propios (443 estrellas) fue efectuado en 1979 por los astrónomos norteamericanos Cudworth y Monet, comparando placas fotográficas tomadas con el refractor de 1 metro de Yerkes entre los años 1900 y 1977: el movimiento propio de sus estrellas está en el intervalo 0.001- 0.075" por siglo.
+
+Para un telescopio de aficionado M13 es resoluble en estrellas a partir de un instrumento de al menos 10 cm de abertura: aunque hay tres estrellas de brillo inferior a la magnitud 12 (las tres variables) la mayoría de sus astros más visibles están en el rango 12-13: por encima de la magnitud 13 se pueden totalizar hasta 40 estrellas, la mayoría de ellas son anaranjadas gigantes rojas (la única excepción es la estrella azul L222, de magnitud 13.15 y perteneciente al tipo errante azul). Por debajo de la magnitud 13 el número de astros crece, aunque solo pueden individualizarse por medio de la fotografía o cámaras CCD.
+En abril de 2021 se descubrió desde Cáceres (España) V63 (Ludendorff 199), una nueva variable que está entre los astros más brillantes del cúmulo (magnitud 12,175 en banda V): pulsa con un período próximo a los 27 días. V64 (Ludendorff 261) fue descubierta en marzo de 2022 también desde Cáceres: es una estrella variable de tipo gigante roja y magnitud 12,206 en banda V que pulsa con un período cercano a los 31 días. En enero de 2024 se confirmó la variable V65, desde el mismo observatorio, situada muy próxima a V10 (que no varía, es constante en luz): es irregular, sin período; en agosto de ese año se descubrieron las variables V66, V67, V68 y V69 habiendo sido las siete descubiertas desde Cáceres (España).
+
+
+== Mensaje de Arecibo ==
+El famoso mensaje de Arecibo de 1974, que contiene datos sobre la situación del sistema solar, de nuestro planeta y del ser humano, fue enviado a este cúmulo globular con el objetivo de contactar con una posible civilización extraterrestre y demostrar así los logros tecnológicos humanos de la época. El mensaje iba a tardar hipotéticamente unos 25 milenios en llegar a su destino (y una hipotética respuesta otros 25 milenios más): dado que las estrellas del cúmulo pertenecen a la Población II (astros muy viejos pobres es metales) es poco probable que en él existan planetas rocosos, como la Tierra, aunque no se excluye que hubiese planetas jovianos formados por gas (hidrógeno y helio); el envío del mensaje sería, por tanto, superfluo, ya que no habría allí seres inteligentes que pudiesen interpretarlo.
+
+
+== Bibliografía ==
+Smiths
+
+Devuelve este JSON:
+{
+ "gancho": "frase de 6 a 12 palabras que haga parar el dedo, intrigante, sin revelar todo (no empieces por 'Un día como hoy')",
+ "frases": ["Un día como hoy, 16 de noviembre de AAAA, ...", "...", "..."],   // 4 a 6 frases, en total 60 a 90 palabras, incluye 1 o 2 curiosidades sorprendentes del texto fuente
+ "pregunta": "pregunta final corta para que comenten",
+ "titulo": "título para YouTube Shorts, máximo 70 caracteres, que alguien buscaría o en el que haría clic (incluye el tema y el año), como mucho 1 emoji",
+ "descripcion": "texto para la publicación: primera línea con la palabra clave del tema y gancho, segunda línea con un dato extra breve, y al final 4 o 5 hashtags en español: #historia #undiacomohoy #curiosidades + 1 o 2 concretos del tema (persona, lugar o acontecimiento)",
+ "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
+}
+IMPORTANTE para este encargo:
+- Escribe SOLO con datos que estén en el TEXTO FUENTE. Un verificador comprobará cada dato; si inventas, el guion se tira.
+- Añade al JSON el campo "fecha": "2026-11-16" exactamente así.
+- Responde SOLO con el JSON, sin explicaciones ni ```.

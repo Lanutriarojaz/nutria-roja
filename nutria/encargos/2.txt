@@ -1,0 +1,60 @@
+Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
+Estilo: cercano, con ritmo, frases cortas, curiosidad. Nada de sensacionalismo ni de opiniones políticas.
+QUE SUENE A PERSONA, NO A IA (muy importante):
+- Escribe como alguien que se lo cuenta a un amigo en un bar: natural, directo, con algún giro coloquial de España ("ojo", "lo mejor viene ahora", "y aquí viene lo curioso") pero sin pasarte.
+- PROHIBIDO: "¡Increíble!", "¿Sabías que...?" como muletilla, "sumérgete", "fascinante", "en un mundo donde", "no te lo vas a creer", "épico", "un hito sin precedentes", enumeraciones de tres adjetivos, frases que empiezan por "En resumen".
+- Varía la forma de empezar el gancho cada vez (una pregunta, una imagen, un dato, una contradicción). Nada de fórmulas repetidas.
+- Nada de rayas largas (—) ni de exclamaciones seguidas. Como mucho 1 emoji en el título y 1 en la descripción.
+- La pregunta final tiene que ser una pregunta de verdad que apetezca contestar (opinión o experiencia), no "¿qué opinas?" a secas.
+REGLAS DE ORO:
+1. Solo puedes usar datos que aparezcan en el TEXTO FUENTE. Si un dato no está, no lo pongas. Nada de cifras, citas ni detalles inventados.
+2. La primera frase de "frases" empieza EXACTAMENTE por "Un día como hoy, 17 de noviembre de <AÑO>," con el año del hecho.
+3. Nunca numeres días ("día 1", "día 2"...).
+4. Escribe los números grandes como se dicen si es natural; los años, en cifras.
+Responde SOLO con JSON.
+
+HECHO (1869): Se inaugura oficialmente el canal de Suez, permitiendo la navegación entre Europa y Asia a través del mar Mediterráneo y el mar Rojo.
+
+TEXTO FUENTE (Wikipedia):
+El canal de Suez es un canal artificial navegable situado en Egipto, que une el mar Mediterráneo con el golfo de Suez, en el mar Rojo, a través del istmo de Suez. El canal convirtió a la región de la península del Sinaí en una nueva península, constituyendo la frontera entre los continentes de África y Asia. Su longitud es de 193 km entre Puerto Saíd, en la ribera mediterránea, y Suez, en la costa del mar Rojo.
+
+El canal de Suez (en árabe: قناة السويس‎, romanizado: qanat al-Suways) es un canal artificial navegable situado en Egipto, que une el mar Mediterráneo (océano Atlántico) con el golfo de Suez, en el mar Rojo (océano Índico), a través del istmo de Suez. El canal convirtió a la región de la península del Sinaí en una nueva península, constituyendo la frontera entre los continentes de África y Asia. Su longitud es de 193 km entre Puerto Saíd, en la ribera mediterránea, y Suez, en la costa del mar Rojo.
+Fue impulsado entre 1859 y 1869 por Fernando de Lesseps bajo la dirección del ingeniero Louis Maurice Adolphe Linant de Bellefonds. Pertenece a Egipto desde la nacionalización de la compañía franco-británica Suez Canal Company en 1956 y la posterior guerra del Sinaí en 1957.​ El canal es de vital importancia para el abastecimiento europeo de petróleo y el comercio mundial en general, puesto que permite la comunicación entre Europa y el sur de Asia sin rodear el continente africano por el cabo de Buena Esperanza.
+El canal se inauguró oficialmente el 17 de noviembre de 1869. Ofrece a los buques una ruta directa entre el Atlántico Norte y el Índico Norte a través del mar Mediterráneo y el mar Rojo, evitando el Atlántico Sur y el Índico Sur y reduciendo la distancia del viaje desde el mar Arábigo a Londres en aproximadamente 8900 kilómetros (5500 mi), o de 10 días a 20 nudos (37 km/h; 23 mph) a 8 días a 24 nudos (44 km/h; 28 mph).​ El canal se extiende desde el extremo septentrional de Puerto Saíd hasta el extremo meridional de Port Tewfik, en la ciudad de Suez. Su longitud es de 193,30 kilómetros, incluidos los canales de acceso norte y sur. En 2020, más de 18 500 barcos atravesaron el canal (una media de 51,5 al día).​
+El canal original presentaba una vía de agua de un solo carril con lugares de paso en la Circunvalación de Ballah y el Gran Lago Amargo.​ Según los planes de Alois Negrelli, no contenía sistemas de esclusas, y el agua del mar fluía libremente por él. En general, el agua del canal al norte de los Lagos Amargos fluye hacia el norte en invierno y hacia el sur en verano. Al sur de los lagos, la corriente cambia con la marea en Suez.​
+Aunque el canal era propiedad del gobierno egipcio, los accionistas europeos, en su mayoría británicos y franceses, eran dueños de la empresa concesionaria que lo explotaba hasta julio de 1956, cuando el presidente Gamal Abdel Nasser lo nacionalizó, hecho que provocó la  crisis de Suez de octubre-noviembre de 1956.​ El canal es explotado y mantenido por la Autoridad del Canal de Suez​ (SCA) de Egipto, de propiedad estatal. En virtud de la Convención de Constantinopla, puede ser utilizado «en tiempo de guerra como en tiempo de paz, por todos los buques de comercio o de guerra, sin distinción de pabellón».​ No obstante, el canal ha desempeñado un importante papel estratégico militar como atajo naval y punto de estrangulamiento. Las armadas con costas y bases en los mares Mediterráneo y Rojo (Egipto e Israel) tienen un interés particular en el canal de Suez. Después de que Egipto cerrara el canal de Suez al comienzo de la guerra de los Seis Días, el 5 de junio de 1967, el canal permaneció cerrado precisamente durante ocho años, reabriéndose el 5 de junio de 1975.​
+En 2014, el gobierno egipcio puso en marcha la construcción de la ampliación y el ensanchamiento de la circunvalación de Ballah en 35 kilómetros para acelerar el tiempo de tránsito del canal. La ampliación pretendía casi duplicar la capacidad del canal de Suez, pasando de 49 a 97 barcos al día.​ Con un coste de 59 400 millones de libras egipcias (9000 millones de dólares), este proyecto se financió con certificados de inversión con intereses emitidos exclusivamente a entidades y particulares egipcios. El «Nuevo Canal de Suez», como se denominó la ampliación, se inauguró en una ceremonia el 6 de agosto de 2015.​
+La Autoridad del Canal de Suez inauguró oficialmente el nuevo canal lateral en 2016. Este canal lateral, situado en el lado norte de la extensión oriental del canal de Suez, sirve a la Terminal Este para el atraque y desembarque de buques de la terminal. Como la Terminal de Contenedores del Este está situada en el propio Canal, antes de la construcción del nuevo canal lateral no era posible atracar o desatracar buques en la terminal mientras un convoy estaba en marcha.​
+
+
+== Precursores ==
+Los antiguos canales oeste-este se construyeron para facilitar el viaje desde el río Nilo hasta el mar Rojo.​​​ Se cree que un canal más pequeño se construyó bajo los auspicios de Senusret II​  o Ramsés II.​​​​​ Otro canal, que probablemente incorporaba una parte del primero,​​ se construyó bajo el reinado de Necao II, pero el único canal completamente funcional fue diseñado y completado por Darío I.​​​
+
+
+=== II milenio a. C. ===
+
+Es posible que el legendario  Sesostris (probablemente el faraón Sesostris II o Sesostris III de la  duodécima dinastía de Egipto​​) iniciara las obras de un antiguo canal, el canal de los Faraones, que unía el Nilo con el mar Rojo (1897-1839 a. C.), cuando se construyó un canal de irrigación alrededor de 1848 a. C. que era navegable durante la estación de las crecidas y que desembocaba en un valle fluvial seco al este del delta del Nilo llamado Wadi Tumilat.​ (Se dice que en la antigüedad el mar Rojo llegaba hacia el norte hasta los Lagos Amargos​​ y el Lago Timsah).​​
+En su Meteorología, Aristóteles escribió
+
+ 
+
+Estrabón escribió que Sesostris comenzó a construir un canal, y Plinio el Viejo escribió
+
+ 
+
+En el siglo XX se descubrió la extensión hacia el norte del posterior canal de Darío I, que se extendía desde el lago Timsah hasta los lagos Ballah,​ y que se fechó en el Imperio Medio de Egipto extrapolando las fechas de los antiguos emplazamientos a lo largo de su recorrido.​
+Los relieves de la expedición a Punt bajo el mando de Hatshepsut, en el año 1470 a. C., muestran embarcaciones marítimas que transportan a la fuerza expedicionaria que regresa de Punt. Esto sugiere que ex
+
+Devuelve este JSON:
+{
+ "gancho": "frase de 6 a 12 palabras que haga parar el dedo, intrigante, sin revelar todo (no empieces por 'Un día como hoy')",
+ "frases": ["Un día como hoy, 17 de noviembre de AAAA, ...", "...", "..."],   // 4 a 6 frases, en total 60 a 90 palabras, incluye 1 o 2 curiosidades sorprendentes del texto fuente
+ "pregunta": "pregunta final corta para que comenten",
+ "titulo": "título para YouTube Shorts, máximo 70 caracteres, que alguien buscaría o en el que haría clic (incluye el tema y el año), como mucho 1 emoji",
+ "descripcion": "texto para la publicación: primera línea con la palabra clave del tema y gancho, segunda línea con un dato extra breve, y al final 4 o 5 hashtags en español: #historia #undiacomohoy #curiosidades + 1 o 2 concretos del tema (persona, lugar o acontecimiento)",
+ "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
+}
+IMPORTANTE para este encargo:
+- Escribe SOLO con datos que estén en el TEXTO FUENTE. Un verificador comprobará cada dato; si inventas, el guion se tira.
+- Añade al JSON el campo "fecha": "2026-11-17" exactamente así.
+- Responde SOLO con el JSON, sin explicaciones ni ```.
