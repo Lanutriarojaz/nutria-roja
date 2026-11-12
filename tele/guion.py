@@ -176,7 +176,7 @@ def _palabras(g):
     return sum(len(l['texto'].split()) for e in g['escenas'] for l in e['lineas'])
 
 
-def validar(g, s):
+def validar(g, s, min_lineas=12, min_palabras=110):
     """Corrige lo que se puede corregir solo y lanza ValueError si el guion no sirve."""
     for k in ('titulo', 'premisa', 'personajes', 'escenas', 'giro', 'descripcion'):
         if not g.get(k):
@@ -228,12 +228,12 @@ def validar(g, s):
     todas[-1]['golpe'] = True
     for l in [l for l in todas if l['golpe']][:-1][2:]:        # como mucho tres golpes, contando el del giro
         l['golpe'], l['sello'] = False, ''
-    if len(todas) < 12:
+    if len(todas) < min_lineas:
         raise ValueError(f'solo {len(todas)} líneas: falta conversación (deben ser 16-24)')
     if sum(l['quien'] == 'narrador' for l in todas) > 4:
         raise ValueError('el narrador habla demasiado: la historia la llevan los personajes')
     n = _palabras(g)
-    if not 110 <= n <= 185:
+    if not min_palabras <= n <= 185:
         raise ValueError(f'{n} palabras de diálogo (deben ser 130-170)')
     usados = {p['cuerpo'] for p in pers} | {e['prop'] for e in esc}
     faltan = [x for x in s['elementos'] if x not in usados]

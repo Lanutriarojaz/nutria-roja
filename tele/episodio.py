@@ -297,7 +297,7 @@ def hacer(fecha, carpeta, guion_fijo=None, semilla=None):
                 s0['formato'] = cand['guion']['formato']
             print(f"▶ Guion de ChatGPT: {cand['guion'].get('titulo')}", flush=True)
             try:
-                g0 = guion.validar(cand['guion'], s0)
+                g0 = guion.validar(cand['guion'], s0, min_lineas=9, min_palabras=65)
                 g0['nota'], fallos = guion.revisar(g0, s0)
                 print(f"  nota del jefe de guion: {g0['nota']} {fallos[:2]}", flush=True)
             except Exception as e:

@@ -36,7 +36,9 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }}
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 """
 
