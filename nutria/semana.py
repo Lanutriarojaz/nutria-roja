@@ -7,7 +7,7 @@ import random
 import shutil
 import traceback
 
-from . import calidad, fuentes, guion, video
+from . import calidad, encargos, fuentes, guion, video
 
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -46,13 +46,29 @@ def un_dia(fecha, carpeta, usados):
     if not candidatos:
         raise RuntimeError('Wikipedia no tiene efemérides para ese día')
     errores = []
-    for hecho in guion.elegir(candidatos, d, m, usados) + candidatos[:5]:
-        if hecho['articulos'][0] in usados:
+    chatgpt = None                                   # guion de ChatGPT (atajo del domingo), solo si el verificador lo aprueba
+    try:
+        prev = encargos.de_chatgpt(fecha.isoformat())
+        if prev and prev[0]['articulos'][0] not in usados:
+            guion.validar(prev[2], prev[0], d, guion.MESES[m - 1])
+            ok, malos = guion.verificar(prev[2], prev[1], prev[0])
+            if ok:
+                chatgpt = prev; print('  guion de ChatGPT verificado', flush=True)
+            else:
+                errores.append(f'ChatGPT descartado: {malos[:2]}'); print('  guion de ChatGPT descartado:', malos[:2], flush=True)
+    except Exception as e:
+        errores.append(f'ChatGPT no válido: {e}'); print('  guion de ChatGPT no válido:', str(e)[:120], flush=True)
+    orden = ([chatgpt[0]] if chatgpt else []) + guion.elegir(candidatos, d, m, usados) + candidatos[:5]
+    for hecho in orden:
+        if hecho['articulos'][0] in usados or (chatgpt and hecho is not chatgpt[0] and hecho['articulos'][0] == chatgpt[0]['articulos'][0]):
             continue
         try:
-            fuente = (hecho.get('resumen') or '') + '\n\n' + fuentes.articulo(hecho['articulos'][0])
-            g = None
-            for intento in range(3):
+            if chatgpt and hecho is chatgpt[0]:
+                fuente, g = chatgpt[1], chatgpt[2]
+            else:
+                fuente = (hecho.get('resumen') or '') + '\n\n' + fuentes.articulo(hecho['articulos'][0])
+                g = None
+            for intento in range(0 if g else 3):
                 try:
                     g = guion.escribir(hecho, fuente, d, m)
                 except ValueError as e:

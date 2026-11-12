@@ -1,0 +1,36 @@
+name: Efemérides (encargos para ChatGPT)
+
+# Cada domingo por la tarde: elige con Wikipedia el hecho de cada día de la semana siguiente y deja un encargo por día.
+# El atajo «Efemérides guiones» del iPhone los pasa a ChatGPT por la noche; la tirada del lunes los usa si el verificador los aprueba.
+on:
+  schedule:
+    - cron: '0 17 * * 0'
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: 'Primer día (AAAA-MM-DD). Vacío = el próximo lunes'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  encargos:
+    runs-on: ubuntu-latest
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+      GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q -r requirements.txt
+      - name: Preparar los 7 encargos
+        run: python -m nutria.encargos preparar ${{ inputs.desde && format('--desde {0}', inputs.desde) || '' }}
+      - name: Guardar
+        run: |
+          git add nutria
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Encargos de efemérides para ChatGPT" || exit 0
+          for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done

@@ -3,7 +3,7 @@ name: Tele-Dimensional (recibir ideas)
 # El atajo del iPhone (ChatGPT) o la reserva (Claude) mandan aquí las ideas de la semana.
 on:
   repository_dispatch:
-    types: [ideas, guion]
+    types: [ideas, guion, efemeride]
   workflow_dispatch:
     inputs:
       texto:
@@ -34,7 +34,10 @@ jobs:
       - name: Guardar las ideas
         run: |
           case "$FUENTE" in chatgpt|claude) ;; *) FUENTE=otra ;; esac
-          if [ "${{ github.event.action }}" = "guion" ]; then
+          if [ "${{ github.event.action }}" = "efemeride" ]; then
+            printf '%s' "$TEXTO" | python -m nutria.encargos guardar
+            git add nutria
+          elif [ "${{ github.event.action }}" = "guion" ]; then
             printf '%s' "$TEXTO" | python -m tele.guiones guardar "$FUENTE"
           else
             printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
