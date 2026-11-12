@@ -15,7 +15,7 @@ def main():
     ids = {c['id']: s for s, c in chs.items()}
     cola = {s: [] for s in chs}
     for o in gql('query { account { organizations { id } } }')['account']['organizations']:
-        d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}) '
+        d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}, first: 100) '
                 '{ edges { node { dueAt channelId } } } }', {'o': o['id']})
         for e in d['posts']['edges']:
             n = e['node']

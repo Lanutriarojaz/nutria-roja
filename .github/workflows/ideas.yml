@@ -3,7 +3,7 @@ name: Tele-Dimensional (recibir ideas)
 # El atajo del iPhone (ChatGPT) o la reserva (Claude) mandan aquí las ideas de la semana.
 on:
   repository_dispatch:
-    types: [ideas]
+    types: [ideas, guion]
   workflow_dispatch:
     inputs:
       texto:
@@ -17,7 +17,6 @@ permissions:
   contents: write
   issues: write
 
-concurrency: ideas
 
 jobs:
   guardar:
@@ -35,9 +34,13 @@ jobs:
       - name: Guardar las ideas
         run: |
           case "$FUENTE" in chatgpt|claude) ;; *) FUENTE=otra ;; esac
-          printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
-          git add tele/ideas
-          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Ideas de la semana ($FUENTE)"
+          if [ "${{ github.event.action }}" = "guion" ]; then
+            printf '%s' "$TEXTO" | python -m tele.guiones guardar "$FUENTE"
+          else
+            printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
+          fi
+          git add tele/ideas tele/encargos 2>/dev/null; git add tele/guiones 2>/dev/null; true
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "${{ github.event.action || 'ideas' }} de ChatGPT ($FUENTE)"
           for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
       - name: Aviso si las ideas no valían
         if: failure()

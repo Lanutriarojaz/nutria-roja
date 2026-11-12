@@ -110,7 +110,19 @@ def guardar(texto, fuente, fecha=None):
     while os.path.exists(ruta):                      # nunca pisa una tanda anterior
         ruta = os.path.join(CARPETA, f'{fecha}-{fuente}-{n}.json'); n += 1
     json.dump({'fuente': fuente, 'fecha': fecha, 'ideas': ideas}, open(ruta, 'w'), ensure_ascii=False, indent=1)
+    encargos(ideas)
     return ruta, len(ideas)
+
+
+def encargos(ideas):
+    """Un encargo de guion por idea (tele/encargos/1.txt, 2.txt…): el atajo los descarga y se los pasa a ChatGPT."""
+    base = open(os.path.join(AQUI, 'encargo_guion.txt')).read().rstrip()
+    d = os.path.join(AQUI, 'encargos'); os.makedirs(d, exist_ok=True)
+    for f in glob.glob(os.path.join(d, '*.txt')):
+        os.remove(f)
+    for n, i in enumerate(ideas, 1):
+        idea = {k: v for k, v in i.items() if v and k not in ('formato',)}
+        open(os.path.join(d, f'{n}.txt'), 'w').write(base + '\n' + json.dumps(idea, ensure_ascii=False, indent=1) + '\n')
 
 
 def _usadas():

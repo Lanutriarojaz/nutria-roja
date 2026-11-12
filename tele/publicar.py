@@ -17,7 +17,7 @@ def en_cola(chs, cuando):
     ya = set()
     try:
         for o in gql('query { account { organizations { id } } }')['account']['organizations']:
-            d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}) '
+            d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}, first: 100) '
                     '{ edges { node { dueAt channelId } } } }', {'o': o['id']})
             for e in d['posts']['edges']:
                 n = e['node']

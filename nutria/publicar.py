@@ -47,7 +47,7 @@ def ya_programados(chs):
         orgs = gql('query { account { organizations { id } } }')['account']['organizations']
         ids = {c['id'] for c in chs.values()}
         for o in orgs:
-            d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}) '
+            d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}, first: 100) '
                     '{ edges { node { id dueAt channelId } } } }', {'o': o['id']})
             for e in d['posts']['edges']:
                 n = e['node']
