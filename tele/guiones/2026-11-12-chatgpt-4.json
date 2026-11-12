@@ -1,0 +1,211 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "El pronóstico de ayer para mañana",
+  "titulo_corto": "Mañana llueve… ayer ya está mojado ☔",
+  "formato": "tiempo",
+  "resumen": "Una presentadora quiere sol, pero cada pronóstico cambia el pasado.",
+  "premisa": "Una meteoróloga intenta anunciar un día soleado, pero cada palabra altera retroactivamente el clima de ayer.",
+  "personajes": [
+   {
+    "id": "lumia",
+    "nombre": "Lumia",
+    "cuerpo": "paraguas",
+    "personalidad": "Quejica y melodramático, siempre se siente víctima de la lluvia.",
+    "voz": "aguda",
+    "aspecto": "A small blue umbrella with googly eyes, a bent metal rib, dripping water constantly, and wearing a tiny bow tie."
+   },
+   {
+    "id": "tora",
+    "nombre": "Tora",
+    "cuerpo": "tendedero",
+    "personalidad": "Seca y sarcástica, habla pausado como si todo le molestara.",
+    "voz": "grave",
+    "aspecto": "A wooden clothesline with dangling socks and a shirt, two small expressive clothespins as eyes, and a single wet slipper hanging upside down."
+   },
+   {
+    "id": "petunia",
+    "nombre": "Petunia",
+    "cuerpo": "maceta",
+    "personalidad": "Dramática y acusadora, cree que todo gira en torno a ella.",
+    "voz": "chillon",
+    "aspecto": "A terracotta flowerpot with a wilted pink flower, muddy smudges, a tiny umbrella sticking out the soil, and a crack shaped like a smile."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Plató del tiempo con mapas flotantes. Lumia gotea sobre la mesa.",
+    "rotulo": "El Tiempo Retroactivo",
+    "decorado": "A futuristic weather studio: floating holographic maps, puddles on the shiny floor, and floating clock faces running backward.",
+    "musica": "normal",
+    "sfx": "ding",
+    "prop": null,
+    "presentes": [
+     "lumia",
+     "tora",
+     "petunia"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Mañana lloverá tanto que ayer ya suspendimos la barbacoa.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "La presentadora señala el mapa; aparecen gotas en el plató.",
+    "rotulo": "Pronóstico en directo",
+    "decorado": "Same weather studio, now water drips from hovering clouds, puddles forming around the props.",
+    "musica": "normal",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "lumia",
+     "tora",
+     "petunia"
+    ],
+    "lineas": [
+     {
+      "quien": "lumia",
+      "texto": "¡Otra vez mojado! ¿Puedes no decir 'lluvia'?",
+      "emocion": "enfado",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tora",
+      "texto": "Ayer estaba seco. Hasta que abriste la boca.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "petunia",
+      "texto": "Mi tierra se inundó antes de secarse. Eso es crueldad vegetal.",
+      "emocion": "enfado",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Mapa se ilumina, ropa gotea sobre la mesa. Tora se sacude indignada.",
+    "rotulo": "Tormenta ayer",
+    "decorado": "Studio with flashing map, puddles spreading, hanging soaked garments appearing spontaneously.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "lumia",
+     "tora",
+     "petunia"
+    ],
+    "lineas": [
+     {
+      "quien": "lumia",
+      "texto": "Di sol. ¡Di sol ya!",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tora",
+      "texto": "Si dice sol, ayer se incendia la colada.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "petunia",
+      "texto": "Prefiero sequía a esta locura. ¡Suelta el sol!",
+      "emocion": "enfado",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Lumia abre su paraguas, la maceta tiembla, la ropa humea.",
+    "rotulo": "El momento decisivo",
+    "decorado": "Studio half flooded on one side, half dry and cracked on the other, with flickering holograms.",
+    "musica": "silencio",
+    "sfx": null,
+    "prop": null,
+    "presentes": [
+     "lumia",
+     "tora",
+     "petunia"
+    ],
+    "lineas": [
+     {
+      "quien": "lumia",
+      "texto": "¿Qué vas a decir?",
+      "emocion": "miedo",
+      "pausa": 0.3,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tora",
+      "texto": "Pues…",
+      "emocion": "neutral",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "petunia",
+      "texto": "Calla. Que no diga nada.",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ]
+   },
+   {
+    "plano": "Silencio absoluto. Los tres miran al mapa que empieza a gotear.",
+    "rotulo": "Consecuencias",
+    "decorado": "Studio frozen in silence, drops fall in slow motion, a single sock floats in a puddle.",
+    "musica": "silencio",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "lumia",
+     "tora",
+     "petunia"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "El silencio de mañana… fue la tormenta de ayer.",
+      "emocion": "neutral",
+      "pausa": 0.9,
+      "golpe": true,
+      "sello": "CÍRCULO"
+     }
+    ]
+   }
+  ],
+  "giro": "La presentadora opta por callar, pero ese silencio causó la tormenta de ayer.",
+  "descripcion": "El parte del tiempo retroactivo: lo que digas hoy cambia ayer.\n¿Qué pronosticarías tú sin arruinar el pasado?",
+  "hashtags": [
+   "#teledimensional",
+   "#humorabsurdo",
+   "#cienciaficcion",
+   "#miniserie",
+   "#lluvia"
+  ]
+ }
+}

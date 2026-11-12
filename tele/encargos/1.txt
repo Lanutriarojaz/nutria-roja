@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "El juicio de la última croqueta",
- "elementos": [
-  "croqueta",
-  "táper",
-  "tenedor"
- ],
- "concepto": "Paradoja de Newcomb: elegir sabiendo que alguien ya ha predicho tu elección",
- "conflicto": "Un acusado debe decidir si comerse una croqueta que podría demostrar su inocencia.",
- "premisa": "Un hombre quiere demostrar que no robó la última croqueta, pero el tribunal ya ha dictado sentencia basándose en lo que va a hacer durante el juicio.",
- "chiste": "El juez le ofrece un tenedor y un táper cerrado, mientras el fiscal insiste en que cualquier decisión constituye una confesión anticipada.",
- "giro": "El acusado decide no comer y el juez abre el táper: está vacío porque el tribunal predijo que, al declararse inocente, alguien tendría que haberse comido la prueba.",
- "gancho": "Hoy juzgamos un robo que todavía no se ha cometido.",
- "clave": "2026-11-11-chatgpt.json#0",
- "fuente": "chatgpt"
+ "titulo": "Ascensor hasta el Océano",
+ "formato_texto": "Grabación de cámara de seguridad",
+ "genero": "Comedia surrealista",
+ "premisa": "El ascensor intenta llevar a un ejecutivo a su piso, pero accidentalmente baja hasta el océano y empiezan a entrar peces",
+ "chiste": "El ascensor mantiene un tono profesional mientras todo se vuelve ridículo y acuático",
+ "giro": "El ascensor abre puertas en un arrecife y dice: “Planta -2000, zona de snorkel corporativo”",
+ "gancho": "Puertas de ascensor que se abren y entra un pez payaso flotando",
+ "protagonista": "Un ascensor parlante muy educado que se pone nervioso cuando transporta peces vivos",
+ "universo": "Un rascacielos cuya planta -2000 se abre directamente al fondo del mar",
+ "desarrollo": "1) El ascensor baja y se escuchan burbujas; 2) Peces y un tiburón entran como si fuera normal; 3) El ejecutivo intenta mantener la compostura mientras el ascensor pide disculpas por la humedad",
+ "audiovisual": "Plano de cámara de seguridad con pez cruzando frente al ejecutivo serio mientras el ascensor dice: “Siguiente parada: Mar profundo”"
 }

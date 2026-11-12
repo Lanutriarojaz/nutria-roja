@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "Atención al cliente del destino",
- "elementos": [
-  "ticket de turno",
-  "plátano",
-  "reloj despertador"
- ],
- "concepto": "Argumento perezoso: confundir un destino inevitable con la inutilidad de actuar",
- "conflicto": "Un ciudadano quiere evitar un accidente predestinado sin realizar ningún esfuerzo.",
- "premisa": "Un hombre quiere impedir que mañana resbale con un plátano, pero la oficina del destino le asegura que cualquier precaución ya está incluida en su expediente.",
- "chiste": "El funcionario le entrega un ticket para recurrir el accidente, le recomienda poner el despertador y le cobra una tasa por cada intento de no levantarse de la cama.",
- "giro": "El hombre decide quedarse dormido para desafiar al destino, pero al apagar el despertador pisa el plátano que él mismo había colocado junto a la cama para recordar que debía evitarlo.",
- "gancho": "Su accidente de mañana ya está disponible para reclamaciones.",
- "clave": "2026-11-11-chatgpt.json#6",
- "fuente": "chatgpt"
+ "titulo": "Perros Telepáticos en el Metro",
+ "formato_texto": "Falso documental urbano",
+ "genero": "Comedia urbana y surrealista",
+ "premisa": "Los perros usan el metro para coordinar fiestas secretas sin que los humanos se enteren",
+ "chiste": "Vemos la vida cotidiana del metro desde su punto de vista, con pensamientos absurdos y discusiones telepáticas",
+ "giro": "Los perros se bajan en su parada ladrando la sintonía del metro",
+ "gancho": "Un perro sentado en el metro mirando a cámara con subtítulos: “Próxima parada: botellón canino”",
+ "protagonista": "Una manada de perros callejeros con telepatía colectiva",
+ "universo": "El transporte público es dominado por animales que se comunican mentalmente",
+ "desarrollo": "1) Perros entrando al vagón como si nada; 2) Comentan mentalmente sobre los pasajeros y hacen planes; 3) Un humano accidental capta un pensamiento y se traumatiza",
+ "audiovisual": "Montaje de miradas caninas y subtítulos telepáticos mezclados con megafonía del metro"
 }

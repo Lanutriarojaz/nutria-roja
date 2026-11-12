@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "Alquiler de recuerdos de segunda mano",
- "elementos": [
-  "cepillo de dientes",
-  "fotografía",
-  "tostadora"
- ],
- "concepto": "Paradoja de la teletransportación: continuidad psicológica frente a identidad personal",
- "conflicto": "Una clienta quiere recuperar su infancia sin convertirse en otra persona.",
- "premisa": "Una mujer quiere comprar recuerdos felices, pero cada recuerdo adquirido sustituye una parte de su personalidad original.",
- "chiste": "El vendedor ofrece recuerdos premium de desayunos familiares y regala una tostadora que reconoce a sus antiguos propietarios mejor que ellos mismos.",
- "giro": "La clienta compra todos los recuerdos y descubre en una fotografía que es una copia mental de la vendedora anterior, que ahora presenta el programa desde su cuerpo.",
- "gancho": "Esta noche liquidamos infancias usadas con garantía de identidad.",
- "clave": "2026-11-11-chatgpt.json#2",
- "fuente": "chatgpt"
+ "titulo": "Noticias desde el Trastero",
+ "formato_texto": "Noticiario absurdo",
+ "genero": "Sátira y humor surrealista",
+ "premisa": "La lámpara narra noticias como si fueran históricas, pero solo son discusiones entre cajas y ratones",
+ "chiste": "Se trata cada tontería como noticia de última hora",
+ "giro": "Corte súbito porque la lámpara se funde y todo queda a oscuras",
+ "gancho": "“Última hora: una caja de zapatos ha iniciado una guerra civil”",
+ "protagonista": "Un presentador de informativos que es en realidad una lámpara rota",
+ "universo": "Un canal que solo informa sucesos ocurridos dentro de un trastero infinito",
+ "desarrollo": "1) La lámpara abre el informativo con gravedad; 2) Conexiones en directo con una pelota de playa ‘reportera’; 3) Se anuncia el hallazgo de un calcetín desaparecido como si fuera oro",
+ "audiovisual": "Mesa de informativos hecha de maletas, con la lámpara parpadeando dramáticamente"
 }

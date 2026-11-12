@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "Gran Hermetismo: el concursante invisible",
- "elementos": [
-  "espejo",
-  "almohada",
-  "cepillo de pelo"
- ],
- "concepto": "Problema de las otras mentes: imposibilidad de verificar directamente la experiencia consciente ajena",
- "conflicto": "Un concursante quiere demostrar que existe aunque nadie pueda observarlo.",
- "premisa": "Un participante quiere ganar un reality de convivencia, pero sus compañeros creen que es un personaje inventado por la producción.",
- "chiste": "El concursante duerme en una almohada, empaña el espejo y deja pelos en el cepillo, mientras el programa penaliza sus pruebas por falta de consentimiento del supuesto fantasma.",
- "giro": "En la gala final, el presentador revela que el concursante era el único ser consciente y que todos los demás, incluido el público, eran simulaciones creadas para comprobar si podía demostrarlo.",
- "gancho": "Esta semana expulsaremos al único concursante que asegura estar vivo.",
- "clave": "2026-11-11-chatgpt.json#5",
- "fuente": "chatgpt"
+ "titulo": "Tutorial de Magia para Cafeteras",
+ "formato_texto": "Tutorial online absurdo",
+ "genero": "Comedia visual y slapstick",
+ "premisa": "El mago intenta enseñar un truco de desaparición usando café caliente",
+ "chiste": "Las cafeteras hacen trucos fallidos, salpicando café y humo por todas partes",
+ "giro": "El mago aplaude orgulloso mientras todo el salón gotea café",
+ "gancho": "Una cafetera con capa y sombrero de mago sobre la mesa",
+ "protagonista": "Un mago frustrado que solo enseña a cafeteras a hacer trucos",
+ "universo": "Las cafeteras pueden aprender magia si alguien les dedica tiempo",
+ "desarrollo": "1) El mago presenta a su ‘alumna estrella’; 2) La cafetera intenta desaparecer una cucharilla y la lanza por la ventana; 3) Explosión de espuma de leche como gran final",
+ "audiovisual": "Cámara rápida de trucos fallidos con chorros de café y confeti"
 }

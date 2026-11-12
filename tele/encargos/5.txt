@@ -109,23 +109,22 @@ Devuelve SOLO este JSON, sin nada más:
  "descripcion": "texto de la publicación: 2 líneas con gancho y una pregunta final, sin hashtags",
  "hashtags": ["5 hashtags en español, el primero #teledimensional"]
 }
-LÍMITES: 5 o 6 escenas; de 16 a 24 líneas en total; entre 130 y 170 palabras de diálogo; ninguna frase de más de 15 palabras.
+LÍMITES (OBLIGATORIOS, cuéntalos antes de responder): 5 o 6 escenas; MÍNIMO 16 líneas de diálogo en total (ideal 18-22);
+MÍNIMO 130 palabras de diálogo en total (ideal 140-170); ninguna frase de más de 15 palabras. Un guion más corto NO sirve:
+el vídeo dura un minuto y necesita conversación, réplicas y escalada. Si te queda corto, añade réplicas en la escalada.
 La primera línea es el gancho. La última lleva "golpe": true.
 
 IDEA:
 {
- "titulo": "El pronóstico de ayer para mañana",
- "elementos": [
-  "paraguas",
-  "tendedero",
-  "maceta"
- ],
- "concepto": "Causalidad inversa: acontecimientos futuros que influyen en el pasado",
- "conflicto": "Una meteoróloga intenta impedir una tormenta que ya ha mojado el pasado.",
- "premisa": "Una presentadora quiere anunciar un día soleado, pero cada pronóstico modifica retroactivamente el tiempo que hizo ayer.",
- "chiste": "Cada vez que dice 'lluvia', aparecen paraguas mojados en el plató, la ropa del tendedero gotea y una maceta reclama daños por una sequía que todavía no se ha anunciado.",
- "giro": "La presentadora decide no pronosticar nada, pero descubre que el silencio de mañana fue precisamente lo que provocó ayer la primera tormenta.",
- "gancho": "Mañana lloverá tanto que ayer ya suspendimos la barbacoa.",
- "clave": "2026-11-11-chatgpt.json#4",
- "fuente": "chatgpt"
+ "titulo": "Reality de Nubes",
+ "formato_texto": "Reality show sin presentador",
+ "genero": "Comedia poética y absurda",
+ "premisa": "Las nubes intentan destacar formando sombras divertidas mientras el viento hace de villano",
+ "chiste": "Las nubes se comportan como concursantes de reality exagerando dramas por cambios de forma",
+ "giro": "Un avión atraviesa a las tres y el cartel “TEMPORADA 2 MUY PRONTO” aparece en el cielo",
+ "gancho": "Una nube con gafas de sol diciendo “¡Hoy voy a petarlo!”",
+ "protagonista": "Tres nubes con personalidad: chula, llorona y despistada",
+ "universo": "El cielo funciona como un plató donde las nubes compiten por formar figuras más virales",
+ "desarrollo": "1) La nube chula presume de parecer un dragón; 2) El viento deforma a la llorona en churro; 3) La despistada hace sin querer un meme perfecto",
+ "audiovisual": "Time-lapse de nubes transformándose mientras suenan confesiones estilo reality"
 }
