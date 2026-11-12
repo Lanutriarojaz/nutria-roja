@@ -11,5 +11,18 @@
   "formato": "debate",
   "conflicto": "dos versiones del mismo personaje reclaman ser la original",
   "nota": 4.0
+ },
+ {
+  "fecha": "2026-11-12",
+  "titulo": "Gran Convivencia: La Promesa del Fuego",
+  "elementos": [
+   "taco",
+   "luna",
+   "patinete"
+  ],
+  "concepto": "Prometeo",
+  "formato": "reality",
+  "conflicto": "el ganador será castigado y el perdedor, premiado",
+  "nota": 6.0
  }
 ]
