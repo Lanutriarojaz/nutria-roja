@@ -69,13 +69,13 @@ def _proveedores(mensajes, temperatura, rol='escribir'):
 _AGOTADOS = set()   # modelos que ya han dicho «sin cupo» en esta ejecución
 
 
-def llm(mensajes, temperatura=0.7, rol='escribir', espera=120):
+def llm(mensajes, temperatura=0.7, rol='escribir', espera=120, vision=False):
     """Prueba los modelos gratuitos por turnos: si uno está saturado (503), sin cupo (429) o retirado (404),
     pasa al siguiente al momento. Hasta 3 vueltas completas con pausas crecientes."""
     ultimo = None
     for vuelta in range(5):
         for nombre, url, cab, cuerpo in _proveedores(mensajes, temperatura, rol):
-            if nombre in _AGOTADOS:
+            if nombre in _AGOTADOS or (vision and (nombre in ('groq', 'pollinations') or 'gemma' in nombre)):
                 continue
             try:
                 r = requests.post(url, json=cuerpo, headers=cab, timeout=espera)

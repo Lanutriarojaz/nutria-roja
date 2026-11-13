@@ -66,8 +66,11 @@ def _info_imagenes(titulos):
         if not re.search(r'(public domain|dominio p|cc0|cc[ -]by)', lic, re.I):
             continue
         autor = re.sub('<[^>]+>', '', m.get('Artist', {}).get('value') or '').strip()[:60]
+        desc = re.sub('<[^>]+>', '', m.get('ImageDescription', {}).get('value') or '').strip()[:300]
+        cats = (m.get('Categories', {}).get('value') or '').replace('|', ', ')[:200]
         out.append({'titulo': p['title'], 'url': ii['thumburl'], 'ancho': ii.get('width', 0),
-                    'alto': ii.get('height', 0), 'licencia': lic, 'autor': autor or 'Wikimedia Commons'})
+                    'alto': ii.get('height', 0), 'licencia': lic, 'autor': autor or 'Wikimedia Commons',
+                    'desc': desc, 'cats': cats})
     return out
 
 

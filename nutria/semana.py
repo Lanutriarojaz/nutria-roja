@@ -1,5 +1,6 @@
 """Genera la tirada de vídeos: python -m nutria.semana --desde 2026-11-11 --dias 6"""
 import argparse
+import base64
 import datetime as dt
 import json
 import os
@@ -47,43 +48,111 @@ def _candidatas(hecho, g):
     return [im for _, im in cands]
 
 
-def _ordenar_con_gemini(cands, hecho, g, n):
-    """Gemini mira los títulos de archivo y elige las n fotos que mejor cuentan el hecho. Si falla, orden por defecto."""
-    if len(cands) <= n:
-        return cands
-    lista = '\n'.join(f"{i}: {im['titulo']}" for i, im in enumerate(cands[:40]))
+def _miniatura_b64(ruta):
+    out = ruta + '.v.jpg'
+    video.sh(['ffmpeg', '-v', 'error', '-y', '-i', ruta, '-vf', 'scale=640:640:force_original_aspect_ratio=decrease',
+              '-frames:v', '1', out])
+    return base64.b64encode(open(out, 'rb').read()).decode()
+
+
+REVISION = """Eres el documentalista gráfico de un canal de historia que presume de rigor: una foto equivocada nos hace perder la credibilidad.
+Decide qué fotos pueden ilustrar este vídeo SIN ERRAR en nada.
+HECHO ({año}): {hecho}
+SUJETO (lo que debe verse): {sujeto}
+DETALLES QUE NO PUEDEN FALLAR (país, bando, época, modelo, lugar, persona): {detalles}
+GUION: {guion}
+
+De cada imagen te doy el nombre de archivo y la descripción de Wikimedia. Responde por cada una:
+- "si": muestra claramente el sujeto, o un elemento esencial de la historia (protagonista, lugar, objeto, destino), y NADA contradice los detalles.
+- "no": muestra otra cosa; o lo mismo pero de otro país, bando, época, modelo o persona (p. ej. una nave soviética cuando el hecho es de una nave de EE. UU.);
+  o algo genérico que podría ser de cualquier sitio (un ring de boxeo cualquiera, un cohete cualquiera); o un mapa, logo o texto.
+- "dudoso": no puedes asegurarlo.
+Reglas: no identifiques a nadie por la cara; para personas fíate del pie de foto y de que la imagen sea coherente con él.
+Si la descripción dice una cosa y la imagen otra, es "no". Ante la duda, "dudoso".
+Responde {{"fotos":[{{"id":N,"veredicto":"si|no|dudoso","muestra":"lo que se ve, en 8-15 palabras, en español","motivo":"breve"}}]}}"""
+
+ASIGNACION = """Para cada frase de este vídeo elige UNA de las fotos aprobadas (por su id). Puedes repetir fotos.
+Reglas:
+- La foto debe ilustrar el SIGNIFICADO de la frase, nunca una palabra suelta. Si habla de crisis o de hambre, no pongas a alguien comiendo; si dice «cohete», no pongas un cohete cualquiera.
+- Si ninguna foto encaja con lo que dice la frase, usa la más neutra del sujeto principal. Jamás una que muestre algo distinto o contradictorio.
+- No repitas la misma foto más de 2 frases seguidas.
+SUJETO: {sujeto}
+FOTOS APROBADAS:
+{fotos}
+FRASES:
+{frases}
+Responde {{"asignacion":[id, id, ...]}} con exactamente {n} ids, uno por frase y en orden."""
+
+
+def _revisar_fotos(cands, hecho, g, sujeto, detalles):
+    """cands: [{'im':..., 'ruta':...}]. Gemini MIRA cada foto (con su pie de Commons) y aprueba solo las que encajan."""
+    aprobadas = []
+    guion_txt = ' '.join([g.get('gancho', ''), *g.get('frases', [])])
+    cab = REVISION.format(año=hecho.get('año'), hecho=hecho.get('texto'), sujeto=sujeto, detalles=detalles or 'los que se deduzcan del hecho', guion=guion_txt)
+    for i in range(0, len(cands), 6):
+        lote = cands[i:i + 6]
+        partes = [{'type': 'text', 'text': cab}]
+        for k, c in enumerate(lote):
+            im = c['im']
+            partes.append({'type': 'text', 'text': f"Imagen id={i + k}. Archivo: {im['titulo']}. Descripción: {im.get('desc') or '—'}. Categorías: {im.get('cats') or '—'}."})
+            partes.append({'type': 'image_url', 'image_url': {'url': 'data:image/jpeg;base64,' + _miniatura_b64(c['ruta'])}})
+        r = guion.llm([{'role': 'user', 'content': partes}], temperatura=0, rol='elegir', vision=True)
+        for f in r.get('fotos', []):
+            try:
+                idx = int(f['id'])
+            except (KeyError, ValueError, TypeError):
+                continue
+            if i <= idx < i + len(lote):
+                c = cands[idx]; c['veredicto'] = f.get('veredicto'); c['muestra'] = f.get('muestra', ''); c['motivo'] = f.get('motivo', '')
+                print(f"    {'✔' if f.get('veredicto') == 'si' else '✖'} {c['im']['titulo'][:55]} → {f.get('veredicto')}: {f.get('muestra', '')[:60]} ({f.get('motivo', '')[:50]})", flush=True)
+                if f.get('veredicto') == 'si':
+                    aprobadas.append(c)
+    return aprobadas
+
+
+def _asignar(aprobadas, frases, sujeto):
+    """Una foto por frase, según lo que dice cada frase. Si Gemini falla, reparto por orden entre las aprobadas."""
+    n = len(frases)
     try:
-        r = guion.llm([
-            {'role': 'system', 'content': 'Eres editor gráfico de un canal de historia en vídeos cortos. Responde solo JSON.'},
-            {'role': 'user', 'content': f"Hecho ({hecho.get('año')}): {hecho.get('texto')}\nGuion: {' '.join(g.get('frases', []))}\n\nArchivos disponibles:\n{lista}\n\n"
-                                       f'Elige las {n} que mejor ilustran el relato, en el orden en que deben salir y sin repetir plano. '
-                                       'Descarta lo que no pinte nada (escudos, mapas, fotos de otra cosa). Responde {"ids":[...]}.'}],
-            temperatura=0.2, rol='elegir')
-        ids = [int(i) for i in r.get('ids', []) if str(i).isdigit() and int(i) < len(cands[:40])]
-        ids = list(dict.fromkeys(ids))
-        elegidas = [cands[i] for i in ids]
-        resto = [im for im in cands if im not in elegidas]
-        return elegidas + resto
+        r = guion.llm([{'role': 'user', 'content': ASIGNACION.format(
+            sujeto=sujeto, n=n, fotos='\n'.join(f"{i}: {c['muestra']}" for i, c in enumerate(aprobadas)),
+            frases='\n'.join(f'{i + 1}. {f}' for i, f in enumerate(frases)))}], temperatura=0, rol='elegir')
+        ids = [int(x) for x in r.get('asignacion', [])]
+        if len(ids) == n and all(0 <= x < len(aprobadas) for x in ids):
+            return ids
+        print(f'  asignación rara ({len(ids)} ids para {n} frases): reparto por orden', flush=True)
     except Exception as e:
-        print(f'  Gemini no elige fotos: {str(e)[:100]}', flush=True)
-        return cands
+        print(f'  Gemini no asigna fotos a las frases: {str(e)[:100]}', flush=True)
+    return [i % len(aprobadas) for i in range(n)]
 
 
-def elegir_imagenes(hecho, g, carpeta, n=5):
-    cands = _ordenar_con_gemini(_candidatas(hecho, g), hecho, g, n)
-    elegidas, rutas = [], []
-    for im in cands:
-        if len(rutas) >= n:
-            break
+def elegir_imagenes(hecho, g, carpeta, frases, minimo=3):
+    """Devuelve (una ruta por frase, fotos distintas usadas). Solo entran fotos que Gemini ha mirado y aprobado.
+    Si no hay al menos `minimo` aprobadas, falla: mejor ningún vídeo que una foto que no es."""
+    sujeto = g.get('sujeto') or hecho.get('texto') or g.get('titulo')
+    detalles = g.get('detalles_clave') or ''
+    cands, n = [], 0
+    for im in _candidatas(hecho, g)[:16]:
         ext = '.png' if im['url'].lower().split('?')[0].endswith('.png') else '.jpg'
-        ruta = os.path.join(carpeta, f'img{len(rutas)}{ext}')
+        ruta = os.path.join(carpeta, f'cand{n}{ext}')
         try:
-            fuentes.descargar(im['url'], ruta)
-            video._tam(ruta)  # comprueba que ffmpeg la lee
-            rutas.append(ruta); elegidas.append(im)
+            fuentes.descargar(im['url'], ruta); video._tam(ruta)
+            cands.append({'im': im, 'ruta': ruta}); n += 1
         except Exception:
             continue
-    return rutas, elegidas
+    if not cands:
+        raise ValueError('ninguna foto candidata se pudo bajar')
+    aprobadas = _revisar_fotos(cands, hecho, g, sujeto, detalles)
+    if len(aprobadas) < minimo:
+        raise ValueError(f'solo {len(aprobadas)} fotos aprobadas de {len(cands)} (mínimo {minimo}): no se publica con fotos dudosas')
+    ids = _asignar(aprobadas, frases, sujeto)
+    usadas = list(dict.fromkeys(ids))
+    # renombrar a imgN para que el montaje y los créditos las usen en orden
+    rutas = {}
+    for k, i in enumerate(usadas):
+        c = aprobadas[i]; nueva = os.path.join(carpeta, f'img{k}' + os.path.splitext(c['ruta'])[1])
+        os.replace(c['ruta'], nueva); rutas[i] = nueva
+    return [rutas[i] for i in ids], [aprobadas[i]['im'] | {'muestra': aprobadas[i]['muestra']} for i in usadas]
 
 
 def _art(hecho):
@@ -126,10 +195,11 @@ def un_dia(fecha, carpeta, usados):
             if not g:
                 continue
             os.makedirs(carpeta, exist_ok=True)
-            rutas, imgs = elegir_imagenes(hecho, g, carpeta)
-            if len(rutas) < 2:
-                errores.append(f"pocas fotos para «{_art(hecho)}»"); continue
             frases = [g['gancho'], *g['frases'], g['pregunta']]
+            try:
+                rutas, imgs = elegir_imagenes(hecho, g, carpeta, frases)
+            except ValueError as e:
+                errores.append(f"fotos de «{_art(hecho)}»: {e}"); print(f'  ✖ {e}', flush=True); continue
             texto = ' '.join(frases)
             salida = os.path.join(carpeta, 'video.mp4')
             fecha_txt = f"{d} de {guion.MESES[m - 1]} de {hecho['año']}"
@@ -146,7 +216,7 @@ def un_dia(fecha, carpeta, usados):
             info = {'fecha': fecha.isoformat(), 'año': hecho['año'], 'hecho': hecho['texto'],
                     'articulo': _art(hecho), 'titulo': g['titulo'],
                     'descripcion': g['descripcion'] + f"\n\nFotos: Wikimedia Commons — {creditos}",
-                    'guion': frases, 'imagenes': [i['titulo'] for i in imgs], 'calidad': medidas}
+                    'guion': frases, 'imagenes': [i['titulo'] for i in imgs], 'fotos': [{'archivo': i['titulo'], 'muestra': i.get('muestra', '')} for i in imgs], 'calidad': medidas}
             json.dump(info, open(os.path.join(carpeta, 'info.json'), 'w'), ensure_ascii=False, indent=2)
             return info
         except Exception as e:

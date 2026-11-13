@@ -35,6 +35,8 @@ Devuelve SOLO este JSON (sin explicaciones ni ```):
  "año": 0000,
  "hecho": "el hecho en una frase",
  "articulo": "título EXACTO del artículo de Wikipedia en español sobre el tema (para buscar las fotos)",
+ "sujeto": "quién o qué debe VERSE en las fotos, con su nombre exacto (p. ej. «Mike Tyson», «módulo lunar Intrepid del Apolo 12»)",
+ "detalles_clave": "lo que NO puede fallar al elegir fotos: país o bando, época, modelo, lugar, persona (p. ej. «EE. UU., NASA, 1969; no es soviético»)",
  "gancho": "frase de 6 a 12 palabras que haga parar el dedo, intrigante, sin revelar todo (no empieces por 'Un día como hoy')",
  "frases": ["Un día como hoy, {dia} de {mes} de AAAA, ...", "...", "..."],
  "pregunta": "pregunta final corta que apetezca contestar (opinión o experiencia)",
@@ -42,6 +44,7 @@ Devuelve SOLO este JSON (sin explicaciones ni ```):
  "descripcion": "primera línea con la palabra clave y gancho, segunda con un dato extra breve, y al final 4 o 5 hashtags: #historia #undiacomohoy #curiosidades + 1 o 2 del tema",
  "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
 }}
+LAS FOTOS: otra IA buscará fotos reales en Wikimedia Commons y las revisará mirándolas. "sujeto" y "detalles_clave" son la guía de esa revisión: sé concreto y exacto.
 "frases": de 4 a 6, en total 60 a 90 palabras, con 1 o 2 curiosidades sorprendentes y el dato más bestia guardado para el final.
 """
 
