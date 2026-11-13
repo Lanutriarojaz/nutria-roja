@@ -43,8 +43,14 @@ jobs:
             printf '%s' "$TEXTO" | python -m tele.ideas guardar --fuente "$FUENTE"
           fi
           git add tele
-          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "${{ github.event.action || 'ideas' }} de ChatGPT ($FUENTE)"
-          for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
+          git config user.name nutria-bot && git config user.email bot@users.noreply.github.com
+          git commit -qm "${{ github.event.action || 'ideas' }} de ChatGPT ($FUENTE)"
+          # llegan varios a la vez desde el atajo: reintenta hasta subirlo, y si no lo consigue, que falle (y avise)
+          for i in $(seq 1 8); do
+            git pull -q --rebase && git push -q && exit 0
+            git rebase --abort 2>/dev/null; sleep $((RANDOM % 12 + 4))
+          done
+          exit 1
       - name: Aviso si las ideas no valían
         if: failure()
         run: |
