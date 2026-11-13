@@ -63,7 +63,10 @@ DETALLES QUE NO PUEDEN FALLAR (país, bando, época, modelo, lugar, persona): {d
 GUION: {guion}
 
 De cada imagen te doy el nombre de archivo y la descripción de Wikimedia. Responde por cada una:
-- "si": muestra claramente el sujeto, o un elemento esencial de la historia (protagonista, lugar, objeto, destino), y NADA contradice los detalles.
+- "si": muestra el sujeto MISMO, o su lugar, su objeto o a sus protagonistas, y NADA contradice los detalles.
+  El contexto cultural o de época NO basta (un grabado antiguo "del mismo estilo", un edificio del mismo país, ropa o merchandising con un logo): eso es "no".
+  Si el sujeto es una persona, vale cualquier foto suya identificada por el pie de foto de la época relevante de su vida
+  (no fotos de décadas después, ni de museos, ni de su casa, ni de otra persona).
 - "no": muestra otra cosa; o lo mismo pero de otro país, bando, época, modelo o persona (p. ej. una nave soviética cuando el hecho es de una nave de EE. UU.);
   o algo genérico que podría ser de cualquier sitio (un ring de boxeo cualquiera, un cohete cualquiera); o un mapa, logo o texto.
 - "dudoso": no puedes asegurarlo.
