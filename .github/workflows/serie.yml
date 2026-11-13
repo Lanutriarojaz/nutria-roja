@@ -76,7 +76,7 @@ jobs:
           json.dump([i], open('salida-serie/tirada.json', 'w'), ensure_ascii=False, indent=2)
           EOF
           echo "fecha=$FECHA" >> "$GITHUB_OUTPUT"
-          if [ "${{ inputs.publicar }}" = "true" ] || { [ "${{ github.event_name }}" = "schedule" ] && [ -f tele/serie_auto ]; }; then
+          if [ "${{ inputs.publicar }}" = "true" ] || { [ "${{ github.event_name }}" = "schedule" ] && { [ -f tele/serie_auto ] || [ -f tele/serie_una_vez ]; }; }; then
             echo "publicar=si" >> "$GITHUB_OUTPUT"
           fi
 
@@ -119,13 +119,23 @@ jobs:
           MEDIA_BASE: ${{ env.PAGES }}
         run: python -m tele.publicar salida-serie/tirada.json --hora "${{ inputs.hora || '13:00' }}"
 
+      - name: Avisar por correo de que está programado
+        if: steps.montaje.outputs.publicar
+        run: |
+          FECHA=${{ steps.montaje.outputs.fecha }}
+          TITULO=$(python -c "import json; print(json.load(open('salida-serie/info.json'))['titulo'])")
+          .github/aviso.sh "📺 Tele-Dimensional programado: «$TITULO» ($(date -d "$FECHA" +%d/%m) a las ${{ inputs.hora || '13:00' }})" \
+            "Sale en TikTok, YouTube e Instagram a las ${{ inputs.hora || '13:00' }} (Madrid). Verlo ya: $PAGES/td-$FECHA.mp4"
+
       - name: Apuntar el estado del rodaje
         if: always() && steps.rodaje.outcome != 'skipped'
         run: |
           if [ "${{ steps.montaje.outputs.publicar }}" = "si" ] && [ "${{ job.status }}" = "success" ]; then
             python -m tele.rodaje --dir rodaje --cerrar
+            [ -f tele/serie_una_vez ] && git rm -q tele/serie_una_vez     # «solo este»: el siguiente vuelve a esperar visto bueno
+            git config user.name nutria-bot && git config user.email bot@users.noreply.github.com
             git add tele/guiones
-            git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Tele-Dimensional ${{ steps.montaje.outputs.fecha }}" && \
+            git commit -qm "Tele-Dimensional ${{ steps.montaje.outputs.fecha }}" && \
               for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done || true
           elif [ "${{ steps.montaje.outcome }}" = "success" ]; then
             python -m tele.rodaje --dir rodaje --montado
