@@ -11,9 +11,9 @@
 | | edge-tts + ffmpeg | Voz, subtítulos palabra a palabra y montaje vertical |
 | | Control de calidad | Rechaza vídeos con silencios, saltos de audio, imagen negra o duración rara |
 | | GitHub Pages | Aloja los vídeos en una dirección pública |
-| | Buffer | Recibe los 7 vídeos programados a las 19:00, uno por día, en TikTok, YouTube e Instagram |
+| | Buffer | Recibe los 7 vídeos programados a las 13:30, uno por día, en TikTok, YouTube e Instagram |
 | | Correo | Llega el resumen de la semana (o el aviso de fallo) a lanutriarojaz@gmail.com |
-| Cada día 19:00 | Buffer | Publica el vídeo del día en las 3 redes |
+| Cada día 13:30 | Buffer | Publica el vídeo del día en las 3 redes |
 
 ## Qué NO interviene
 

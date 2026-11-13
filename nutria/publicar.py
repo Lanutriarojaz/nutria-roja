@@ -1,6 +1,6 @@
 """Programa la tirada en Buffer (TikTok, YouTube Shorts, Instagram Reels), un vídeo por día a la hora fijada.
 Uso: BUFFER_API_KEY=... MEDIA_BASE=https://raw.githubusercontent.com/<usuario>/<repo>/media \
-     python -m nutria.publicar salida/tirada.json [--hora 19:00] [--prueba]"""
+     python -m nutria.publicar salida/tirada.json [--hora 13:30] [--prueba]"""
 import argparse
 import datetime as dt
 import json
@@ -79,7 +79,7 @@ def metadatos(servicio, v):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('tirada')
-    ap.add_argument('--hora', default=os.environ.get('NUTRIA_HORA', '19:00'))
+    ap.add_argument('--hora', default=os.environ.get('NUTRIA_HORA', '13:30'))
     ap.add_argument('--prueba', action='store_true', help='no programa nada, solo enseña')
     a = ap.parse_args()
     tirada = json.load(open(a.tirada))
