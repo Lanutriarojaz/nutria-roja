@@ -12,21 +12,67 @@ from . import calidad, encargos, fuentes, guion, video
 RAIZ = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 
-def elegir_imagenes(hecho, g, carpeta, n=5):
+def _candidatas(hecho, g):
+    """Fotos candidatas: las del artículo, las de las búsquedas de ChatGPT y las que propone Gemini."""
     vistas, cands = set(), []
-    for art in hecho['articulos']:
-        for im in fuentes.imagenes_articulo(art):
-            if im['titulo'] not in vistas:
-                vistas.add(im['titulo']); cands.append((0, im))
-    for i, q in enumerate(g.get('busquedas', [])[:3]):
-        for im in fuentes.buscar_commons(q, 4):
-            if im['titulo'] not in vistas:
-                vistas.add(im['titulo']); cands.append((1 + i, im))
-    # fotos grandes y apaisadas o cuadradas primero; las del artículo, antes que las de la búsqueda
-    cands = [(p, im) for p, im in cands if im['ancho'] >= 500 and im['alto'] >= 350]
+
+    def add(im, prio):
+        if im['titulo'] not in vistas and im['ancho'] >= 500 and im['alto'] >= 350:
+            vistas.add(im['titulo']); cands.append((prio, im))
+
+    for art in hecho.get('articulos') or []:
+        try:
+            for im in fuentes.imagenes_articulo(art):
+                add(im, 0)
+        except Exception as e:
+            print(f'  (sin fotos del artículo «{art}»: {str(e)[:80]})', flush=True)
+    consultas = list(g.get('busquedas', []))[:3]
+    try:   # Gemini: búsquedas propias, más variadas y concretas que las del guion
+        r = guion.llm([
+            {'role': 'system', 'content': 'Eres documentalista gráfico de un canal de historia en vídeos cortos. Responde solo JSON.'},
+            {'role': 'user', 'content': f"Tema: {g.get('titulo')}\nHecho ({hecho.get('año')}): {hecho.get('texto')}\nGuion: {' '.join(g.get('frases', []))}\n\n"
+                                       'Propón 5 búsquedas EN INGLÉS para Wikimedia Commons que den fotos reales, nítidas y variadas '
+                                       '(personas, lugares, objetos, época; no mapas ni logos). Responde {"busquedas":["..."]}.'}],
+            temperatura=0.4, rol='elegir')
+        consultas += [q for q in r.get('busquedas', []) if isinstance(q, str)][:5]
+    except Exception as e:
+        print(f'  Gemini no propone búsquedas: {str(e)[:100]}', flush=True)
+    for i, q in enumerate(dict.fromkeys(consultas)):
+        try:
+            for im in fuentes.buscar_commons(q, 4):
+                add(im, 1 + i)
+        except Exception as e:
+            print(f'  (búsqueda «{q}» falla: {str(e)[:60]})', flush=True)
     cands.sort(key=lambda x: (x[0], -min(x[1]['ancho'], 1600) * min(x[1]['alto'], 1600)))
+    return [im for _, im in cands]
+
+
+def _ordenar_con_gemini(cands, hecho, g, n):
+    """Gemini mira los títulos de archivo y elige las n fotos que mejor cuentan el hecho. Si falla, orden por defecto."""
+    if len(cands) <= n:
+        return cands
+    lista = '\n'.join(f"{i}: {im['titulo']}" for i, im in enumerate(cands[:40]))
+    try:
+        r = guion.llm([
+            {'role': 'system', 'content': 'Eres editor gráfico de un canal de historia en vídeos cortos. Responde solo JSON.'},
+            {'role': 'user', 'content': f"Hecho ({hecho.get('año')}): {hecho.get('texto')}\nGuion: {' '.join(g.get('frases', []))}\n\nArchivos disponibles:\n{lista}\n\n"
+                                       f'Elige las {n} que mejor ilustran el relato, en el orden en que deben salir y sin repetir plano. '
+                                       'Descarta lo que no pinte nada (escudos, mapas, fotos de otra cosa). Responde {"ids":[...]}.'}],
+            temperatura=0.2, rol='elegir')
+        ids = [int(i) for i in r.get('ids', []) if str(i).isdigit() and int(i) < len(cands[:40])]
+        ids = list(dict.fromkeys(ids))
+        elegidas = [cands[i] for i in ids]
+        resto = [im for im in cands if im not in elegidas]
+        return elegidas + resto
+    except Exception as e:
+        print(f'  Gemini no elige fotos: {str(e)[:100]}', flush=True)
+        return cands
+
+
+def elegir_imagenes(hecho, g, carpeta, n=5):
+    cands = _ordenar_con_gemini(_candidatas(hecho, g), hecho, g, n)
     elegidas, rutas = [], []
-    for _, im in cands:
+    for im in cands:
         if len(rutas) >= n:
             break
         ext = '.png' if im['url'].lower().split('?')[0].endswith('.png') else '.jpg'
@@ -40,27 +86,27 @@ def elegir_imagenes(hecho, g, carpeta, n=5):
     return rutas, elegidas
 
 
+def _art(hecho):
+    return (hecho.get('articulos') or [hecho.get('texto', '')[:60]])[0]
+
+
 def un_dia(fecha, carpeta, usados):
     d, m = fecha.day, fecha.month
     candidatos = fuentes.efemerides(m, d)
     if not candidatos:
         raise RuntimeError('Wikipedia no tiene efemérides para ese día')
     errores = []
-    chatgpt = None                                   # guion de ChatGPT (atajo del domingo), solo si el verificador lo aprueba
+    chatgpt = None                                   # guion de ChatGPT (atajo del domingo): él elige el hecho y manda; solo se mira el formato
     try:
         prev = encargos.de_chatgpt(fecha.isoformat())
-        if prev and prev[0]['articulos'][0] not in usados:
+        if prev and _art(prev[0]) not in usados:
             guion.validar(prev[2], prev[0], d, guion.MESES[m - 1])
-            ok, malos = guion.verificar(prev[2], prev[1], prev[0])
-            if ok:
-                chatgpt = prev; print('  guion de ChatGPT verificado', flush=True)
-            else:
-                errores.append(f'ChatGPT descartado: {malos[:2]}'); print('  guion de ChatGPT descartado:', malos[:2], flush=True)
+            chatgpt = prev; print(f"  guion de ChatGPT: «{prev[2].get('titulo')}»", flush=True)
     except Exception as e:
         errores.append(f'ChatGPT no válido: {e}'); print('  guion de ChatGPT no válido:', str(e)[:120], flush=True)
     orden = ([chatgpt[0]] if chatgpt else []) + guion.elegir(candidatos, d, m, usados) + candidatos[:5]
     for hecho in orden:
-        if hecho['articulos'][0] in usados or (chatgpt and hecho is not chatgpt[0] and hecho['articulos'][0] == chatgpt[0]['articulos'][0]):
+        if _art(hecho) in usados or (chatgpt and hecho is not chatgpt[0] and _art(hecho) == _art(chatgpt[0])):
             continue
         try:
             if chatgpt and hecho is chatgpt[0]:
@@ -82,7 +128,7 @@ def un_dia(fecha, carpeta, usados):
             os.makedirs(carpeta, exist_ok=True)
             rutas, imgs = elegir_imagenes(hecho, g, carpeta)
             if len(rutas) < 2:
-                errores.append(f"pocas fotos para «{hecho['articulos'][0]}»"); continue
+                errores.append(f"pocas fotos para «{_art(hecho)}»"); continue
             frases = [g['gancho'], *g['frases'], g['pregunta']]
             texto = ' '.join(frases)
             salida = os.path.join(carpeta, 'video.mp4')
@@ -98,13 +144,13 @@ def un_dia(fecha, carpeta, usados):
                 continue
             creditos = '; '.join(f"{i['autor']} ({i['licencia']})" for i in imgs)
             info = {'fecha': fecha.isoformat(), 'año': hecho['año'], 'hecho': hecho['texto'],
-                    'articulo': hecho['articulos'][0], 'titulo': g['titulo'],
+                    'articulo': _art(hecho), 'titulo': g['titulo'],
                     'descripcion': g['descripcion'] + f"\n\nFotos: Wikimedia Commons — {creditos}",
                     'guion': frases, 'imagenes': [i['titulo'] for i in imgs], 'calidad': medidas}
             json.dump(info, open(os.path.join(carpeta, 'info.json'), 'w'), ensure_ascii=False, indent=2)
             return info
         except Exception as e:
-            errores.append(f"{hecho['articulos'][0]}: {e!r}")
+            errores.append(f"{_art(hecho)}: {e!r}")
     raise RuntimeError('Ningún hecho salió bien: ' + ' | '.join(errores[-6:]))
 
 

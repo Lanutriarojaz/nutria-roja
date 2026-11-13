@@ -18,35 +18,46 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 ENCARGOS = os.path.join(AQUI, 'encargos')
 GUIONES = os.path.join(AQUI, 'guiones')
 
-EXTRA = """
-IMPORTANTE para este encargo:
-- Escribe SOLO con datos que estén en el TEXTO FUENTE. Un verificador comprobará cada dato; si inventas, el guion se tira.
-- Añade al JSON el campo "fecha": "{fecha}" exactamente así.
-- Responde SOLO con el JSON, sin explicaciones ni ```.
+LIBRE = """Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
+
+TU DÍA: {dia} de {mes}. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un {dia} de {mes} de cualquier año
+(un invento, un récord, un estreno, un descubrimiento, un personaje, algo insólito...). Que enganche a gente joven de España.
+Evita tragedias con muchas víctimas y la política actual que divide. Usa solo datos de los que estés seguro: fecha, año y cifras exactos.
+
+Estilo: cercano, con ritmo, frases cortas, curiosidad. Que suene a persona contándoselo a un amigo, no a IA ni a enciclopedia.
+PROHIBIDO: "¡Increíble!", "¿Sabías que...?" como muletilla, "sumérgete", "fascinante", "en un mundo donde", "no te lo vas a creer",
+"épico", "un hito sin precedentes", rayas largas (—). Como mucho 1 emoji en el título y 1 en la descripción.
+La primera frase de "frases" empieza EXACTAMENTE por "Un día como hoy, {dia} de {mes} de <AÑO>," con el año del hecho.
+
+Devuelve SOLO este JSON (sin explicaciones ni ```):
+{{
+ "fecha": "{fecha}",
+ "año": 0000,
+ "hecho": "el hecho en una frase",
+ "articulo": "título EXACTO del artículo de Wikipedia en español sobre el tema (para buscar las fotos)",
+ "gancho": "frase de 6 a 12 palabras que haga parar el dedo, intrigante, sin revelar todo (no empieces por 'Un día como hoy')",
+ "frases": ["Un día como hoy, {dia} de {mes} de AAAA, ...", "...", "..."],
+ "pregunta": "pregunta final corta que apetezca contestar (opinión o experiencia)",
+ "titulo": "título para YouTube Shorts, máximo 70 caracteres, con el tema y el año, como mucho 1 emoji",
+ "descripcion": "primera línea con la palabra clave y gancho, segunda con un dato extra breve, y al final 4 o 5 hashtags: #historia #undiacomohoy #curiosidades + 1 o 2 del tema",
+ "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
+}}
+"frases": de 4 a 6, en total 60 a 90 palabras, con 1 o 2 curiosidades sorprendentes y el dato más bestia guardado para el final.
 """
 
 
 def preparar(desde, dias=7):
+    """Un encargo por día con libertad total: ChatGPT elige el hecho y escribe el guion (sin veto de Gemini)."""
     os.makedirs(ENCARGOS, exist_ok=True)
     for f in glob.glob(os.path.join(ENCARGOS, '*')):
         os.remove(f)
-    usados = []
     for n in range(dias):
         fecha = desde + dt.timedelta(days=n)
-        d, m = fecha.day, fecha.month
-        candidatos = fuentes.efemerides(m, d)
-        if not candidatos:
-            print(f'⚠️ {fecha}: Wikipedia no tiene efemérides'); continue
-        hecho = next((h for h in guion.elegir(candidatos, d, m, usados) if h['articulos'][0] not in usados), candidatos[0])
-        usados.append(hecho['articulos'][0])
-        fuente = (hecho.get('resumen') or '') + '\n\n' + fuentes.articulo(hecho['articulos'][0])
-        mes = guion.MESES[m - 1]
-        texto = (guion.SISTEMA.format(dia=d, mes=mes) + f"\n\nHECHO ({hecho['año']}): {hecho['texto']}\n\nTEXTO FUENTE (Wikipedia):\n{fuente}\n\n"
-                 + guion.FORMATO.format(dia=d, mes=mes) + EXTRA.format(fecha=fecha.isoformat()))
-        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(texto)
-        json.dump({'fecha': fecha.isoformat(), 'hecho': hecho, 'fuente': fuente},
-                  open(os.path.join(ENCARGOS, f'meta-{fecha.isoformat()}.json'), 'w'), ensure_ascii=False, indent=1)
-        print(f"✔ {fecha}: {hecho['año']} · {hecho['texto'][:80]}")
+        mes = guion.MESES[fecha.month - 1]
+        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(LIBRE.format(dia=fecha.day, mes=mes, fecha=fecha.isoformat()))
+        json.dump({'fecha': fecha.isoformat(), 'libre': True}, open(os.path.join(ENCARGOS, f'meta-{fecha.isoformat()}.json'), 'w'),
+                  ensure_ascii=False, indent=1)
+        print(f"✔ {fecha}: encargo libre")
 
 
 def _json(texto):
@@ -61,20 +72,26 @@ def guardar(texto):
     g = _json(texto)
     fecha = str(g.get('fecha', ''))[:10]
     dt.date.fromisoformat(fecha)                      # tiene que traer una fecha válida
-    if not os.path.exists(os.path.join(ENCARGOS, f'meta-{fecha}.json')):
-        raise ValueError(f'No hay encargo para el {fecha}')
+    if not g.get('frases') or not g.get('titulo'):
+        raise ValueError('Al guion le faltan frases o título')
     os.makedirs(GUIONES, exist_ok=True)
     json.dump(g, open(os.path.join(GUIONES, f'{fecha}.json'), 'w'), ensure_ascii=False, indent=1)
     return fecha, g.get('titulo', '')
 
 
 def de_chatgpt(fecha):
-    """(hecho, fuente, guion) escritos por ChatGPT para ese día, o None."""
+    """(hecho, fuente, guion) de ChatGPT para ese día, o None. Con el encargo libre, el hecho sale del propio guion."""
     r, meta = os.path.join(GUIONES, f'{fecha}.json'), os.path.join(ENCARGOS, f'meta-{fecha}.json')
-    if not (os.path.exists(r) and os.path.exists(meta)):
+    if not os.path.exists(r):
         return None
-    m = json.load(open(meta))
-    return m['hecho'], m['fuente'], json.load(open(r))
+    g = json.load(open(r))
+    m = json.load(open(meta)) if os.path.exists(meta) else {}
+    if m.get('hecho'):                                # encargo antiguo: el hecho lo había elegido Gemini
+        return m['hecho'], m.get('fuente', ''), g
+    año = int(str(g.get('año') or re.search(r'de (\d{3,4}),', (g.get('frases') or [''])[0]).group(1)))
+    hecho = {'año': año, 'texto': g.get('hecho') or g.get('titulo', ''), 'articulos': [a for a in [g.get('articulo')] if a],
+             'resumen': ''}
+    return hecho, '', g
 
 
 def main():
