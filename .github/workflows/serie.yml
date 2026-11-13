@@ -138,5 +138,5 @@ jobs:
       - name: Aviso si algo ha fallado
         if: failure()
         run: |
-          gh issue create --title "📺 Tele-Dimensional v2: fallo el $(date +%d/%m)" \
-            --body "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          .github/aviso.sh "📺 Tele-Dimensional v2 tiene un fallo" \
+            "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

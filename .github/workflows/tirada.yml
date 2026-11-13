@@ -105,10 +105,10 @@ jobs:
           [ -f salida/tirada.json ] || exit 0
           python -m nutria.informe salida "$PAGES" > informe.md
           echo "" >> informe.md; echo "[Ejecución completa](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> informe.md
-          gh issue create --title "🦦 Tirada del $(date +%d/%m)" --body-file informe.md
+          .github/aviso.sh "🦦 Tirada del $(date +%d/%m)" --body-file informe.md
 
       - name: Correo de aviso si algo ha fallado
         if: failure()
         run: |
-          gh issue create --title "❌ La tirada del $(date +%d/%m) ha fallado" \
-            --body "Algo ha fallado. Mira los detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          .github/aviso.sh "❌ La tirada del $(date +%d/%m) ha fallado" \
+            "Algo ha fallado. Mira los detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

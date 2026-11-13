@@ -54,5 +54,5 @@ jobs:
       - name: Aviso si las ideas no valían
         if: failure()
         run: |
-          gh issue create --title "💡 Las ideas de Tele-Dimensional no se han podido guardar" \
-            --body "Ha llegado una respuesta que no se ha podido leer. Esa semana el guion tirará del sorteo. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          .github/aviso.sh "💡 Una respuesta de ChatGPT no se ha podido guardar" \
+            "Ha llegado una respuesta del atajo (ideas o guion) que no se ha podido guardar. Se usa la alternativa de siempre; ciérrala cuando la veas. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
