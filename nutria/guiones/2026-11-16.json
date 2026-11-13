@@ -1,19 +1,19 @@
 {
- "gancho": "Un mensaje humano que tardará milenios en ser leído",
+ "gancho": "Un mensaje salió de la Tierra rumbo a las estrellas",
  "frases": [
-  "Un día como hoy, 16 de noviembre de 1974, se envió desde el radiotelescopio de Arecibo un mensaje al espacio.",
-  "Era un mensaje digital de 1679 bits con información sobre el sistema solar, la Tierra y el ser humano.",
-  "Su destino: el cúmulo globular de Hércules, también conocido como M13, a unos veinticinco mil años luz de distancia.",
-  "Lo curioso es que llegaría allí en unos 25 milenios y, si hubiera respuesta, tardaría otros 25 milenios en volver.",
-  "Y lo más irónico: quizá no haya allí nadie capaz de entenderlo."
+  "Un día como hoy, 16 de noviembre de 1974, el radiotelescopio de Arecibo envió un mensaje al espacio.",
+  "Iba dirigido al cúmulo de Hércules, también llamado M13, un conjunto de cientos de miles de estrellas muy viejas.",
+  "El mensaje contenía información sobre el sistema solar, la Tierra y el ser humano.",
+  "Se calcula que tardará unos 25 milenios en llegar a su destino, y otros tantos en recibir una respuesta.",
+  "Y aquí viene lo curioso: es probable que allí no haya planetas rocosos capaces de albergar vida."
  ],
- "pregunta": "¿Tú enviarías un mensaje sabiendo que nadie lo leerá?",
+ "pregunta": "¿Tú lo habrías enviado aunque nadie pudiera contestar?",
  "titulo": "El mensaje de Arecibo al espacio en 1974 🛰️",
- "descripcion": "Mensaje de Arecibo, un saludo humano que tardará milenios.\nSe envió a M13, el Gran Cúmulo de Hércules, desde Puerto Rico.\n#historia #undiacomohoy #curiosidades #Arecibo #astronomía",
+ "descripcion": "Mensaje de Arecibo: cuando saludamos al cúmulo de Hércules.  \nSe estima que tardará 25 milenios en llegar.  \n#historia #undiacomohoy #curiosidades #espacio #Arecibo",
  "busquedas": [
   "Arecibo message 1974",
-  "Messier 13 Hercules cluster",
-  "Arecibo radio telescope Puerto Rico 1974"
+  "Messier 13 Hercules Cluster",
+  "Arecibo radio telescope Puerto Rico"
  ],
  "fecha": "2026-11-16"
 }
