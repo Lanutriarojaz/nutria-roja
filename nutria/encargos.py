@@ -23,6 +23,10 @@ LIBRE = """Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (
 TU DÍA: {dia} de {mes}. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un {dia} de {mes} de cualquier año
 (un invento, un récord, un estreno, un descubrimiento, un personaje, algo insólito...). Que enganche a gente joven de España.
 Evita tragedias con muchas víctimas y la política actual que divide. Usa solo datos de los que estés seguro: fecha, año y cifras exactos.
+IMPORTANTE, LAS FOTOS: el vídeo se ilustra solo con fotos libres de derechos de Wikimedia Commons (dominio público o licencias abiertas), y cada una
+se revisa mirándola. Elige un hecho que TENGA fotos libres claras: ciencia, exploración, inventos, edificios y lugares, naturaleza, historia y personajes
+históricos, deporte hasta los años 90, misiones espaciales (NASA), obras de arte antiguas. EVITA lo que casi nunca tiene fotos libres: manga, anime, cine,
+series, música y videojuegos modernos, marcas y productos actuales, famosos recientes. Si dudas entre dos hechos, elige el que se pueda ver mejor.
 
 Estilo: cercano, con ritmo, frases cortas, curiosidad. Que suene a persona contándoselo a un amigo, no a IA ni a enciclopedia.
 PROHIBIDO: "¡Increíble!", "¿Sabías que...?" como muletilla, "sumérgete", "fascinante", "en un mundo donde", "no te lo vas a creer",
