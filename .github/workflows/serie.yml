@@ -6,8 +6,8 @@ name: Tele-Dimensional v2 (rodaje diario y montaje)
 #   - existe el fichero tele/serie_auto (se crea cuando Álvaro da el visto bueno al piloto).
 on:
   schedule:
-    - cron: '30 5 * * *'      # 06:30 Madrid (07:30 en verano)
-    - cron: '30 17 * * *'     # segundo intento por si el cupo aún no se había renovado
+    - cron: '30 9 * * *'      # 10:30 Madrid: el cupo gratis se renueva 24 h después del primer uso
+    - cron: '30 21 * * *'     # segundo intento por si el cupo aún no se había renovado
   workflow_dispatch:
     inputs:
       guion:
