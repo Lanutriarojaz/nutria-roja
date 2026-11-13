@@ -36,7 +36,7 @@ def siguiente():
 
 def _cliente(token):
     from gradio_client import Client
-    return Client(ESPACIO, hf_token=token, verbose=False) if token else Client(ESPACIO, verbose=False)
+    return Client(ESPACIO, token=token, verbose=False) if token else Client(ESPACIO, verbose=False)
 
 
 def _sin_cupo(e):
