@@ -1,0 +1,213 @@
+{
+ "fuente": "chatgpt",
+ "fecha": "2026-11-12",
+ "guion": {
+  "titulo": "El juicio de la última croqueta",
+  "titulo_corto": "¿Quién se come la croqueta? ⚖️",
+  "formato": "juicio",
+  "resumen": "Un acusado quiere probar su inocencia, pero el tribunal ya sabe lo que hará.",
+  "premisa": "Un hombre quiere demostrar que no robó la última croqueta, pero el tribunal ya ha dictado sentencia basándose en lo que va a hacer durante el juicio.",
+  "personajes": [
+   {
+    "id": "tapercio",
+    "nombre": "Tapercio",
+    "cuerpo": "taper",
+    "personalidad": "Pedante y legalista, habla lento y con solemnidad.",
+    "voz": "grave",
+    "aspecto": "A small plastic lunchbox with courtroom wig, dusty label, and golden hinges; a faint steam leaks from its lid."
+   },
+   {
+    "id": "tenoril",
+    "nombre": "Tenoril",
+    "cuerpo": "tenedor",
+    "personalidad": "Nervioso y agudo, siempre quiere actuar rápido.",
+    "voz": "aguda",
+    "aspecto": "A silver fork with jittery eyes, wearing a tiny black tie, and shaking slightly; its prongs glint under courtroom lights."
+   },
+   {
+    "id": "croqui",
+    "nombre": "Croqui",
+    "cuerpo": "croqueta",
+    "personalidad": "Sarcástica y seca, habla poco y siempre con sorna.",
+    "voz": "castizo",
+    "aspecto": "A golden fried croquette with tiny arms, sunglasses, and a single olive toothpick hat; crispy crumbs fall when it moves."
+   }
+  ],
+  "escenas": [
+   {
+    "plano": "Sala de juicio minimalista con estrados flotantes y un jurado de relojes de arena.",
+    "rotulo": "Tribunal de Croquetas",
+    "decorado": "A shiny floating courtroom with translucent benches, hovering gavels, and sandglass jurors; neon legal sigils pulse on the walls and a single spotlight above the witness box.",
+    "musica": "normal",
+    "sfx": "murmullo",
+    "prop": null,
+    "presentes": [
+     "tapercio",
+     "tenoril",
+     "croqui"
+    ],
+    "lineas": [
+     {
+      "quien": "narrador",
+      "texto": "Hoy juzgamos un robo que todavía no se ha cometido.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ],
+    "video": "Slow push-in on the plate with the last golden croquette under a dramatic spotlight; Tapercio the lunchbox judge bangs a tiny gavel, Tenoril the fork trembles nearby."
+   },
+   {
+    "plano": "Tapercio en el estrado, Tenoril ofrece su mango como prueba.",
+    "rotulo": "Inicio del juicio",
+    "decorado": "A shiny floating courtroom with translucent benches, hovering gavels, and sandglass jurors; neon legal sigils pulse on the walls and a single spotlight above the witness box.",
+    "musica": "normal",
+    "sfx": null,
+    "prop": null,
+    "presentes": [
+     "tapercio",
+     "tenoril",
+     "croqui"
+    ],
+    "lineas": [
+     {
+      "quien": "tapercio",
+      "texto": "Acusado, si clava el tenedor en Croqui, culpable. Si no, inocente.",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tenoril",
+      "texto": "Pero si no pincha, ya hemos dictado que es culpable por evitarlo.",
+      "emocion": "risa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "croqui",
+      "texto": "Pues vaya plan. Yo quieta, ¿eh?",
+      "emocion": "sorpresa",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ],
+    "video": "Tapercio the lunchbox judge leans forward solemnly and points his gavel at Tenoril the fork; Croqui the croquette on the plate crosses her tiny arms and lowers her sunglasses sarcastically."
+   },
+   {
+    "plano": "Tenoril tiembla, Tapercio abre un táper cerrado, vapor sale.",
+    "rotulo": "Momento decisivo",
+    "decorado": "A shiny floating courtroom with translucent benches, hovering gavels, and sandglass jurors; neon legal sigils pulse on the walls and a single spotlight above the witness box.",
+    "musica": "tension",
+    "sfx": "latido",
+    "prop": null,
+    "presentes": [
+     "tapercio",
+     "tenoril",
+     "croqui"
+    ],
+    "lineas": [
+     {
+      "quien": "tenoril",
+      "texto": "Venga, que el jurado de arena se está acabando.",
+      "emocion": "miedo",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tapercio",
+      "texto": "Decida: ¿come, no come?",
+      "emocion": "neutral",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "croqui",
+      "texto": "A ver… No quiero comérmela.",
+      "emocion": "triste",
+      "pausa": 0,
+      "golpe": false,
+      "sello": ""
+     }
+    ],
+    "video": "Close-up of Tenoril the fork sweating and shaking above the croquette, while Tapercio the lunchbox judge taps impatiently and a sand timer runs out behind them."
+   },
+   {
+    "plano": "Croqui espera tensa, Tapercio levanta el táper lentamente.",
+    "rotulo": "Veredicto flotante",
+    "decorado": "A shiny floating courtroom with translucent benches, hovering gavels, and sandglass jurors; neon legal sigils pulse on the walls and a single spotlight above the witness box.",
+    "musica": "silencio",
+    "sfx": "whoosh",
+    "prop": null,
+    "presentes": [
+     "tapercio",
+     "tenoril",
+     "croqui"
+    ],
+    "lineas": [
+     {
+      "quien": "tapercio",
+      "texto": "Muy bien. Entonces…",
+      "emocion": "neutral",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     },
+     {
+      "quien": "tapercio",
+      "texto": "Abrimos la prueba.",
+      "emocion": "neutral",
+      "pausa": 0.5,
+      "golpe": false,
+      "sello": ""
+     }
+    ],
+    "video": "Tense silence: Tapercio the lunchbox judge slowly lifts his own lid with both hands, steam rising, while Croqui the croquette stares frozen and Tenoril the fork holds his breath."
+   },
+   {
+    "plano": "Se revela el interior vacío del táper.",
+    "rotulo": "Sentencia final",
+    "decorado": "A shiny floating courtroom with translucent benches, hovering gavels, and sandglass jurors; neon legal sigils pulse on the walls and a single spotlight above the witness box.",
+    "musica": "silencio",
+    "sfx": "mazo",
+    "prop": null,
+    "presentes": [
+     "tapercio",
+     "tenoril",
+     "croqui"
+    ],
+    "lineas": [
+     {
+      "quien": "tapercio",
+      "texto": "Vacío. El tribunal predijo su inocencia… y alguien ya se la comió.",
+      "emocion": "sorpresa",
+      "pausa": 0.8,
+      "golpe": true,
+      "sello": "¿CÓMO?"
+     }
+    ],
+    "video": "Reveal: the lunchbox is completely empty inside except for a few crumbs; Tapercio the judge, Tenoril the fork and Croqui the croquette all gasp in shock with huge eyes."
+   }
+  ],
+  "giro": "El táper está vacío porque el tribunal predijo que al declararse inocente la prueba desaparecería.",
+  "descripcion": "Un juicio decide si alguien se come la última croqueta… antes de que pase nada.\n¿Tú qué harías: pinchar o esperar?",
+  "hashtags": [
+   "#teledimensional",
+   "#juicioabsurdo",
+   "#croquetas",
+   "#humorsurrealista",
+   "#paradoja"
+  ],
+  "lugar": "a tiny Spanish bar counter turned into a solemn courtroom: a plate with one last golden croquette under a spotlight, napkin dispensers as jury benches, beer taps, tiled wall",
+  "presentador": {
+   "cierre": "Vaya juicio. Si alguien ha visto una croqueta, que no diga nada."
+  },
+  "version": 2
+ }
+}

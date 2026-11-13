@@ -1,0 +1,142 @@
+name: Tele-Dimensional v2 (rodaje diario y montaje)
+
+# Cada día pide al animador gratuito los clips del episodio en curso (lo que deje el cupo).
+# Cuando están todos, monta el episodio. Solo se publica si:
+#   - se lanza a mano con «publicar», o
+#   - existe el fichero tele/serie_auto (se crea cuando Álvaro da el visto bueno al piloto).
+on:
+  schedule:
+    - cron: '30 5 * * *'      # 06:30 Madrid (07:30 en verano)
+    - cron: '30 17 * * *'     # segundo intento por si el cupo aún no se había renovado
+  workflow_dispatch:
+    inputs:
+      guion:
+        description: 'Guion concreto (p. ej. tele/piloto_v2.json). Vacío = el siguiente de ChatGPT'
+        required: false
+        default: ''
+      publicar:
+        description: 'Programar en Buffer cuando esté montado'
+        type: boolean
+        default: false
+      hora:
+        description: 'Hora de publicación en Madrid (HH:MM)'
+        required: false
+        default: '13:00'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: tirada          # nunca a la vez que otros flujos que escriben en la rama media
+
+jobs:
+  serie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      TZ: Europe/Madrid
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar ffmpeg y dependencias
+        run: |
+          for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null && break; sleep 30; done
+          pip install -q -r requirements.txt gradio_client
+
+      - name: Traer los clips ya rodados (rama rodaje)
+        run: |
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 -b rodaje "$REMOTO" rodaje 2>/dev/null || mkdir -p rodaje
+          rm -rf rodaje/.git
+
+      - name: Rodar los clips que deje el cupo de hoy
+        id: rodaje
+        run: python -m tele.rodaje --dir rodaje ${{ inputs.guion && format('--guion {0}', inputs.guion) || '' }}
+
+      - name: Montar el episodio
+        id: montaje
+        if: steps.rodaje.outputs.listo
+        run: |
+          CLAVE="${{ steps.rodaje.outputs.listo }}"
+          python -m tele.serie montar rodaje/estado.json "rodaje/${CLAVE%.json}" --salida salida-serie
+          # se publica hoy si aún da tiempo para las 13:00; si no, mañana
+          if [ "$(date +%H)" -lt 12 ]; then FECHA=$(date +%F); else FECHA=$(date -d tomorrow +%F); fi
+          python - "$FECHA" <<'EOF'
+          import json, sys
+          i = json.load(open('salida-serie/info.json')); i['fecha'] = sys.argv[1]
+          json.dump([i], open('salida-serie/tirada.json', 'w'), ensure_ascii=False, indent=2)
+          EOF
+          echo "fecha=$FECHA" >> "$GITHUB_OUTPUT"
+          if [ "${{ inputs.publicar }}" = "true" ] || { [ "${{ github.event_name }}" = "schedule" ] && [ -f tele/serie_auto ]; }; then
+            echo "publicar=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Guardar el episodio para verlo (descargable 14 días)
+        if: steps.rodaje.outputs.listo
+        uses: actions/upload-artifact@v4
+        with:
+          name: episodio-v2
+          path: |
+            salida-serie/video.mp4
+            salida-serie/info.json
+          retention-days: 14
+
+      - name: Subir el vídeo a la web pública (rama media → GitHub Pages)
+        if: steps.montaje.outputs.publicar
+        run: |
+          FECHA=${{ steps.montaje.outputs.fecha }}
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 -b media "$REMOTO" /tmp/media || mkdir -p /tmp/media
+          cd /tmp/media && rm -rf .git
+          limite=$(date -d '6 days ago' +%F)
+          for f in td-20*.mp4; do [ -f "$f" ] || continue; d=${f#td-}; [ "${d%.mp4}" \< "$limite" ] && rm -f "$f"; done
+          cp "$GITHUB_WORKSPACE/salida-serie/video.mp4" "td-$FECHA.mp4"
+          [ -f index.html ] || echo "La Nutria Roja" > index.html
+          git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Tele-Dimensional $FECHA"
+          git push -qf "$REMOTO" media
+          bytes=$(stat -c %s "td-$FECHA.mp4")
+          for i in $(seq 1 40); do
+            cab=$(curl -sI "$PAGES/td-$FECHA.mp4" | tr -d '\r')
+            largo=$(echo "$cab" | awk 'tolower($1)=="content-length:"{print $2}')
+            if echo "$cab" | head -1 | grep -q 200 && { [ -z "$largo" ] || [ "$largo" = "$bytes" ]; }; then echo "Pages listo"; exit 0; fi
+            sleep 15
+          done
+          echo "::error::GitHub Pages no sirve el vídeo"; exit 1
+
+      - name: Programar en Buffer (TikTok, YouTube, Instagram)
+        if: steps.montaje.outputs.publicar
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m tele.publicar salida-serie/tirada.json --hora "${{ inputs.hora || '13:00' }}"
+
+      - name: Apuntar el estado del rodaje
+        if: always() && steps.rodaje.outcome != 'skipped'
+        run: |
+          if [ "${{ steps.montaje.outputs.publicar }}" = "si" ] && [ "${{ job.status }}" = "success" ]; then
+            python -m tele.rodaje --dir rodaje --cerrar
+            git add tele/guiones
+            git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Tele-Dimensional ${{ steps.montaje.outputs.fecha }}" && \
+              for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done || true
+          elif [ "${{ steps.montaje.outcome }}" = "success" ]; then
+            python -m tele.rodaje --dir rodaje --montado
+          fi
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          cd rodaje && find . -name __pycache__ -prune -exec rm -rf {} + ; git init -q -b rodaje && git add -A
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "rodaje $(date +%F)" --allow-empty
+          git push -qf "$REMOTO" rodaje
+
+      - name: Aviso si algo ha fallado
+        if: failure()
+        run: |
+          gh issue create --title "📺 Tele-Dimensional v2: fallo el $(date +%d/%m)" \
+            --body "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
