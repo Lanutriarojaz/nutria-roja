@@ -1,0 +1,32 @@
+[
+  {
+    "fecha": "2026-11-13",
+    "año": 2009,
+    "hecho": "tras el impacto de la sonda LCROSS, la NASA anuncia el descubrimiento de «significativas cantidades» de agua en la Luna.",
+    "articulo": "LCROSS",
+    "titulo": "El día que la NASA encontró agua en la Luna (2009) 🌑",
+    "descripcion": "Agua en la Luna: la NASA confirmó su presencia tras un choque brutal.\nEl impacto levantó una columna de polvo de más de un kilómetro y medio.\n#historia #undiacomohoy #curiosidades #luna #nasa\n\nFotos: Wikimedia Commons — NASA (Public domain); NASA (Public domain); NASA (Public domain); NASA (Public domain); NASA (Public domain)",
+    "guion": [
+      "Estrellaron una nave contra la Luna a propósito y encontraron esto",
+      "Un día como hoy, 13 de noviembre de 2009, la NASA confirmó que había encontrado agua en la Luna.",
+      "Para comprobarlo, un mes antes habían estrellado un cohete de más de dos mil kilos a nueve mil kilómetros por hora.",
+      "El golpe levantó diez mil toneladas de material y una nube de polvo de un kilómetro y medio de altura.",
+      "Detrás iba la sonda LCROSS analizando los restos antes de estrellarse también cuatro minutos después.",
+      "Al final detectaron cien kilos de agua entre todo ese material.",
+      "¿Te irías a vivir una temporada a una colonia en la Luna si supieras que hay agua?"
+    ],
+    "imagenes": [
+      "File:LCROSS 2.jpg",
+      "File:Apollo 11 moon rock 10072 in the International Space Station.jpg",
+      "File:Art of SLS launch.jpg",
+      "File:COTS2 Dragon is berthed.jpg",
+      "File:CST-100.jpg"
+    ],
+    "calidad": {
+      "duracion": 34.8,
+      "peor_silencio_s": 0.0,
+      "volumen_medio_db": -19.5
+    },
+    "ok": true
+  }
+]
