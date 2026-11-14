@@ -1,0 +1,90 @@
+{
+ "fecha": "2026-11-18",
+ "topic_id": "albatros-vuela-sin-alas-batiendo",
+ "categoria": "naturaleza",
+ "pregunta": "¿Cómo vuela horas sin batir las alas?",
+ "titulo": "El secreto del vuelo del albatros",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Cómo vuela horas sin batir las alas? Parece imposible, pero el albatros lo hace cada día.",
+   "busqueda_en": "albatross flying",
+   "alternativa_en": "ocean bird sky",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 2,
+   "locucion": "Este ave gigante cruza océanos enteros con el mínimo esfuerzo.",
+   "busqueda_en": "albatross ocean",
+   "alternativa_en": "sea waves bird",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 3,
+   "locucion": "Su secreto está en el llamado vuelo dinámico.",
+   "busqueda_en": "albatross gliding",
+   "alternativa_en": "bird glide ocean",
+   "texto_pantalla": "Vuelo dinámico"
+  },
+  {
+   "n": 4,
+   "locucion": "Aprovecha la diferencia de velocidad del viento entre la superficie del mar y el aire más alto.",
+   "busqueda_en": "wind ocean",
+   "alternativa_en": "sea breeze sky",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 5,
+   "locucion": "Sube para ganar energía con el viento rápido, baja para avanzar casi sin esfuerzo.",
+   "busqueda_en": "albatross soaring",
+   "alternativa_en": "bird wind sea",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 6,
+   "locucion": "Así puede recorrer miles de kilómetros sin apenas gastar energía.",
+   "busqueda_en": "ocean horizon bird",
+   "alternativa_en": "sea travel wildlife",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 7,
+   "locucion": "Su vuelo es tan eficiente que puede pasar meses enteros sin tocar tierra.",
+   "busqueda_en": "albatross sea",
+   "alternativa_en": "bird ocean sky",
+   "texto_pantalla": "Meses sin tierra"
+  },
+  {
+   "n": 8,
+   "locucion": "El albatros no lucha contra el viento: lo convierte en su autopista.",
+   "busqueda_en": "stormy sea bird",
+   "alternativa_en": "windy ocean albatross",
+   "texto_pantalla": ""
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "El albatros usa el vuelo dinámico para recorrer largas distancias sin batir las alas.",
+   "titulo": "Albatross flight",
+   "url": "https://www.nationalgeographic.com/animals/birds/facts/albatrosses",
+   "editor": "National Geographic"
+  },
+  {
+   "afirmacion": "El vuelo dinámico aprovecha los gradientes de viento sobre el océano.",
+   "titulo": "Dynamic soaring in albatrosses",
+   "url": "https://www.britannica.com/animal/albatross",
+   "editor": "Encyclopedia Britannica"
+  }
+ ],
+ "metadatos": {
+  "titulo": "El truco del albatros para volar sin esfuerzo",
+  "descripcion": "Descubre cómo el albatros cruza océanos sin apenas batir sus alas.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Naturaleza",
+   "#Aves"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
