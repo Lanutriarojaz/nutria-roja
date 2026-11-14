@@ -244,14 +244,14 @@ def _base():
     return im
 
 
-def _etiqueta(im, texto):
+def _etiqueta(im, texto, y0=330):
     if not texto:
         return im
     d = ImageDraw.Draw(im)
     t = texto.replace('→', '>').upper()
     tam = _ajustar(d, t, 92, W - 200)
     ancho = d.textlength(t, font=_f(tam))
-    x0, y0 = (W - ancho) / 2 - 34, 330
+    x0 = (W - ancho) / 2 - 34
     d.rectangle([x0, y0, x0 + ancho + 68, y0 + tam + 46], fill=(0, 0, 0, 165))
     d.rectangle([x0, y0, x0 + 12, y0 + tam + 46], fill=ROJO)
     d.text((W / 2 + 6, y0 + (tam + 46) / 2), t, font=_f(tam), fill=BLANCO, anchor='mm')
@@ -278,7 +278,7 @@ def _sub(im, grupo, activa):
     return im
 
 
-def _portada(im, pregunta):
+def _portada(im, pregunta, yc=560):
     d = ImageDraw.Draw(im)
     lineas, linea, tam = [], '', 118
     for w in pregunta.upper().split():
@@ -288,7 +288,7 @@ def _portada(im, pregunta):
             linea = (linea + ' ' + w).strip()
     lineas.append(linea)
     alto = len(lineas) * (tam + 14)
-    y0 = 560 - alto / 2
+    y0 = yc - alto / 2
     d.rectangle([0, y0 - 50, W, y0 + alto + 60], fill=(0, 0, 0, 150))
     d.rectangle([W / 2 - 90, y0 + alto + 28, W / 2 + 90, y0 + alto + 40], fill=ROJO)
     for i, l in enumerate(lineas):
@@ -319,7 +319,7 @@ def _marca_ia(im, lang):
     return im
 
 
-def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=()):
+def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=(), pos=()):
     """Una imagen PNG por cambio (marca + etiqueta de escena + subtítulo con palabra activa)."""
     cortes, k = [], 0
 
@@ -329,7 +329,8 @@ def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=()
         im.save(n); cortes.append((t, n))
 
     for i, e in enumerate(escenas):
-        fondo = _portada(_base(), pregunta) if (i == 0 and pregunta) else _etiqueta(_base(), e.get('texto_pantalla', ''))
+        p = pos[i] if i < len(pos) else None
+        fondo = _portada(_base(), pregunta, p or 560) if (i == 0 and pregunta) else _etiqueta(_base(), e.get('texto_pantalla', ''), p or 330)
         if i < len(ia) and ia[i]:
             fondo = _marca_ia(fondo, lang)
         guarda(inicios[i], fondo)
@@ -368,6 +369,44 @@ def tramo(ruta, dur, i, carpeta):
     sh(['ffmpeg', '-v', 'error', '-y', '-stream_loop', '-1', '-i', ruta, '-t', f'{dur:.3f}', '-an', '-vf', vf,
         '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', out])
     return out
+
+
+def _relevancia(ruta, dur):
+    """Mapa por filas (192 de alto) de dónde está lo importante del plano: puntos brillantes (la Luna, el Sol),
+    contraste local y detalle. Se mira en 4 momentos del tramo."""
+    import numpy as np
+    filas = np.zeros(192)
+    for k in range(4):
+        t = dur * (0.1 + 0.25 * k)
+        crudo = subprocess.run(['ffmpeg', '-v', 'quiet', '-ss', f'{t:.2f}', '-i', ruta, '-frames:v', '1', '-vf',
+                                'scale=108:192,format=gray', '-f', 'rawvideo', '-'], capture_output=True).stdout
+        if len(crudo) != 108 * 192:
+            continue
+        g = np.frombuffer(crudo, np.uint8).reshape(192, 108).astype(float)
+        brillo = np.clip(g - np.median(g) - 25, 0, None) * 2.5           # objetos que destacan por luz
+        suave = g.copy()
+        for _ in range(3):                                                 # desenfoque barato
+            suave = (suave + np.roll(suave, 3, 0) + np.roll(suave, -3, 0) + np.roll(suave, 3, 1) + np.roll(suave, -3, 1)) / 5
+        contraste = np.abs(g - suave)
+        detalle = np.abs(np.diff(g, axis=0, prepend=g[:1])) + np.abs(np.diff(g, axis=1, prepend=g[:, :1]))
+        mapa = brillo + contraste * 1.5 + detalle * 0.5
+        mapa[:, :8] = mapa[:, -8:] = 0                                     # bordes (recorte del paneo)
+        filas += mapa.sum(axis=1)
+    return filas
+
+
+def _mejor_hueco(ruta, dur, alto, candidatos, preferido):
+    """Elige el centro vertical (en píxeles de 1920) donde el rótulo tapa menos; el sitio de siempre gana si empata."""
+    try:
+        filas = _relevancia(ruta, dur)
+    except Exception:
+        return preferido
+    if not filas.any():
+        return preferido
+    def coste(yc):
+        a, b = int((yc - alto / 2) / 10), int((yc + alto / 2) / 10)
+        return filas[max(a, 0):min(b, 192)].sum() * (1.0 if yc == preferido else 1.2)
+    return min(candidatos, key=coste)
 
 
 def montar(g, lang, motor, voz, clips, carpeta, salida):
@@ -417,7 +456,17 @@ def montar(g, lang, motor, voz, clips, carpeta, salida):
         '[0:a]asplit[v][sc];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=400[md];'
         '[v][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-15:TP=-1.5:LRA=9[a]',
         '-map', '[a]', '-ar', '44100', '-ac', '2', mezcla])
-    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta, g.get('pregunta', ''), [c[1].get('ia') for c in clips])
+    # dónde poner la portada y las etiquetas sin tapar al protagonista del plano (los subtítulos van siempre abajo)
+    pos = []
+    for i, t in enumerate(tramos):
+        if i == 0 and g.get('pregunta'):
+            pos.append(_mejor_hueco(t, durs[i], 400, [420, 560, 760, 1060], 560))
+        elif escenas[i].get('texto_pantalla'):
+            pos.append(_mejor_hueco(t, durs[i], 150, [405, 760, 1130], 405) - 75)
+        else:
+            pos.append(None)
+    print('  rótulos colocados en:', pos, flush=True)
+    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta, g.get('pregunta', ''), [c[1].get('ia') for c in clips], pos)
     sh(['ffmpeg', '-v', 'error', '-y', '-i', base, '-i', mov, '-i', mezcla, '-filter_complex',
         '[0:v][1:v]overlay=0:0:shortest=1,format=yuv420p[v]', '-map', '[v]', '-map', '2:a',
         '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-profile:v', 'high', '-pix_fmt', 'yuv420p',
