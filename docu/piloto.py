@@ -29,7 +29,7 @@ ESLOGAN = {'es': 'Lo extraordinario está más cerca de lo que crees',
            'en': 'The extraordinary is closer than you think'}
 VOCES = {
     'es': [('edge', 'es-ES-XimenaNeural')],
-    'en': [('edge', 'en-US-AvaNeural'), ('edge', 'en-GB-SoniaNeural'), ('kokoro', 'af_heart')],
+    'en': [('edge', 'en-GB-SoniaNeural')],
 }
 MUSICA = ('Floating Cities', 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Floating%20Cities.mp3')
 CREDITO_MUSICA = ('Music: "Floating Cities" by Kevin MacLeod (incompetech.com), '
