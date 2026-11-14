@@ -147,8 +147,6 @@ def _candidatos(consultas, usados, vistos):
         for h in r.json().get('hits', []):
             v = h['videos']
             pick = next((v[k] for k in ('large', 'medium') if v.get(k, {}).get('url') and v[k].get('height', 0) >= 1080), None)
-            if 'ai generated' in h.get('tags', '').lower():
-                continue
             if pick and h['id'] not in usados and h['id'] not in vistos:
                 vistos.add(h['id'])
                 out.append({'h': h, 'pick': pick, 'q': q, 'mini': (v.get('small') or pick).get('thumbnail') or pick.get('thumbnail')})
@@ -221,7 +219,8 @@ def metraje(g, estricto=False):
         c = mejor[0]
         usados.add(c['h']['id'])
         info = {'consulta': c['q'], 'pixabay_id': c['h']['id'], 'nota_juez': c['nota'], 'pagina': c['h']['pageURL'],
-                'autor': c['h']['user'], 'licencia': 'Pixabay Content License (uso comercial, sin atribución obligatoria)'}
+                'autor': c['h']['user'], 'licencia': 'Pixabay Content License (uso comercial, sin atribución obligatoria)',
+                'ia': 'ai generated' in c['h'].get('tags', '').lower()}
         print(f'  escena {e["n"]}: {c["q"]!r} → pixabay {c["h"]["id"]} (nota {c["nota"]}, {c["h"].get("tags", "")[:50]})', flush=True)
         clips.append((_bajar(c), info))
     return clips
@@ -313,7 +312,14 @@ def _cierre(lang):
     return im
 
 
-def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta=''):
+def _marca_ia(im, lang):
+    d = ImageDraw.Draw(im)
+    t = 'RECREACIÓN IA' if lang == 'es' else 'AI RECREATION'
+    d.text((W - 54, 128), t, font=_f(34), fill=(255, 255, 255, 200), anchor='rm', stroke_width=3, stroke_fill=(0, 0, 0, 200))
+    return im
+
+
+def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=()):
     """Una imagen PNG por cambio (marca + etiqueta de escena + subtítulo con palabra activa)."""
     cortes, k = [], 0
 
@@ -324,6 +330,8 @@ def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta=''):
 
     for i, e in enumerate(escenas):
         fondo = _portada(_base(), pregunta) if (i == 0 and pregunta) else _etiqueta(_base(), e.get('texto_pantalla', ''))
+        if i < len(ia) and ia[i]:
+            fondo = _marca_ia(fondo, lang)
         guarda(inicios[i], fondo)
         grupos, gr = [], []
         for p in palabras[i]:
@@ -409,7 +417,7 @@ def montar(g, lang, motor, voz, clips, carpeta, salida):
         '[0:a]asplit[v][sc];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=400[md];'
         '[v][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-15:TP=-1.5:LRA=9[a]',
         '-map', '[a]', '-ar', '44100', '-ac', '2', mezcla])
-    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta, g.get('pregunta', ''))
+    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta, g.get('pregunta', ''), [c[1].get('ia') for c in clips])
     sh(['ffmpeg', '-v', 'error', '-y', '-i', base, '-i', mov, '-i', mezcla, '-filter_complex',
         '[0:v][1:v]overlay=0:0:shortest=1,format=yuv420p[v]', '-map', '[v]', '-map', '2:a',
         '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-profile:v', 'high', '-pix_fmt', 'yuv420p',
