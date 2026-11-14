@@ -1,0 +1,84 @@
+{
+ "fecha": "2026-11-16",
+ "topic_id": "luna-naranja",
+ "categoria": "naturaleza|ciencia|mundo",
+ "pregunta": "¿Por qué la Luna se ve naranja?",
+ "titulo": "La Luna naranja y su secreto",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Por qué la Luna se ve naranja? Parece un farol colgado en el cielo.",
+   "busqueda_en": "orange moon",
+   "alternativa_en": "moonrise horizon",
+   "texto_pantalla": "Luna naranja"
+  },
+  {
+   "n": 2,
+   "locucion": "Cuando la Luna está baja, su luz debe atravesar más atmósfera que cuando está arriba.",
+   "busqueda_en": "moon horizon",
+   "alternativa_en": "low moon",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 3,
+   "locucion": "El aire dispersa los colores azules de la luz lunar, dejándonos sobre todo los tonos rojizos y naranjas.",
+   "busqueda_en": "atmosphere sky",
+   "alternativa_en": "scattering light",
+   "texto_pantalla": "Colores filtrados"
+  },
+  {
+   "n": 4,
+   "locucion": "Es el mismo efecto que tiñe de rojo los atardeceres.",
+   "busqueda_en": "sunset sky",
+   "alternativa_en": "orange sunset",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 5,
+   "locucion": "Si además hay polvo, humo o partículas en suspensión, el color se intensifica.",
+   "busqueda_en": "dusty sky",
+   "alternativa_en": "hazy sunset",
+   "texto_pantalla": "Aire cargado"
+  },
+  {
+   "n": 6,
+   "locucion": "Por eso en noches tranquilas y despejadas la Luna parece más blanca, y en otras se vuelve naranja o incluso roja.",
+   "busqueda_en": "full moon night",
+   "alternativa_en": "bright moon sky",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 7,
+   "locucion": "No es magia: es la atmósfera pintando la Luna con el pincel de la luz.",
+   "busqueda_en": "moon clouds sky",
+   "alternativa_en": "dramatic night sky",
+   "texto_pantalla": "Arte del cielo"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "La dispersión atmosférica filtra los colores de la luz lunar, haciendo que la Luna baja se vea naranja o roja.",
+   "titulo": "Why Does the Moon Look Orange?",
+   "url": "https://science.nasa.gov/moon/why-does-the-moon-look-orange/",
+   "editor": "NASA"
+  },
+  {
+   "afirmacion": "El polvo, el humo y la contaminación aumentan la tonalidad cálida de la Luna en el horizonte.",
+   "titulo": "Why Is the Moon Red?",
+   "url": "https://www.space.com/why-moon-red.html",
+   "editor": "Space.com"
+  }
+ ],
+ "metadatos": {
+  "titulo": "La Luna naranja: el truco de la atmósfera",
+  "descripcion": "Descubre por qué la Luna se tiñe de naranja cuando aparece en el horizonte. La explicación está en el aire.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Luna",
+   "#Cielo",
+   "#Ciencia"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
