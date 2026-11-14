@@ -132,45 +132,92 @@ def locutar(texto, motor, voz, base):
 
 
 # ---------- metraje ----------
-def buscar_clip(consultas, usados, minimo):
+import base64
+
+
+def _candidatos(consultas, usados, vistos):
     clave = os.environ['PIXABAY_API_KEY']
+    out = []
     for q in consultas:
         if not q:
             continue
         r = requests.get('https://pixabay.com/api/videos/', params={
-            'key': clave, 'q': q[:100], 'per_page': 20, 'safesearch': 'true', 'video_type': 'film'}, timeout=30)
+            'key': clave, 'q': q[:100], 'per_page': 12, 'safesearch': 'true'}, timeout=30)
         r.raise_for_status()
-        hits = [h for h in r.json().get('hits', []) if h['id'] not in usados]
-        hits.sort(key=lambda h: (h['duration'] < minimo, -h.get('likes', 0)))
-        for h in hits:
+        for h in r.json().get('hits', []):
             v = h['videos']
             pick = next((v[k] for k in ('large', 'medium') if v.get(k, {}).get('url') and v[k].get('height', 0) >= 1080), None)
-            if not pick:
-                continue
-            os.makedirs(CACHE, exist_ok=True)
-            ruta = os.path.join(CACHE, f"{h['id']}.mp4")
-            if not os.path.exists(ruta):
-                with requests.get(pick['url'], stream=True, timeout=120) as d:
-                    d.raise_for_status()
-                    with open(ruta, 'wb') as f:
-                        for b in d.iter_content(1 << 20):
-                            f.write(b)
-            usados.add(h['id'])
-            return ruta, {'consulta': q, 'pixabay_id': h['id'], 'pagina': h['pageURL'], 'autor': h['user'],
-                          'licencia': 'Pixabay Content License (uso comercial, sin atribución obligatoria)'}
-    return None, None
+            if pick and h['id'] not in usados and h['id'] not in vistos:
+                vistos.add(h['id'])
+                out.append({'h': h, 'pick': pick, 'q': q, 'mini': (v.get('small') or pick).get('thumbnail') or pick.get('thumbnail')})
+    return out
+
+
+def _mini_b64(url):
+    try:
+        return base64.b64encode(requests.get(url, timeout=30).content).decode()
+    except Exception:
+        return None
+
+
+def _juez(escena, tema, cands):
+    """Gemini mira las miniaturas y puntúa 0-10 si el clip muestra lo que dice la escena."""
+    partes = [{'type': 'text', 'text':
+               f'Microdocumental sobre: {tema}. Escena: «{escena["locucion"]}». Lo que debería verse: {escena["busqueda_en"]}'
+               f' / {escena.get("alternativa_en", "")}. Puntúa de 0 a 10 cada miniatura según lo bien que ILUSTRA ESTA escena '
+               '(10 = muestra justo eso; 5 = relacionado pero genérico; 0 = no tiene nada que ver, p. ej. un animal o paisaje '
+               'cuando se habla de un vaso). Penaliza texto/logos incrustados y personas mirando a cámara. '
+               'Responde SOLO JSON {"notas":[{"id":int,"nota":int}]}'}]
+    for i, c in enumerate(cands):
+        b = _mini_b64(c['mini']) if c['mini'] else None
+        if not b:
+            continue
+        partes.append({'type': 'text', 'text': f'id={i} etiquetas: {c["h"].get("tags", "")}'})
+        partes.append({'type': 'image_url', 'image_url': {'url': 'data:image/jpeg;base64,' + b}})
+    try:
+        r = llm([{'role': 'user', 'content': partes}], temperatura=0, rol='elegir', vision=True)
+        notas = {int(x['id']): int(x['nota']) for x in r.get('notas', [])}
+    except Exception as e:
+        print('  juez de metraje sin respuesta:', str(e)[:120], flush=True)
+        notas = {}
+    for i, c in enumerate(cands):
+        c['nota'] = notas.get(i, -1)
+    return cands
+
+
+def _bajar(c):
+    os.makedirs(CACHE, exist_ok=True)
+    ruta = os.path.join(CACHE, f"{c['h']['id']}.mp4")
+    if not os.path.exists(ruta):
+        with requests.get(c['pick']['url'], stream=True, timeout=120) as d:
+            d.raise_for_status()
+            with open(ruta, 'wb') as f:
+                for b in d.iter_content(1 << 20):
+                    f.write(b)
+    return ruta
 
 
 def metraje(g):
     usados, clips = set(), []
     for e in g['escenas']:
         palabras = e['busqueda_en'].split()
-        consultas = [e['busqueda_en'], e.get('alternativa_en'), ' '.join(palabras[:2]), palabras[0] if palabras else '']
-        ruta, info = buscar_clip(consultas, usados, 6)
-        if not ruta:
-            raise RuntimeError(f'Sin metraje para la escena {e["n"]}: {consultas}')
-        print(f'  escena {e["n"]}: {info["consulta"]!r} → pixabay {info["pixabay_id"]}', flush=True)
-        clips.append((ruta, info))
+        vistos, mejor = set(), []
+        rondas = [[e['busqueda_en'], e.get('alternativa_en')], [' '.join(palabras[:2]), ' '.join(palabras[-2:])]]
+        for ronda in rondas:
+            cands = _candidatos(ronda, usados, vistos)[:10]
+            if cands:
+                mejor += _juez(e, g['titulo'], cands)
+            mejor.sort(key=lambda c: (c['nota'], c['h']['duration'] >= 6, c['h'].get('likes', 0)), reverse=True)
+            if mejor and mejor[0]['nota'] >= 7:
+                break
+        if not mejor:
+            raise RuntimeError(f'Sin metraje para la escena {e["n"]}')
+        c = mejor[0]
+        usados.add(c['h']['id'])
+        info = {'consulta': c['q'], 'pixabay_id': c['h']['id'], 'nota_juez': c['nota'], 'pagina': c['h']['pageURL'],
+                'autor': c['h']['user'], 'licencia': 'Pixabay Content License (uso comercial, sin atribución obligatoria)'}
+        print(f'  escena {e["n"]}: {c["q"]!r} → pixabay {c["h"]["id"]} (nota {c["nota"]}, {c["h"].get("tags", "")[:50]})', flush=True)
+        clips.append((_bajar(c), info))
     return clips
 
 
