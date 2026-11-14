@@ -1,0 +1,95 @@
+name: Documental del día
+
+# Lunes, miércoles y viernes por la mañana: monta el microdocumental (guion de ChatGPT o, si no llegó, de Gemini),
+# pasa el control de calidad y lo programa en Buffer a las 19:00 de Madrid. Si algo falla, no se publica y avisa.
+on:
+  schedule:
+    - cron: '15 8 * * 1,3,5'
+  workflow_dispatch:
+    inputs:
+      fecha:
+        description: 'Día (AAAA-MM-DD). Vacío = hoy'
+        required: false
+      publicar:
+        description: 'Subir y programar en Buffer'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: docu-diario
+
+jobs:
+  documental:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+      GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TZ: Europe/Madrid
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+      PUBLICAR: ${{ github.event_name == 'schedule' || inputs.publicar }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Instalar ffmpeg y dependencias
+        run: |
+          for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null && break; sleep 30; done
+          pip install -q -r requirements.txt
+      - name: Montar el documental (con control de calidad)
+        run: python -m docu.diario ${{ inputs.fecha && format('--fecha {0}', inputs.fecha) || '' }}
+      - name: Guardar el vídeo para revisarlo (14 días)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: documental
+          path: |
+            salida-docu/diario/docu-*.mp4
+            salida-docu/diario/diario.json
+          retention-days: 14
+      - name: Subir el vídeo a la web pública (rama media → GitHub Pages)
+        if: env.PUBLICAR == 'true'
+        run: |
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          f=$(ls salida-docu/diario/docu-*.mp4 | head -1); nombre=$(basename "$f")
+          for i in 1 2 3; do
+            rm -rf /tmp/media; git clone -q --depth 1 -b media "$REMOTO" /tmp/media || { mkdir -p /tmp/media; }
+            ( cd /tmp/media && rm -rf .git
+              limite=docu-$(date -d '8 days ago' +%F).mp4
+              for v in docu-*.mp4; do [ -f "$v" ] && [ "$v" \< "$limite" ] && rm -f "$v"; done
+              cp "$GITHUB_WORKSPACE/$f" "$nombre"
+              git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Documental $nombre"
+              git push -qf "$REMOTO" media ) && break
+            sleep 20
+          done
+          for i in $(seq 1 40); do
+            [ "$(curl -s -o /dev/null -w '%{http_code}' "$PAGES/$nombre")" = 200 ] && echo "Pages listo" && exit 0
+            sleep 15
+          done
+          echo "::error::GitHub Pages no sirve el vídeo"; exit 1
+      - name: Programar en Buffer a las 19:00
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m docu.publicar salida-docu/diario/diario.json $([ "$PUBLICAR" = true ] || echo --prueba)
+      - name: Guardar el historial (para no repetir temas)
+        if: env.PUBLICAR == 'true'
+        run: |
+          git add docu/historial.json
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Documental $(date +%F)" || exit 0
+          for i in 1 2 3 4 5; do git pull -q --rebase && git push -q && break; sleep 5; done
+      - name: Aviso si no se ha podido publicar
+        if: failure() && env.PUBLICAR == 'true'
+        run: |
+          motivo=$(python -c "import json;print(json.load(open('salida-docu/diario/diario.json')).get('motivo',''))" 2>/dev/null)
+          .github/aviso.sh "🎬 El documental del $(date +%d/%m) no se ha publicado" \
+            "No se ha programado el documental de hoy. Motivo: ${motivo:-mira el registro}. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

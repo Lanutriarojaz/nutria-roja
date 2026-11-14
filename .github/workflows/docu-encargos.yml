@@ -1,0 +1,31 @@
+name: Documentales (encargos para ChatGPT)
+
+# Cada domingo por la tarde deja 3 encargos (lunes, miércoles y viernes de la semana siguiente) en docu/encargos/1-3.txt.
+# El atajo del iPhone se los pasa a ChatGPT por la noche y los guiones llegan por «documental» a ideas.yml.
+on:
+  schedule:
+    - cron: '0 17 * * 0'
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: 'Lunes de la semana (AAAA-MM-DD). Vacío = el próximo lunes'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  encargos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar los 3 encargos
+        run: python -m docu.encargos preparar ${{ inputs.desde && format('--desde {0}', inputs.desde) || '' }}
+      - name: Guardar
+        run: |
+          git add docu/encargos
+          git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Encargos de documentales para ChatGPT" || exit 0
+          for i in 1 2 3 4 5; do git pull -q --rebase && git push -q && break; sleep 5; done
