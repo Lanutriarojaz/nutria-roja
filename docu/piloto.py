@@ -359,11 +359,43 @@ def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=()
 
 
 # ---------- montaje ----------
+def _encuadre(ruta, dur):
+    """Los clips suelen ser horizontales: en vez de recortar siempre el centro, el recorte vertical sigue al
+    protagonista (lo más brillante y con más detalle). Devuelve el centro del recorte como fracción del ancho."""
+    import numpy as np
+    try:
+        cols, ancho_v = None, None
+        for k in range(3):
+            crudo = subprocess.run(['ffmpeg', '-v', 'quiet', '-ss', f'{dur * (0.15 + 0.3 * k):.2f}', '-i', ruta, '-frames:v', '1',
+                                    '-vf', 'scale=256:144,format=gray', '-f', 'rawvideo', '-'], capture_output=True).stdout
+            if len(crudo) != 256 * 144:
+                continue
+            g = np.frombuffer(crudo, np.uint8).reshape(144, 256).astype(float)
+            brillo = np.clip(g - np.median(g) - 25, 0, None) * 2.5
+            detalle = np.abs(np.diff(g, axis=0, prepend=g[:1])) + np.abs(np.diff(g, axis=1, prepend=g[:, :1]))
+            c = (brillo + detalle * 0.5)[8:-8].sum(axis=0)
+            cols = c if cols is None else cols + c
+        info = json.loads(sh(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height',
+                              '-of', 'json', ruta]))['streams'][0]
+        aspecto = info['width'] / info['height']
+        if cols is None or aspecto <= W / H + 0.01:
+            return 0.5
+        ancho_v = max(int(round(256 * (W / H) / aspecto * 1.06)), 1)     # ancho del recorte en columnas
+        sumas = np.convolve(cols, np.ones(ancho_v), 'valid')
+        centro = len(sumas) // 2
+        sumas[centro] *= 1.15                                                 # sin protagonista claro: el centro
+        mejor = int(np.argmax(sumas))
+        return (mejor + ancho_v / 2) / 256
+    except Exception:
+        return 0.5
+
+
 def tramo(ruta, dur, i, carpeta):
     """Metraje a pantalla completa 9:16 con paneo lento, grado de color suave y viñeta."""
     out = os.path.join(carpeta, f'tramo{i}.mp4')
     sentido = 1 if i % 2 == 0 else -1
-    pan = f"(iw-ow)/2+{sentido}*min(70\\,(iw-ow)/2)*(t/{dur:.2f}-0.5)"
+    f = _encuadre(ruta, dur)
+    pan = f"clip({f:.3f}*iw-ow/2+{sentido}*40*(t/{dur:.2f}-0.5)\\,0\\,iw-ow)"
     vf = (f"scale=1150:2044:force_original_aspect_ratio=increase,crop={W}:{H}:x='{pan}':y='(ih-oh)/2',"
           f"eq=contrast=1.06:saturation=1.12:brightness=-0.02,vignette=PI/5,fps={FPS},format=yuv420p,setsar=1")
     sh(['ffmpeg', '-v', 'error', '-y', '-stream_loop', '-1', '-i', ruta, '-t', f'{dur:.3f}', '-an', '-vf', vf,
