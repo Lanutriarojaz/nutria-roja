@@ -1,10 +1,12 @@
-name: Piloto documentales (sin publicar)
+name: Piloto documentales (no publica)
 
-# Solo corre en la rama piloto-docu: no toca Efemérides ni publica nada.
 on:
   push:
     branches: [piloto-docu]
     paths: ['docu/**', '.github/workflows/piloto-docu.yml']
+
+permissions:
+  contents: read
 
 concurrency: piloto-docu
 
@@ -22,13 +24,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: pip
-      - name: Instalar ffmpeg, espeak y dependencias
+      - name: Instalar ffmpeg, espeak-ng y dependencias
         run: |
           for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg espeak-ng >/dev/null && break; sleep 30; done
           pip install -q -r requirements.txt
           pip install -q torch --index-url https://download.pytorch.org/whl/cpu
-          pip install -q "kokoro>=0.9" soundfile || echo "Kokoro no se pudo instalar: se probarán solo las voces de Microsoft"
+          pip install -q kokoro soundfile || echo "Kokoro no se pudo instalar: se probarán solo las voces de Microsoft"
       - name: Montar el piloto
         run: python -m docu.piloto "$(cat docu/pilotos/ACTUAL)"
       - uses: actions/upload-artifact@v4

@@ -1,0 +1,25 @@
+{
+"topic_id": "agua-invisible-vaso-frio-condensacion",
+"categoria": "ciencia",
+"titulo": "El agua que aparece de la nada en tu vaso",
+"gancho": "Este vaso parece estar perdiendo agua.",
+"guion": "Este vaso parece estar perdiendo agua. Pero las gotas de fuera no vienen de dentro. Aunque no veas nada, el aire que te rodea contiene vapor de agua. Cuando llenas un vaso con hielo, su superficie se enfría rápidamente. El aire que toca ese cristal también se enfría y puede alcanzar el llamado punto de rocío. Entonces, parte del vapor invisible pasa a ser agua líquida y aparecen pequeñas gotas sobre el vidrio. Cuanta más humedad haya en el ambiente, más fácil será que el vaso termine empapado. Puedes comprobarlo secando bien el exterior y esperando unos minutos, sin derramar ni una gota. Así que el vaso no está sudando ni tiene fugas: está recogiendo agua que ya estaba flotando, invisible, a tu alrededor.",
+"escenas": [
+{"n": 1, "locucion": "Este vaso parece estar perdiendo agua. Pero las gotas de fuera no vienen de dentro.", "busqueda_en": "cold glass condensation", "alternativa_en": "wet drinking glass", "texto_pantalla": "¿De dónde sale?"},
+{"n": 2, "locucion": "Aunque no veas nada, el aire que te rodea contiene vapor de agua.", "busqueda_en": "sunlight through window", "alternativa_en": "sunlight empty room", "texto_pantalla": "Agua invisible"},
+{"n": 3, "locucion": "Cuando llenas un vaso con hielo, su superficie se enfría rápidamente.", "busqueda_en": "ice cubes glass", "alternativa_en": "pouring ice water", "texto_pantalla": ""},
+{"n": 4, "locucion": "El aire que toca ese cristal también se enfría y puede alcanzar el llamado punto de rocío.", "busqueda_en": "cold glass closeup", "alternativa_en": "frosted drinking glass", "texto_pantalla": "Punto de rocío"},
+{"n": 5, "locucion": "Entonces, parte del vapor invisible pasa a ser agua líquida y aparecen pequeñas gotas sobre el vidrio.", "busqueda_en": "water condensation macro", "alternativa_en": "water droplets glass", "texto_pantalla": "Vapor → Agua líquida"},
+{"n": 6, "locucion": "Cuanta más humedad haya en el ambiente, más fácil será que el vaso termine empapado.", "busqueda_en": "humid window condensation", "alternativa_en": "foggy window droplets", "texto_pantalla": "Más humedad, más gotas"},
+{"n": 7, "locucion": "Puedes comprobarlo secando bien el exterior y esperando unos minutos, sin derramar ni una gota.", "busqueda_en": "wiping drinking glass", "alternativa_en": "cleaning glass cloth", "texto_pantalla": "Haz la prueba"},
+{"n": 8, "locucion": "Así que el vaso no está sudando ni tiene fugas: está recogiendo agua que ya estaba flotando, invisible, a tu alrededor.", "busqueda_en": "cold drink droplets", "alternativa_en": "condensation glass closeup", "texto_pantalla": "El agua viene del aire"}
+],
+"pronunciacion": [{"termino": "condensación", "como": "con-den-sa-CIÓN"}, {"termino": "punto de rocío", "como": "PUN-to de ro-CÍ-o"}],
+"fuentes": [
+{"afirmacion": "La condensación transforma el vapor de agua atmosférico en agua líquida y explica las gotas que aparecen en el exterior de un vaso frío.", "titulo": "Condensation and the Water Cycle", "url": "https://www.usgs.gov/water-science-school/science/condensation-and-water-cycle", "editor": "USGS"},
+{"afirmacion": "El vapor de agua del aire se condensa sobre un vaso que enfría el aire próximo por debajo de su punto de rocío; depende de la humedad.", "titulo": "Learning Lesson: Sweatin' to the Coldies", "url": "https://www.noaa.gov/jetstream/ll-sweatin", "editor": "NOAA"},
+{"afirmacion": "La condensación produce gotas en ventanas, latas y vasos fríos.", "titulo": "Condensation", "url": "https://education.nationalgeographic.org/resource/condensation/", "editor": "National Geographic Education"}
+],
+"metadatos": {"titulo": "Tu vaso está creando gotas de agua... ¿de dónde salen?", "descripcion": "Un vaso frío puede cubrirse de agua sin perder una sola gota de su interior. La explicación está en el aire que respiramos. La Nutria Roja: lo extraordinario está más cerca de lo que crees.", "hashtags": ["#LaNutriaRoja", "#CienciaCotidiana", "#Condensacion", "#Curiosidades", "#Ciencia", "#Shorts"]},
+"riesgos": ["La condensación depende de que la superficie esté por debajo del punto de rocío.", "Escena 2: no presentar polvo o niebla como vapor visible.", "Escena 6: la ventana empañada ilustra, no demuestra la relación cuantitativa."]
+}
