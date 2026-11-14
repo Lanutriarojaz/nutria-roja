@@ -166,7 +166,7 @@ def _juez(escena, tema, cands):
                f'Microdocumental sobre: {tema}. Escena: «{escena["locucion"]}». Lo que debería verse: {escena["busqueda_en"]}'
                f' / {escena.get("alternativa_en", "")}. Puntúa de 0 a 10 cada miniatura según lo bien que ILUSTRA ESTA escena '
                '(10 = muestra justo eso; 5 = relacionado pero genérico; 0 = no tiene nada que ver, p. ej. un animal o paisaje '
-               'cuando se habla de un vaso). Penaliza texto/logos incrustados y personas mirando a cámara. '
+               'cuando se habla de un vaso). Pon 0 a: fondo verde o azul de croma, pantallas, texto o logos incrustados, bebidas alcohólicas, personas mirando a cámara, render 3D o animación. Prefiere planos reales, bonitos y con movimiento natural. '
                'Responde SOLO JSON {"notas":[{"id":int,"nota":int}]}'}]
     for i, c in enumerate(cands):
         b = _mini_b64(c['mini']) if c['mini'] else None
