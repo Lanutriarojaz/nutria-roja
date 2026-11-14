@@ -28,7 +28,7 @@ ROJO, BLANCO = (232, 67, 52, 255), (255, 255, 255, 255)
 ESLOGAN = {'es': 'Lo extraordinario está más cerca de lo que crees',
            'en': 'The extraordinary is closer than you think'}
 VOCES = {
-    'es': [('edge', 'es-ES-ElviraNeural'), ('edge', 'es-ES-XimenaNeural'), ('kokoro', 'ef_dora')],
+    'es': [('edge', 'es-ES-XimenaNeural')],
     'en': [('edge', 'en-US-AvaNeural'), ('edge', 'en-GB-SoniaNeural'), ('kokoro', 'af_heart')],
 }
 MUSICA = ('Floating Cities', 'https://incompetech.com/music/royalty-free/mp3-royaltyfree/Floating%20Cities.mp3')
@@ -197,12 +197,15 @@ def _bajar(c):
     return ruta
 
 
-def metraje(g):
+NOTA_MIN = int(os.environ.get('DOCU_NOTA_MIN', '7'))
+
+
+def metraje(g, estricto=False):
     usados, clips = set(), []
     for e in g['escenas']:
         palabras = e['busqueda_en'].split()
         vistos, mejor = set(), []
-        rondas = [[e['busqueda_en'], e.get('alternativa_en')], [' '.join(palabras[:2]), ' '.join(palabras[-2:])]]
+        rondas = [[e['busqueda_en']], [e.get('alternativa_en')], [' '.join(palabras[:2]), ' '.join(palabras[-2:])]]
         for ronda in rondas:
             cands = _candidatos(ronda, usados, vistos)[:10]
             if cands:
@@ -210,8 +213,9 @@ def metraje(g):
             mejor.sort(key=lambda c: (c['nota'], c['h']['duration'] >= 6, c['h'].get('likes', 0)), reverse=True)
             if mejor and mejor[0]['nota'] >= 7:
                 break
-        if not mejor:
-            raise RuntimeError(f'Sin metraje para la escena {e["n"]}')
+        if not mejor or (estricto and mejor[0]['nota'] < NOTA_MIN):
+            print(f'  ✖ escena {e["n"]}: sin metraje que encaje (mejor nota {mejor[0]["nota"] if mejor else "—"}) → tema descartado', flush=True)
+            return None
         c = mejor[0]
         usados.add(c['h']['id'])
         info = {'consulta': c['q'], 'pixabay_id': c['h']['id'], 'nota_juez': c['nota'], 'pagina': c['h']['pageURL'],
@@ -405,16 +409,27 @@ def comprobar_fuentes(fuentes):
 
 
 def main(ruta):
-    g = json.load(open(ruta))
+    datos = json.load(open(ruta))
+    temas = datos if isinstance(datos, list) else [datos]
     os.makedirs(SALIDA, exist_ok=True)
-    print('▶ Guion:', g['titulo'], flush=True)
+    g = clips = None
+    for t in temas:
+        print('▶ Probando tema:', t['titulo'], flush=True)
+        clips = metraje(t, estricto=len(temas) > 1)
+        if clips:
+            g = t; break
+    if not g:
+        sys.exit('Ningún tema tiene metraje que encaje en todas sus escenas')
+    print('▶ Elegido:', g['titulo'], flush=True)
     en = adaptar_en(g)
-    g_en = {**g, 'titulo': en['titulo'], 'metadatos': en['metadatos'],
+    meta_en = en['metadatos']
+    meta_en['descripcion'] = re.sub(r'\s*(Science is wild!?|#.*)$', '', meta_en.get('descripcion', '')).strip() + \
+        ' La Nutria Roja: ' + ESLOGAN['en'].lower().capitalize() + '.'
+    g_en = {**g, 'titulo': en['titulo'], 'metadatos': meta_en,
             'escenas': [{**e, 'locucion': x['locucion'], 'texto_pantalla': x.get('texto_pantalla', '')}
                         for e, x in zip(g['escenas'], en['escenas'])]}
-    print('▶ Metraje de Pixabay', flush=True)
-    clips = metraje(g)
-    informe = {'topic_id': g['topic_id'], 'titulo': {'es': g['titulo'], 'en': g_en['titulo']},
+    informe = {'topic_id': g['topic_id'], 'temas_probados': [t['titulo'] for t in temas],
+               'titulo': {'es': g['titulo'], 'en': g_en['titulo']},
                'guion_en': [e['locucion'] for e in g_en['escenas']], 'metadatos': {'es': g['metadatos'], 'en': g_en['metadatos']},
                'metraje': [c[1] for c in clips], 'musica': CREDITO_MUSICA,
                'fuentes': comprobar_fuentes(g.get('fuentes', [])), 'videos': []}
@@ -425,11 +440,11 @@ def main(ruta):
             try:
                 salida = os.path.join(SALIDA, f'{nombre}.mp4')
                 total = montar(guion, lang, motor, voz, clips, os.path.join(SALIDA, 'tmp', nombre), salida)
-                fallos, datos = calidad.revisar(salida)
+                fallos, datos_qc = calidad.revisar(salida)
                 if not 40 <= total <= 62:
                     fallos.append(f'Duración fuera de 40-60 s: {total:.1f}')
                 informe['videos'].append({'archivo': os.path.basename(salida), 'voz': voz, 'motor': motor,
-                                          'duracion': round(total, 1), 'fallos': fallos, **datos})
+                                          'duracion': round(total, 1), 'fallos': fallos, **datos_qc})
                 print(f'  {nombre}: {total:.1f} s, fallos: {fallos or "ninguno"}', flush=True)
             except Exception as e:
                 informe['videos'].append({'archivo': None, 'voz': voz, 'error': str(e)[:600]})

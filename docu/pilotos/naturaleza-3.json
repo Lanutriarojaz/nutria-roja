@@ -1,0 +1,61 @@
+[
+{"topic_id": "por-que-el-trueno-llega-despues-del-rayo", "categoria": "ciencia", "titulo": "El trueno es el sonido de una explosión",
+ "gancho": "Primero ves el relámpago. Después llega el trueno. Pero ambos nacen prácticamente a la vez.", "guion": "",
+ "escenas": [
+  {"n": 1, "locucion": "Primero ves el relámpago. Después llega el trueno. Pero ambos nacen prácticamente a la vez.", "busqueda_en": "lightning storm", "alternativa_en": "lightning night", "texto_pantalla": "¿Por qué llega después?"},
+  {"n": 2, "locucion": "Un rayo es una descarga eléctrica que atraviesa el aire durante una tormenta.", "busqueda_en": "lightning clouds", "alternativa_en": "thunderstorm sky", "texto_pantalla": "Descarga eléctrica"},
+  {"n": 3, "locucion": "En una fracción de segundo, calienta el aire de su alrededor a temperaturas extremas.", "busqueda_en": "lightning closeup", "alternativa_en": "lightning bolts", "texto_pantalla": "Calor extremo"},
+  {"n": 4, "locucion": "Ese aire se expande tan bruscamente que genera una onda de choque: eso es el trueno.", "busqueda_en": "violent thunderstorm", "alternativa_en": "storm lightning", "texto_pantalla": "Onda de choque"},
+  {"n": 5, "locucion": "La luz llega a tus ojos muchísimo antes que el sonido a tus oídos.", "busqueda_en": "night lightning", "alternativa_en": "dark thunderstorm", "texto_pantalla": "Luz antes que sonido"},
+  {"n": 6, "locucion": "Por eso puedes ver un destello y escuchar el estruendo varios segundos después.", "busqueda_en": "distant lightning", "alternativa_en": "horizon lightning", "texto_pantalla": "Un mismo fenómeno"},
+  {"n": 7, "locucion": "Como orientación, cada tres segundos de diferencia equivalen aproximadamente a un kilómetro de distancia.", "busqueda_en": "lightning horizon", "alternativa_en": "distant storm", "texto_pantalla": "3 segundos = 1 km"},
+  {"n": 8, "locucion": "Y si el sonido retumba durante mucho rato, es porque te llegan ondas de distintas partes del rayo. No son dos fenómenos separados: estás viendo y oyendo la misma descarga.", "busqueda_en": "lightning timelapse", "alternativa_en": "thunderstorm timelapse", "texto_pantalla": "Una descarga. Dos señales."}
+ ],
+ "pronunciacion": [],
+ "fuentes": [
+  {"afirmacion": "Los rayos calientan el aire rápidamente, provocando su expansión y generando el trueno.", "titulo": "Understanding Lightning: Thunder", "url": "https://www.weather.gov/safety/lightning-science-thunder", "editor": "National Weather Service (NOAA)"},
+  {"afirmacion": "La diferencia entre relámpago y trueno permite estimar la distancia; el retumbe viene de distintas partes del canal.", "titulo": "The Sound of Thunder", "url": "https://www.weather.gov/source/zhu/ZHU_Training_Page/lightning_stuff/lightning2/thunder.html", "editor": "National Weather Service (NOAA)"}
+ ],
+ "metadatos": {"titulo": "¿Por qué vemos el rayo antes de escuchar el trueno?", "descripcion": "Un relámpago y su trueno nacen prácticamente al mismo tiempo. La diferencia está en cómo viajan la luz y el sonido.", "hashtags": ["#LaNutriaRoja", "#Rayos", "#Tormentas", "#Ciencia", "#Naturaleza", "#Shorts"]},
+ "riesgos": ["Tres segundos por kilómetro es aproximado.", "No invitar a quedarse al aire libre durante una tormenta."]
+},
+{"topic_id": "por-que-el-hielo-de-los-glaciares-es-azul", "categoria": "naturaleza", "titulo": "Por qué algunos glaciares tienen hielo azul",
+ "gancho": "El hielo de algunos glaciares es azul. Y no, no está teñido.", "guion": "",
+ "escenas": [
+  {"n": 1, "locucion": "El hielo de algunos glaciares es azul. Y no, no está teñido.", "busqueda_en": "blue glacier", "alternativa_en": "blue iceberg", "texto_pantalla": "¿Hielo azul?"},
+  {"n": 2, "locucion": "La nieve recién caída suele verse blanca porque contiene mucho aire.", "busqueda_en": "snow landscape", "alternativa_en": "fresh snowfall", "texto_pantalla": "Nieve blanca"},
+  {"n": 3, "locucion": "Cuando se acumula durante años, su propio peso la comprime y acaba convirtiéndola en hielo glaciar.", "busqueda_en": "snowy glacier", "alternativa_en": "glacier aerial", "texto_pantalla": "Años de compresión"},
+  {"n": 4, "locucion": "En ese proceso, muchas de las pequeñas burbujas de aire desaparecen.", "busqueda_en": "glacier ice", "alternativa_en": "iceberg closeup", "texto_pantalla": "Menos burbujas"},
+  {"n": 5, "locucion": "Si el hielo es suficientemente denso y grueso, la luz puede recorrer bastante por su interior.", "busqueda_en": "blue ice", "alternativa_en": "glacier cave", "texto_pantalla": "La luz atraviesa el hielo"},
+  {"n": 6, "locucion": "El hielo absorbe más fácilmente las longitudes de onda rojas que las azules.", "busqueda_en": "blue icebergs", "alternativa_en": "ice cave", "texto_pantalla": "El rojo se absorbe"},
+  {"n": 7, "locucion": "Por eso, en algunas paredes de hielo y grietas profundas aparece ese azul tan intenso.", "busqueda_en": "glacier crevasse", "alternativa_en": "blue glacier", "texto_pantalla": "El azul permanece"},
+  {"n": 8, "locucion": "No todos los glaciares lo muestran igual: importan el grosor, las burbujas y cómo entra la luz. Ese color no viene de ninguna sustancia añadida. Es la propia luz cambiando mientras atraviesa el hielo.", "busqueda_en": "blue iceberg", "alternativa_en": "glacier aerial", "texto_pantalla": "El secreto está en la luz"}
+ ],
+ "pronunciacion": [{"termino": "glaciar", "como": "gla-CIAR"}],
+ "fuentes": [
+  {"afirmacion": "El hielo glaciar puede verse azul tras años de compresión que reducen las burbujas; el hielo absorbe preferentemente el rojo.", "titulo": "Glaciers and Icecaps", "url": "https://www.usgs.gov/water-science-school/science/glaciers-and-icecaps", "editor": "USGS"}
+ ],
+ "metadatos": {"titulo": "El extraño motivo por el que algunos glaciares son azules", "descripcion": "Los glaciares pueden esconder hielo de un azul intenso. La explicación está en cómo la luz atraviesa el hielo comprimido.", "hashtags": ["#LaNutriaRoja", "#Glaciares", "#Hielo", "#Naturaleza", "#Ciencia", "#PlanetaTierra"]},
+ "riesgos": ["No todo el hielo glaciar es azul.", "Preferir clips de color natural."]
+},
+{"topic_id": "por-que-las-auroras-boreales-tienen-colores", "categoria": "mundo", "titulo": "Las auroras son nuestra atmósfera brillando",
+ "gancho": "Estas luces parecen cortinas moviéndose sobre el cielo. Pero no son nubes iluminadas.", "guion": "",
+ "escenas": [
+  {"n": 1, "locucion": "Estas luces parecen cortinas moviéndose sobre el cielo. Pero no son nubes iluminadas.", "busqueda_en": "aurora borealis", "alternativa_en": "northern lights", "texto_pantalla": "¿Qué está brillando?"},
+  {"n": 2, "locucion": "Las auroras comienzan mucho más lejos, con partículas cargadas procedentes del Sol.", "busqueda_en": "solar surface", "alternativa_en": "sun space", "texto_pantalla": "Todo empieza en el Sol"},
+  {"n": 3, "locucion": "Al llegar a la Tierra, interactúan con su campo magnético y la atmósfera superior.", "busqueda_en": "earth space", "alternativa_en": "planet earth", "texto_pantalla": "Llegan a la Tierra"},
+  {"n": 4, "locucion": "Durante ese proceso, la energía acaba excitando átomos y moléculas del aire.", "busqueda_en": "aurora sky", "alternativa_en": "green aurora", "texto_pantalla": "El aire recibe energía"},
+  {"n": 5, "locucion": "Cuando liberan esa energía, emiten luz. Y aquí aparece el detalle que explica sus colores.", "busqueda_en": "aurora timelapse", "alternativa_en": "colorful aurora", "texto_pantalla": "Y emite luz"},
+  {"n": 6, "locucion": "El oxígeno puede producir auroras verdes o rojas, según las condiciones y la altura.", "busqueda_en": "green aurora", "alternativa_en": "red aurora", "texto_pantalla": "Oxígeno: verde y rojo"},
+  {"n": 7, "locucion": "El nitrógeno contribuye a los tonos azules, rosas y violetas.", "busqueda_en": "purple aurora", "alternativa_en": "pink aurora", "texto_pantalla": "Nitrógeno: azul y rosa"},
+  {"n": 8, "locucion": "Por eso una misma aurora puede cambiar de color mientras se desplaza por el cielo. Lo que estás viendo no es luz reflejada en las nubes: es nuestra propia atmósfera brillando por la energía que llega del espacio.", "busqueda_en": "northern lights", "alternativa_en": "aurora timelapse", "texto_pantalla": "La atmósfera brillando"}
+ ],
+ "pronunciacion": [],
+ "fuentes": [
+  {"afirmacion": "Las auroras se originan por partículas energéticas, la magnetosfera y los gases de la atmósfera superior; sus colores dependen del gas y la altitud.", "titulo": "Auroras", "url": "https://science.nasa.gov/sun/auroras/", "editor": "NASA Science"},
+  {"afirmacion": "El oxígeno da verde y rojo; el nitrógeno, azules y rosados.", "titulo": "NASA's Guide to Finding and Photographing Auroras", "url": "https://science.nasa.gov/feature/nasas-guide-to-finding-and-photographing-auroras/", "editor": "NASA Science"}
+ ],
+ "metadatos": {"titulo": "Las auroras boreales tienen un secreto en sus colores", "descripcion": "El verde, el rojo y el violeta de las auroras no aparecen por casualidad. Cada color nos cuenta algo sobre la atmósfera terrestre.", "hashtags": ["#LaNutriaRoja", "#AurorasBoreales", "#Naturaleza", "#Espacio", "#Ciencia", "#PlanetaTierra"]},
+ "riesgos": ["Mecanismo simplificado.", "Los timelapses aceleran el movimiento y exageran colores."]
+}
+]
