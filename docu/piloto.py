@@ -147,6 +147,8 @@ def _candidatos(consultas, usados, vistos):
         for h in r.json().get('hits', []):
             v = h['videos']
             pick = next((v[k] for k in ('large', 'medium') if v.get(k, {}).get('url') and v[k].get('height', 0) >= 1080), None)
+            if 'ai generated' in h.get('tags', '').lower():
+                continue
             if pick and h['id'] not in usados and h['id'] not in vistos:
                 vistos.add(h['id'])
                 out.append({'h': h, 'pick': pick, 'q': q, 'mini': (v.get('small') or pick).get('thumbnail') or pick.get('thumbnail')})
