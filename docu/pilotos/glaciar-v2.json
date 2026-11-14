@@ -1,0 +1,96 @@
+{
+ "topic_id": "por-que-el-hielo-de-los-glaciares-es-azul",
+ "categoria": "naturaleza",
+ "titulo": "Por qué algunos glaciares tienen hielo azul",
+ "gancho": "El hielo de algunos glaciares es azul. Y no, no está teñido.",
+ "guion": "",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Por qué el hielo de algunos glaciares es azul? No está teñido. La respuesta está en la luz.",
+   "busqueda_en": "blue glacier",
+   "alternativa_en": "blue iceberg",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 2,
+   "locucion": "La nieve recién caída suele verse blanca porque contiene mucho aire.",
+   "busqueda_en": "snow landscape",
+   "alternativa_en": "fresh snowfall",
+   "texto_pantalla": "Nieve blanca"
+  },
+  {
+   "n": 3,
+   "locucion": "Cuando se acumula durante años, su propio peso la comprime y acaba convirtiéndola en hielo glaciar.",
+   "busqueda_en": "snowy glacier",
+   "alternativa_en": "glacier aerial",
+   "texto_pantalla": "Años de compresión"
+  },
+  {
+   "n": 4,
+   "locucion": "En ese proceso, muchas de las pequeñas burbujas de aire desaparecen.",
+   "busqueda_en": "glacier ice",
+   "alternativa_en": "iceberg closeup",
+   "texto_pantalla": "Menos burbujas"
+  },
+  {
+   "n": 5,
+   "locucion": "Si el hielo es suficientemente denso y grueso, la luz puede recorrer bastante por su interior.",
+   "busqueda_en": "blue ice",
+   "alternativa_en": "glacier cave",
+   "texto_pantalla": "La luz atraviesa el hielo"
+  },
+  {
+   "n": 6,
+   "locucion": "El hielo absorbe más fácilmente las longitudes de onda rojas que las azules.",
+   "busqueda_en": "blue icebergs",
+   "alternativa_en": "ice cave",
+   "texto_pantalla": "El rojo se absorbe"
+  },
+  {
+   "n": 7,
+   "locucion": "Por eso, en algunas paredes de hielo y grietas profundas aparece ese azul tan intenso.",
+   "busqueda_en": "glacier crevasse",
+   "alternativa_en": "blue glacier",
+   "texto_pantalla": "El azul permanece"
+  },
+  {
+   "n": 8,
+   "locucion": "No todos los glaciares lo muestran igual: importan el grosor, las burbujas y cómo entra la luz. Ese color no viene de ninguna sustancia añadida. Es la propia luz cambiando mientras atraviesa el hielo.",
+   "busqueda_en": "blue iceberg",
+   "alternativa_en": "glacier aerial",
+   "texto_pantalla": "El secreto está en la luz"
+  }
+ ],
+ "pronunciacion": [
+  {
+   "termino": "glaciar",
+   "como": "gla-CIAR"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "El hielo glaciar puede verse azul tras años de compresión que reducen las burbujas; el hielo absorbe preferentemente el rojo.",
+   "titulo": "Glaciers and Icecaps",
+   "url": "https://www.usgs.gov/water-science-school/science/glaciers-and-icecaps",
+   "editor": "USGS"
+  }
+ ],
+ "metadatos": {
+  "titulo": "El extraño motivo por el que algunos glaciares son azules",
+  "descripcion": "Los glaciares pueden esconder hielo de un azul intenso. La explicación está en cómo la luz atraviesa el hielo comprimido.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Glaciares",
+   "#Hielo",
+   "#Naturaleza",
+   "#Ciencia",
+   "#PlanetaTierra"
+  ]
+ },
+ "riesgos": [
+  "No todo el hielo glaciar es azul.",
+  "Preferir clips de color natural."
+ ],
+ "pregunta": "¿Por qué el hielo de los glaciares es azul?"
+}

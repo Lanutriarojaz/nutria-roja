@@ -50,14 +50,14 @@ def duracion(f):
 # ---------- guion inglés ----------
 def adaptar_en(g):
     pedido = {
-        'titulo': g['titulo'], 'escenas': [{'n': e['n'], 'locucion': e['locucion'], 'texto_pantalla': e.get('texto_pantalla', '')}
+        'titulo': g['titulo'], 'pregunta': g.get('pregunta', ''), 'escenas': [{'n': e['n'], 'locucion': e['locucion'], 'texto_pantalla': e.get('texto_pantalla', '')}
                                            for e in g['escenas']], 'metadatos': g['metadatos']}
     msg = [{'role': 'system', 'content':
             'You localise Spanish science short-video scripts into natural, punchy American English for '
             'YouTube Shorts/TikTok/Reels. Adapt, do not translate word by word: same facts, same scene count and order, '
             'similar length per scene (spoken English ~ same duration). Keep on-screen text max 5 words. '
             'Hashtags in English. Answer ONLY JSON with the same structure: '
-            '{"titulo": str, "escenas": [{"n": int, "locucion": str, "texto_pantalla": str}], '
+            '{"titulo": str, "pregunta": str (the hook question, short), "escenas": [{"n": int, "locucion": str, "texto_pantalla": str}], '
             '"metadatos": {"titulo": str, "descripcion": str, "hashtags": [str]}}'},
            {'role': 'user', 'content': json.dumps(pedido, ensure_ascii=False)}]
     for _ in range(3):
@@ -279,6 +279,24 @@ def _sub(im, grupo, activa):
     return im
 
 
+def _portada(im, pregunta):
+    d = ImageDraw.Draw(im)
+    lineas, linea, tam = [], '', 118
+    for w in pregunta.upper().split():
+        if d.textlength((linea + ' ' + w).strip(), font=_f(tam)) > W - 150:
+            lineas.append(linea); linea = w
+        else:
+            linea = (linea + ' ' + w).strip()
+    lineas.append(linea)
+    alto = len(lineas) * (tam + 14)
+    y0 = 560 - alto / 2
+    d.rectangle([0, y0 - 50, W, y0 + alto + 60], fill=(0, 0, 0, 150))
+    d.rectangle([W / 2 - 90, y0 + alto + 28, W / 2 + 90, y0 + alto + 40], fill=ROJO)
+    for i, l in enumerate(lineas):
+        d.text((W / 2, y0 + i * (tam + 14)), l, font=_f(tam), fill=BLANCO, anchor='ma', stroke_width=4, stroke_fill=(0, 0, 0, 255))
+    return im
+
+
 def _cierre(lang):
     im = Image.new('RGBA', (W, H), (0, 0, 0, 175)); d = ImageDraw.Draw(im)
     d.rounded_rectangle([W / 2 - 300, 700, W / 2 + 300, 800], 16, fill=ROJO)
@@ -295,7 +313,7 @@ def _cierre(lang):
     return im
 
 
-def rotulos(escenas, inicios, palabras, total, lang, carpeta):
+def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta=''):
     """Una imagen PNG por cambio (marca + etiqueta de escena + subtítulo con palabra activa)."""
     cortes, k = [], 0
 
@@ -305,7 +323,7 @@ def rotulos(escenas, inicios, palabras, total, lang, carpeta):
         im.save(n); cortes.append((t, n))
 
     for i, e in enumerate(escenas):
-        fondo = _etiqueta(_base(), e.get('texto_pantalla', ''))
+        fondo = _portada(_base(), pregunta) if (i == 0 and pregunta) else _etiqueta(_base(), e.get('texto_pantalla', ''))
         guarda(inicios[i], fondo)
         grupos, gr = [], []
         for p in palabras[i]:
@@ -391,7 +409,7 @@ def montar(g, lang, motor, voz, clips, carpeta, salida):
         '[0:a]asplit[v][sc];[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=400[md];'
         '[v][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-15:TP=-1.5:LRA=9[a]',
         '-map', '[a]', '-ar', '44100', '-ac', '2', mezcla])
-    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta)
+    mov = rotulos(escenas, inicios, palabras, total, lang, carpeta, g.get('pregunta', ''))
     sh(['ffmpeg', '-v', 'error', '-y', '-i', base, '-i', mov, '-i', mezcla, '-filter_complex',
         '[0:v][1:v]overlay=0:0:shortest=1,format=yuv420p[v]', '-map', '[v]', '-map', '2:a',
         '-c:v', 'libx264', '-crf', '20', '-preset', 'medium', '-profile:v', 'high', '-pix_fmt', 'yuv420p',
@@ -427,7 +445,7 @@ def main(ruta):
     meta_en = en['metadatos']
     meta_en['descripcion'] = re.sub(r'\s*(Science is wild!?|#.*)$', '', meta_en.get('descripcion', '')).strip() + \
         ' La Nutria Roja: ' + ESLOGAN['en'].lower().capitalize() + '.'
-    g_en = {**g, 'titulo': en['titulo'], 'metadatos': meta_en,
+    g_en = {**g, 'titulo': en['titulo'], 'pregunta': en.get('pregunta') or g.get('pregunta', ''), 'metadatos': meta_en,
             'escenas': [{**e, 'locucion': x['locucion'], 'texto_pantalla': x.get('texto_pantalla', '')}
                         for e, x in zip(g['escenas'], en['escenas'])]}
     informe = {'topic_id': g['topic_id'], 'temas_probados': [t['titulo'] for t in temas],
