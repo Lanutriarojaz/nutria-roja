@@ -1,0 +1,24 @@
+{
+ "topic_id": "ensayo-por-que-el-cielo-es-azul",
+ "categoria": "ciencia",
+ "titulo": "¿Por qué el cielo es azul y no violeta?",
+ "gancho": "La luz del Sol no es amarilla, y el cielo debería ser violeta.",
+ "guion": "",
+ "escenas": [
+  {"n": 1, "locucion": "La luz del Sol no es amarilla, y el cielo debería ser violeta.", "busqueda_en": "blue sky clouds timelapse", "alternativa_en": "blue sky", "texto_pantalla": "¿Por qué azul?"},
+  {"n": 2, "locucion": "La luz blanca del Sol lleva dentro todos los colores del arcoíris.", "busqueda_en": "sunlight prism rainbow", "alternativa_en": "sun rays", "texto_pantalla": "Luz blanca"},
+  {"n": 3, "locucion": "Cuando entra en la atmósfera, choca con moléculas de nitrógeno y oxígeno, mucho más pequeñas que su longitud de onda.", "busqueda_en": "earth atmosphere from space", "alternativa_en": "earth orbit", "texto_pantalla": "Nitrógeno y oxígeno"},
+  {"n": 4, "locucion": "Esas moléculas desvían mucho más la luz azul que la roja. Es la dispersión de Rayleigh.", "busqueda_en": "light rays through clouds", "alternativa_en": "sun beams forest", "texto_pantalla": "Dispersión de Rayleigh"},
+  {"n": 5, "locucion": "El violeta se dispersa todavía más, pero el Sol emite menos violeta y nuestros ojos apenas lo captan.", "busqueda_en": "human eye closeup", "alternativa_en": "eye macro", "texto_pantalla": "Ojos poco sensibles al violeta"},
+  {"n": 6, "locucion": "Así que el cerebro mezcla lo que llega y lo interpreta como azul.", "busqueda_en": "blue sky wide", "alternativa_en": "sky", "texto_pantalla": ""},
+  {"n": 7, "locucion": "Al atardecer, la luz atraviesa mucha más atmósfera, el azul se queda por el camino y llegan los rojos.", "busqueda_en": "sunset timelapse", "alternativa_en": "sunset", "texto_pantalla": "Atardecer"},
+  {"n": 8, "locucion": "Mirar al cielo es, literalmente, ver la luz rebotando en el aire.", "busqueda_en": "person looking at sky", "alternativa_en": "clouds moving", "texto_pantalla": ""}
+ ],
+ "pronunciacion": [{"termino": "Rayleigh", "como": "Réilei"}],
+ "fuentes": [
+  {"afirmacion": "La dispersión de Rayleigh explica el color azul del cielo", "titulo": "Rayleigh scattering", "url": "https://en.wikipedia.org/wiki/Rayleigh_scattering", "editor": "Wikipedia"},
+  {"afirmacion": "Por qué el cielo es azul", "titulo": "Why Is the Sky Blue?", "url": "https://spaceplace.nasa.gov/blue-sky/", "editor": "NASA Space Place"}
+ ],
+ "metadatos": {"titulo": "¿Por qué el cielo es azul y no violeta? 🌍", "descripcion": "La respuesta está en cómo el aire dispersa la luz del Sol.", "hashtags": ["#ciencia", "#curiosidades", "#cielo"]},
+ "riesgos": []
+}
