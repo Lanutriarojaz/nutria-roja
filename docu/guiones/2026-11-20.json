@@ -1,0 +1,83 @@
+{
+ "fecha": "2026-11-20",
+ "topic_id": "olas-gigantes-mareas",
+ "categoria": "naturaleza",
+ "pregunta": "¿Por qué existen olas gigantes?",
+ "titulo": "El secreto de las olas gigantes",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Por qué existen olas gigantes? Algunas parecen surgir de la nada.",
+   "busqueda_en": "ocean waves storm",
+   "alternativa_en": "rough sea",
+   "texto_pantalla": "Olas gigantes"
+  },
+  {
+   "n": 2,
+   "locucion": "Se forman cuando fuertes vientos empujan el agua durante kilómetros y kilómetros.",
+   "busqueda_en": "stormy ocean",
+   "alternativa_en": "sea wind",
+   "texto_pantalla": "Viento y mar"
+  },
+  {
+   "n": 3,
+   "locucion": "Cuanto más tiempo sopla el viento y más espacio tiene el mar, más crece la ola.",
+   "busqueda_en": "open sea waves",
+   "alternativa_en": "ocean swell",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 4,
+   "locucion": "Si se cruzan dos trenes de olas, pueden sumarse y crear auténticos muros de agua.",
+   "busqueda_en": "wave collision sea",
+   "alternativa_en": "ocean cross waves",
+   "texto_pantalla": "Se cruzan"
+  },
+  {
+   "n": 5,
+   "locucion": "Algunas, llamadas olas monstruo, superan los 20 metros de altura.",
+   "busqueda_en": "huge ocean wave",
+   "alternativa_en": "giant wave sea",
+   "texto_pantalla": "Olas monstruo"
+  },
+  {
+   "n": 6,
+   "locucion": "Los satélites y boyas han confirmado que no son leyendas marineras.",
+   "busqueda_en": "ocean satellite view",
+   "alternativa_en": "sea buoy",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 7,
+   "locucion": "La próxima vez que mires el mar, recuerda: bajo la calma pueden nacer gigantes.",
+   "busqueda_en": "calm sea sunset",
+   "alternativa_en": "ocean horizon",
+   "texto_pantalla": "Gigantes ocultos"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "Las olas monstruo pueden superar los 20 metros y fueron confirmadas por satélites y boyas.",
+   "titulo": "Rogue Waves",
+   "url": "https://www.noaa.gov/education/resource-collections/ocean-coasts/rogue-waves",
+   "editor": "NOAA"
+  },
+  {
+   "afirmacion": "Las olas se forman por la acción del viento sobre grandes superficies de agua.",
+   "titulo": "How Ocean Waves Form",
+   "url": "https://oceanservice.noaa.gov/facts/wavesinocean.html",
+   "editor": "NOAA"
+  }
+ ],
+ "metadatos": {
+  "titulo": "Por qué existen olas gigantes en el océano",
+  "descripcion": "Descubre cómo nacen las olas gigantes y qué las convierte en verdaderos muros de agua.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Océano",
+   "#OlasGigantes"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
