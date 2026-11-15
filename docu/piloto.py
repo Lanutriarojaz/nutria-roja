@@ -238,10 +238,14 @@ def _ajustar(d, texto, tam, ancho):
     return tam
 
 
+MARCA = {'es': 'LA NUTRIA ROJA', 'en': 'THE RED OTTER'}
+_IDIOMA = {'actual': 'es'}
+
+
 def _base():
     im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle([54, 96, 54 + 330, 96 + 64], 12, fill=ROJO)
-    d.text((54 + 165, 96 + 32), 'LA NUTRIA ROJA', font=_f(40), fill=BLANCO, anchor='mm')
+    d.text((54 + 165, 96 + 32), MARCA[_IDIOMA['actual']], font=_f(40), fill=BLANCO, anchor='mm')
     return im
 
 
@@ -300,7 +304,7 @@ def _portada(im, pregunta, yc=560):
 def _cierre(lang):
     im = Image.new('RGBA', (W, H), (0, 0, 0, 175)); d = ImageDraw.Draw(im)
     d.rounded_rectangle([W / 2 - 300, 700, W / 2 + 300, 800], 16, fill=ROJO)
-    d.text((W / 2, 750), 'LA NUTRIA ROJA', font=_f(66), fill=BLANCO, anchor='mm')
+    d.text((W / 2, 750), MARCA[lang], font=_f(66), fill=BLANCO, anchor='mm')
     lineas, linea = [], ''
     for w in ESLOGAN[lang].split():
         if d.textlength((linea + ' ' + w).strip(), font=_f(74)) > W - 160:
@@ -321,6 +325,7 @@ def _marca_ia(im, lang):
 
 
 def rotulos(escenas, inicios, palabras, total, lang, carpeta, pregunta='', ia=(), pos=()):
+    _IDIOMA['actual'] = lang
     """Una imagen PNG por cambio (marca + etiqueta de escena + subtítulo con palabra activa)."""
     cortes, k = [], 0
 
