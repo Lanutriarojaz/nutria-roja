@@ -1,19 +1,24 @@
 {
- "gancho": "Un mensaje salió de la Tierra rumbo a las estrellas",
+ "fecha": "2026-11-16",
+ "año": 1974,
+ "hecho": "el radiotelescopio de Arecibo envió el famoso Mensaje de Arecibo al espacio",
+ "articulo": "Mensaje de Arecibo",
+ "sujeto": "Radiotelescopio de Arecibo",
+ "detalles_clave": "Puerto Rico, 1974; plato gigante metálico, vista aérea o desde abajo, no telescopios modernos",
+ "gancho": "Un mensaje secreto salió disparado hacia las estrellas",
  "frases": [
-  "Un día como hoy, 16 de noviembre de 1974, el radiotelescopio de Arecibo envió un mensaje al espacio.",
-  "Iba dirigido al cúmulo de Hércules, también llamado M13, un conjunto de cientos de miles de estrellas muy viejas.",
-  "El mensaje contenía información sobre el sistema solar, la Tierra y el ser humano.",
-  "Se calcula que tardará unos 25 milenios en llegar a su destino, y otros tantos en recibir una respuesta.",
-  "Y aquí viene lo curioso: es probable que allí no haya planetas rocosos capaces de albergar vida."
+  "Un día como hoy, 16 de noviembre de 1974, el radiotelescopio de Arecibo apuntó al cielo para hablar con el universo.",
+  "Los científicos enviaron una señal digital con información sobre la Tierra y la humanidad.",
+  "En solo 3 minutos viajaron 1679 bits hacia un cúmulo de estrellas a 25.000 años luz.",
+  "El mensaje mostraba números, química, un dibujo humano y hasta nuestro sistema solar.",
+  "Si alguien lo recibe, la respuesta tardaría 50.000 años en llegar."
  ],
- "pregunta": "¿Tú lo habrías enviado aunque nadie pudiera contestar?",
- "titulo": "El mensaje de Arecibo al espacio en 1974 🛰️",
- "descripcion": "Mensaje de Arecibo: cuando saludamos al cúmulo de Hércules.  \nSe estima que tardará 25 milenios en llegar.  \n#historia #undiacomohoy #curiosidades #espacio #Arecibo",
+ "pregunta": "¿Te gustaría que alguien contestara ese mensaje?",
+ "titulo": "El Mensaje de Arecibo viaja al espacio en 1974 🚀",
+ "descripcion": "Mensaje de Arecibo: Un mensaje secreto salió disparado hacia las estrellas. Fue enviado desde Puerto Rico a 25.000 años luz. #historia #undiacomohoy #curiosidades #espacio #ciencia",
  "busquedas": [
-  "Arecibo message 1974",
-  "Messier 13 Hercules Cluster",
-  "Arecibo radio telescope Puerto Rico"
- ],
- "fecha": "2026-11-16"
+  "Arecibo radio telescope 1974",
+  "Arecibo Message transmission",
+  "Arecibo Observatory aerial view"
+ ]
 }
