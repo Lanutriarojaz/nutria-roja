@@ -1,19 +1,24 @@
 {
- "gancho": "Dos astronautas pisan la Luna por segunda vez",
+ "fecha": "2026-11-19",
+ "año": 1969,
+ "hecho": "el Apolo 12 aterrizó en la Luna con éxito",
+ "articulo": "Apolo 12",
+ "sujeto": "módulo lunar Intrepid del Apolo 12",
+ "detalles_clave": "EE. UU., NASA, 1969; superficie lunar; astronautas Charles Conrad y Alan Bean",
+ "gancho": "La segunda vez que pisamos la Luna casi falla",
  "frases": [
-  "Un día como hoy, 19 de noviembre de 1969, el Apolo 12 alunizó en el Oceanus Procellarum.",
-  "Charles Conrad y Alan L. Bean se convirtieron en el tercer y cuarto hombre en caminar por la Luna.",
-  "Aterrizaron tan cerca de la vieja sonda Surveyor 3 que pudieron recoger piezas para llevarlas a la Tierra.",
-  "Lo curioso es que llevaron la primera cámara a color, pero la imagen se perdió cuando Bean la apuntó al sol.",
-  "Mientras tanto, Richard F. Gordon daba vueltas en órbita lunar esperando a sus compañeros."
+  "Un día como hoy, 19 de noviembre de 1969, el Apolo 12 aterrizó en la Luna.",
+  "Era solo la segunda misión tripulada que lograba llegar a la superficie lunar.",
+  "El módulo lunar Intrepid tocó tierra en el Océano de las Tormentas, a apenas 200 metros del punto previsto.",
+  "La nave había sufrido dos apagones eléctricos por rayos durante el lanzamiento, pero la misión siguió adelante.",
+  "Charles Conrad y Alan Bean caminaron sobre la Luna durante más de 7 horas y recogieron 34 kilos de rocas."
  ],
- "pregunta": "¿Te habría dado más respeto caminar en la Luna o quedarte orbitando?",
- "titulo": "Apolo 12 aluniza en 1969 🌕",
- "descripcion": "Apolo 12 aluniza en Oceanus Procellarum. Dos hombres más pisan la Luna.\nLa cámara a color falló cuando Bean la apuntó al sol.\n#historia #undiacomohoy #curiosidades #Apolo12 #Luna",
+ "pregunta": "¿Te atreverías a dar un paseo por la Luna?",
+ "titulo": "El Apolo 12 aterriza en la Luna en 1969 🌕",
+ "descripcion": "Apolo 12: la segunda vez en la Luna casi sale mal. \nDos apagones, ráfagas de rayos y un aterrizaje perfecto. #historia #undiacomohoy #curiosidades #NASA #luna",
  "busquedas": [
-  "Apollo 12 Oceanus Procellarum 1969",
-  "Charles Conrad Alan Bean lunar surface 1969",
-  "Surveyor 3 Apollo 12 Moon"
- ],
- "fecha": "2026-11-19"
+  "Apollo 12 Lunar Module Intrepid 1969",
+  "Alan Bean Charles Conrad Moonwalk",
+  "Apollo 12 Ocean of Storms landing site"
+ ]
 }
