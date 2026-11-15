@@ -1,19 +1,24 @@
 {
- "gancho": "Un chaval cambia la historia del boxeo en un día",
+ "fecha": "2026-11-22",
+ "año": 1963,
+ "hecho": "se lanzó la sonda lunar estadounidense Explorer 22",
+ "articulo": "Explorer 22",
+ "sujeto": "satélite Explorer 22",
+ "detalles_clave": "EE. UU., NASA, 1963; satélite científico en órbita terrestre, sin tripulación",
+ "gancho": "Un satélite que estudió la ionosfera desde el espacio",
  "frases": [
-  "Un día como hoy, 22 de noviembre de 1986, Mike Tyson se convirtió en el campeón mundial de los pesos pesados más joven.",
-  "El boxeo, también llamado pugilismo, enfrenta a dos rivales que solo pueden usar los puños con guantes, golpeando de la cintura para arriba.",
-  "Los combates se dividen en asaltos cortos y siguen un reglamento que fija los pesos y la duración de la pelea.",
-  "Este deporte tiene raíces muy antiguas y ya aparecía en los Juegos Olímpicos de la Antigua Grecia.",
-  "Lo curioso es que las reglas modernas surgieron en 1889 gracias al marqués de Queensberry, el que impuso los guantes."
+  "Un día como hoy, 22 de noviembre de 1963, despegó el Explorer 22.",
+  "Fue un satélite de la NASA dedicado a estudiar la ionosfera de la Tierra.",
+  "Su misión era medir cómo las ondas de radio viajaban a través de la atmósfera superior.",
+  "Pesaba apenas 41 kilos y orbitaba a más de 1.000 kilómetros de altura.",
+  "Sus datos ayudaron a mejorar las comunicaciones por radio y satélite de la década de los 60."
  ],
- "pregunta": "¿Te animarías a probar un asalto en un cuadrilátero?",
- "titulo": "Mike Tyson campeón mundial de boxeo en 1986 🥊",
- "descripcion": "Boxeo y un joven que hizo historia en 1986.\nLas reglas modernas vienen del siglo XIX y siguen vigentes.\n#historia #undiacomohoy #curiosidades #MikeTyson #boxeo",
+ "pregunta": "¿Te subirías a ver la Tierra desde esa altura?",
+ "titulo": "Explorer 22, el satélite que miró la Tierra en 1963 🚀",
+ "descripcion": "Explorer 22, un satélite que estudió la ionosfera desde el espacio. Lanzado en 1963, ayudó a mejorar las comunicaciones de la época. #historia #undiacomohoy #curiosidades #espacio #NASA",
  "busquedas": [
-  "Mike Tyson 1986 boxing match",
-  "Queensberry boxing gloves 19th century",
-  "boxing ring 1980s"
- ],
- "fecha": "2026-11-22"
+  "Explorer 22 satellite 1963",
+  "NASA ionosphere satellite 1960s",
+  "Explorer program spacecraft"
+ ]
 }
