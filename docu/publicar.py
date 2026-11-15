@@ -32,7 +32,7 @@ def main():
     hh, mm = map(int, HORA.split(':'))
     dia = dt.date.fromisoformat(v['fecha'])
     cuando = dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid'))
-    url = f"{os.environ['MEDIA_BASE'].rstrip('/')}/docu-{v['fecha']}.mp4"
+    url = f"{os.environ['MEDIA_BASE'].rstrip('/')}/{v.get('archivo') or 'docu-' + v['fecha'] + '.mp4'}"
     print(f"{v['fecha']} {HORA} → {url}\n  {v['titulo']}\n---\n{v['descripcion']}\n---")
     if a.prueba:
         print('(prueba: no se programa nada)'); return
@@ -53,7 +53,8 @@ def main():
         print(f"{'✔' if ok else '✖'} {servicio}: {r.get('post', {}).get('id') or r.get('message')}")
         if not ok:
             malos.append(servicio)
-    apuntar(v)
+    if v.get('idioma', 'es') == 'es':
+        apuntar(v)
     if malos:
         sys.exit('Buffer rechazó: ' + ', '.join(malos))
 

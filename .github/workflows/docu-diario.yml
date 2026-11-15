@@ -35,6 +35,7 @@ jobs:
       TZ: Europe/Madrid
       PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
       PUBLICAR: ${{ github.event_name == 'schedule' || inputs.publicar }}
+      BUFFER_EN: ${{ secrets.BUFFER_API_KEY_EN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -54,19 +55,19 @@ jobs:
           name: documental
           path: |
             salida-docu/diario/docu-*.mp4
-            salida-docu/diario/diario.json
+            salida-docu/diario/diario*.json
           retention-days: 14
       - name: Subir el vídeo a la web pública (rama media → GitHub Pages)
         if: env.PUBLICAR == 'true'
         run: |
           REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          f=$(ls salida-docu/diario/docu-*.mp4 | head -1); nombre=$(basename "$f")
+          nombre=$(basename "$(ls salida-docu/diario/docu-*.mp4 | head -1)")
           for i in 1 2 3; do
             rm -rf /tmp/media; git clone -q --depth 1 -b media "$REMOTO" /tmp/media || { mkdir -p /tmp/media; }
             ( cd /tmp/media && rm -rf .git
-              limite=docu-$(date -d '8 days ago' +%F).mp4
-              for v in docu-*.mp4; do [ -f "$v" ] && [ "$v" \< "$limite" ] && rm -f "$v"; done
-              cp "$GITHUB_WORKSPACE/$f" "$nombre"
+              limite=$(date -d '8 days ago' +%F)
+              for v in docu-*.mp4; do d=$(echo "$v" | grep -o '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]'); [ -n "$d" ] && [ "$d" \< "$limite" ] && rm -f "$v"; done
+              cp "$GITHUB_WORKSPACE"/salida-docu/diario/docu-*.mp4 .
               git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Documental $nombre"
               git push -qf "$REMOTO" media ) && break
             sleep 20
@@ -76,13 +77,20 @@ jobs:
             sleep 15
           done
           echo "::error::GitHub Pages no sirve el vídeo"; exit 1
-      - name: Programar en Buffer a las 19:00
+      - name: Programar en Buffer a las 19:00 (La Nutria Roja)
+        if: always() && hashFiles('salida-docu/diario/diario.json') != ''
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           MEDIA_BASE: ${{ env.PAGES }}
         run: python -m docu.publicar salida-docu/diario/diario.json $([ "$PUBLICAR" = true ] || echo --prueba)
+      - name: Programar en Buffer a las 19:00 (The Red Otter, inglés)
+        if: always() && hashFiles('salida-docu/diario/diario-en.json') != '' && env.BUFFER_EN != ''
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY_EN }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m docu.publicar salida-docu/diario/diario-en.json $([ "$PUBLICAR" = true ] || echo --prueba)
       - name: Guardar el historial (para no repetir temas)
-        if: env.PUBLICAR == 'true'
+        if: always() && env.PUBLICAR == 'true'
         run: |
           git add docu/historial.json
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Documental $(date +%F)" || exit 0
@@ -90,6 +98,6 @@ jobs:
       - name: Aviso si no se ha podido publicar
         if: failure() && env.PUBLICAR == 'true'
         run: |
-          motivo=$(python -c "import json;print(json.load(open('salida-docu/diario/diario.json')).get('motivo',''))" 2>/dev/null)
+          motivo=$(python -c "import json;print(' | '.join(f\"{f}: {json.load(open('salida-docu/diario/'+f)).get('motivo','')}\" for f in ('diario.json','diario-en.json')))" 2>/dev/null)
           .github/aviso.sh "🎬 El documental del $(date +%d/%m) no se ha publicado" \
             "No se ha programado el documental de hoy. Motivo: ${motivo:-mira el registro}. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
