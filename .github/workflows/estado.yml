@@ -5,9 +5,15 @@ on:
   schedule:
     - cron: '0 18 * * 0'        # cada domingo por la tarde, por si algo se acerca al límite
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   estado:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,6 +24,22 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
         run: python -m nutria.estado | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Claves de Buffer (castellano e inglés) siguen funcionando
+        env:
+          K_ES: ${{ secrets.BUFFER_API_KEY }}
+          K_EN: ${{ secrets.BUFFER_API_KEY_EN }}
+        run: |
+          malas=""
+          for par in "ES:$K_ES" "EN:$K_EN"; do n=${par%%:*}; k=${par#*:}; [ -z "$k" ] && continue
+            r=$(BUFFER_API_KEY="$k" python -c "from nutria.publicar import canales; print(len(canales()))" 2>&1 | tail -1)
+            echo "Buffer $n: $r redes" | tee -a "$GITHUB_STEP_SUMMARY"
+            [ "$r" = "3" ] || malas="$malas $n"
+          done
+          if [ -n "$malas" ]; then
+            .github/aviso.sh "🔑 Clave de Buffer caducada o sin redes:$malas" \
+              "La clave de Buffer de$malas ya no ve sus 3 redes (caducada o desconectada). Hay que crear una nueva en publish.buffer.com/settings/api (caducidad 1 año) y pegarla en GitHub (BUFFER_API_KEY para castellano, BUFFER_API_KEY_EN para inglés)."
+            exit 1
+          fi
       - name: Modelos de Gemini disponibles (texto e imagen)
         env:
           K1: ${{ secrets.GEMINI_API_KEY }}
