@@ -68,15 +68,15 @@ Antes de responder, comprueba: 6 escenas, 80-110 palabras de diálogo, ninguna e
 
 IDEA (respeta su premisa, su humor y su final; tú pones la historia, el diálogo y lo que se ve):
 {
- "titulo": "Reality de Nubes",
- "formato_texto": "Reality show sin presentador",
- "genero": "Comedia poética y absurda",
- "premisa": "Las nubes intentan destacar formando sombras divertidas mientras el viento hace de villano",
- "chiste": "Las nubes se comportan como concursantes de reality exagerando dramas por cambios de forma",
- "giro": "Un avión atraviesa a las tres y el cartel “TEMPORADA 2 MUY PRONTO” aparece en el cielo",
- "gancho": "Una nube con gafas de sol diciendo “¡Hoy voy a petarlo!”",
- "protagonista": "Tres nubes con personalidad: chula, llorona y despistada",
- "universo": "El cielo funciona como un plató donde las nubes compiten por formar figuras más virales",
- "desarrollo": "1) La nube chula presume de parecer un dragón; 2) El viento deforma a la llorona en churro; 3) La despistada hace sin querer un meme perfecto",
- "audiovisual": "Time-lapse de nubes transformándose mientras suenan confesiones estilo reality"
+ "titulo": "Carrera de Nubes",
+ "formato_texto": "Transmisión deportiva absurda",
+ "genero": "Comedia visual, sátira deportiva",
+ "premisa": "Se retransmite la final mundial de nubes, con el viento como juez traicionero",
+ "chiste": "La seriedad del comentarista contrastada con la lentitud y formas absurdas de las nubes",
+ "giro": "Gana una nube pequeñísima que nadie había visto porque estaba detrás de otra",
+ "gancho": "Un comentarista grita: “¡Y ahí va Cirrostratus adelantando por la derecha!”",
+ "protagonista": "Un comentarista deportivo que narra carreras de nubes con total seriedad",
+ "universo": "El cielo es una pista de carreras oficial y la gente apuesta por las nubes",
+ "desarrollo": "1) Presentación épica de las nubes corredoras; 2) Una nube se transforma en pato y se sale de pista; 3) Lluvia inesperada descalifica a la favorita",
+ "audiovisual": "Infografías deportivas sobre el cielo real con nubes editadas como coches de Fórmula 1"
 }

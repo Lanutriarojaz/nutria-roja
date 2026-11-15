@@ -68,15 +68,15 @@ Antes de responder, comprueba: 6 escenas, 80-110 palabras de diálogo, ninguna e
 
 IDEA (respeta su premisa, su humor y su final; tú pones la historia, el diálogo y lo que se ve):
 {
- "titulo": "Tutorial de Magia para Cafeteras",
- "formato_texto": "Tutorial online absurdo",
- "genero": "Comedia visual y slapstick",
- "premisa": "El mago intenta enseñar un truco de desaparición usando café caliente",
- "chiste": "Las cafeteras hacen trucos fallidos, salpicando café y humo por todas partes",
- "giro": "El mago aplaude orgulloso mientras todo el salón gotea café",
- "gancho": "Una cafetera con capa y sombrero de mago sobre la mesa",
- "protagonista": "Un mago frustrado que solo enseña a cafeteras a hacer trucos",
- "universo": "Las cafeteras pueden aprender magia si alguien les dedica tiempo",
- "desarrollo": "1) El mago presenta a su ‘alumna estrella’; 2) La cafetera intenta desaparecer una cucharilla y la lanza por la ventana; 3) Explosión de espuma de leche como gran final",
- "audiovisual": "Cámara rápida de trucos fallidos con chorros de café y confeti"
+ "titulo": "El Café que Susurra Secretos",
+ "formato_texto": "Mini thriller absurdo",
+ "genero": "Comedia surrealista y misterio ligero",
+ "premisa": "Un oficinista bebe el café de la máquina y escucha secretos incómodos de sus compañeros",
+ "chiste": "Reacciones serias y crecientemente incómodas a revelaciones absurdas",
+ "giro": "El café se enfada porque nadie le responde y se derrama solo sobre la mesa",
+ "gancho": "Un primer plano del café burbujeando y diciendo: “Te voy a contar un cotilleo…”",
+ "protagonista": "Una taza de café que revela secretos aleatorios a quien lo bebe",
+ "universo": "En esta ciudad, todas las bebidas calientes son indiscretas",
+ "desarrollo": "1) El café susurra: “El jefe habla con las plantas”; 2) Revela que la fotocopiadora cree que es un caballo; 3) Grita que el oficinista lleva dos calcetines izquierdos",
+ "audiovisual": "Efectos de sonido ASMR de café con voz cómica reverberante"
 }

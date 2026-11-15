@@ -68,15 +68,15 @@ Antes de responder, comprueba: 6 escenas, 80-110 palabras de diálogo, ninguna e
 
 IDEA (respeta su premisa, su humor y su final; tú pones la historia, el diálogo y lo que se ve):
 {
- "titulo": "Noticias desde el Trastero",
- "formato_texto": "Noticiario absurdo",
- "genero": "Sátira y humor surrealista",
- "premisa": "La lámpara narra noticias como si fueran históricas, pero solo son discusiones entre cajas y ratones",
- "chiste": "Se trata cada tontería como noticia de última hora",
- "giro": "Corte súbito porque la lámpara se funde y todo queda a oscuras",
- "gancho": "“Última hora: una caja de zapatos ha iniciado una guerra civil”",
- "protagonista": "Un presentador de informativos que es en realidad una lámpara rota",
- "universo": "Un canal que solo informa sucesos ocurridos dentro de un trastero infinito",
- "desarrollo": "1) La lámpara abre el informativo con gravedad; 2) Conexiones en directo con una pelota de playa ‘reportera’; 3) Se anuncia el hallazgo de un calcetín desaparecido como si fuera oro",
- "audiovisual": "Mesa de informativos hecha de maletas, con la lámpara parpadeando dramáticamente"
+ "titulo": "El Perro de Schrödinger",
+ "formato_texto": "Mini documental científico absurdo",
+ "genero": "Humor negro y surrealismo",
+ "premisa": "Su dueño intenta pasearlo, pero cada vez que alguien parpadea, el perro desaparece o se multiplica",
+ "chiste": "La imposibilidad de realizar tareas simples con un animal que obedece leyes cuánticas",
+ "giro": "El perro desaparece y reaparece sentado en el sofá de su casa viendo la tele",
+ "gancho": "Un hombre paseando a media correa flotante y diciendo: “¡Está aquí, lo juro!”",
+ "protagonista": "Un perro que existe y no existe según si le miras directamente",
+ "universo": "Un barrio donde la mecánica cuántica afecta solo a las mascotas",
+ "desarrollo": "1) El dueño lo pone la correa y el perro se divide en tres; 2) Cruzan un paso de cebra con la mitad del perro visible; 3) Un policía intenta multarle por pasear ‘animales imaginarios’",
+ "audiovisual": "Efectos de aparición y desaparición sincronizados con parpadeos de transeúntes"
 }

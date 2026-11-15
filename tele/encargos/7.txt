@@ -68,15 +68,15 @@ Antes de responder, comprueba: 6 escenas, 80-110 palabras de diálogo, ninguna e
 
 IDEA (respeta su premisa, su humor y su final; tú pones la historia, el diálogo y lo que se ve):
 {
- "titulo": "Perros Telepáticos en el Metro",
- "formato_texto": "Falso documental urbano",
- "genero": "Comedia urbana y surrealista",
- "premisa": "Los perros usan el metro para coordinar fiestas secretas sin que los humanos se enteren",
- "chiste": "Vemos la vida cotidiana del metro desde su punto de vista, con pensamientos absurdos y discusiones telepáticas",
- "giro": "Los perros se bajan en su parada ladrando la sintonía del metro",
- "gancho": "Un perro sentado en el metro mirando a cámara con subtítulos: “Próxima parada: botellón canino”",
- "protagonista": "Una manada de perros callejeros con telepatía colectiva",
- "universo": "El transporte público es dominado por animales que se comunican mentalmente",
- "desarrollo": "1) Perros entrando al vagón como si nada; 2) Comentan mentalmente sobre los pasajeros y hacen planes; 3) Un humano accidental capta un pensamiento y se traumatiza",
- "audiovisual": "Montaje de miradas caninas y subtítulos telepáticos mezclados con megafonía del metro"
+ "titulo": "Influencer Medieval",
+ "formato_texto": "Videoblog anacrónico",
+ "genero": "Sátira, comedia histórica absurda",
+ "premisa": "El influencer medieval hace un tutorial de ‘cómo sobrevivir a la peste y seguir guapísimo’",
+ "chiste": "Choque entre comportamientos modernos y contexto medieval con lógica propia",
+ "giro": "Una paloma le deja de seguir en directo y él entra en crisis existencial",
+ "gancho": "Un chico con corona de flores medieval diciendo: “¡Qué pasa, mi corte feudal!”",
+ "protagonista": "Un joven del siglo XV que intenta hacerse famoso en TikTok medieval",
+ "universo": "La Edad Media tiene redes sociales que funcionan con palomas mensajeras",
+ "desarrollo": "1) Presenta su outfit de armadura ligera para looks casual; 2) Graba un ‘unboxing’ de queso envuelto en pergamino; 3) Hace un baile viral con un monje y un burro",
+ "audiovisual": "Filtros de TikTok aplicados a escenas medievales reales con palomas volando como notificaciones"
 }

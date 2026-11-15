@@ -68,15 +68,15 @@ Antes de responder, comprueba: 6 escenas, 80-110 palabras de diálogo, ninguna e
 
 IDEA (respeta su premisa, su humor y su final; tú pones la historia, el diálogo y lo que se ve):
 {
- "titulo": "Concierto para Microondas Solista",
- "formato_texto": "Videoclip musical",
- "genero": "Comedia musical absurda",
- "premisa": "El microondas interpreta una balada rock frente a una multitud de utensilios",
- "chiste": "Se toma muy en serio su concierto, pero solo emite pitidos y luces intermitentes",
- "giro": "El microondas hace un solo de 30 segundos y se desenchufa dramáticamente",
- "gancho": "Plano detalle de una puerta de microondas que se abre como si entrara en escena",
- "protagonista": "Un microondas que sueña con ser estrella de rock",
- "universo": "Cocinas donde los electrodomésticos tienen carreras artísticas",
- "desarrollo": "1) Preparativos de backstage con tostadoras dándole consejos; 2) Actuación épica con luces y humo; 3) El público (ollas y tazas) enloquece al explotar palomitas al ritmo",
- "audiovisual": "Escenario miniatura con cubiertos haciendo pogos mientras caen chispas del microondas"
+ "titulo": "Vecinos de Microondas",
+ "formato_texto": "Falso reality vecinal",
+ "genero": "Comedia absurda con humor cotidiano",
+ "premisa": "El microondas intenta organizar una junta vecinal para que la tostadora deje de hacer fiestas a las 3 AM",
+ "chiste": "Diálogos de vecinos de escalera en boca de electrodomésticos que se comportan como personas",
+ "giro": "Toda la cocina termina llena de tostadas pegadas en las paredes mientras el microondas suspira resignado",
+ "gancho": "Un microondas abre su puerta y dice: “O me hacéis caso o corto la luz, ¿eh?”",
+ "protagonista": "Un microondas que habla con acento de barrio y se queja de sus vecinos electrodomésticos",
+ "universo": "Los electrodomésticos viven en un piso en miniatura dentro de la cocina y tienen conflictos de comunidad",
+ "desarrollo": "1) Microondas llama a reunión; 2) La batidora llega borracha de smoothies; 3) La tostadora empieza a lanzar tostadas como confeti",
+ "audiovisual": "Cámara subjetiva a ras de encimera mostrando la cocina como un bloque de pisos animado"
 }
