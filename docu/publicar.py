@@ -35,6 +35,11 @@ def main():
     url = f"{os.environ['MEDIA_BASE'].rstrip('/')}/{v.get('archivo') or 'docu-' + v['fecha'] + '.mp4'}"
     print(f"{v['fecha']} {HORA} → {url}\n  {v['titulo']}\n---\n{v['descripcion']}\n---")
     if a.prueba:
+        if os.environ.get('BUFFER_API_KEY'):
+            chs = canales()
+            print('(prueba) Buffer ve estas redes con esta clave:', ', '.join(f"{k}={c['name']}" for k, c in chs.items()) or 'NINGUNA')
+            if not chs:
+                sys.exit('La clave de Buffer no ve ninguna red')
         print('(prueba: no se programa nada)'); return
     if cuando < dt.datetime.now(ZoneInfo('Europe/Madrid')) + dt.timedelta(minutes=10):
         sys.exit('La hora de publicación ya ha pasado')
