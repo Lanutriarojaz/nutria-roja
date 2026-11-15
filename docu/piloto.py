@@ -70,7 +70,7 @@ def adaptar_en(g):
 # ---------- voz ----------
 async def _edge(texto, voz, mp3):
     import edge_tts
-    ritmo = '-4%' if voz.startswith('en-') else '+6%'          # el inglés se dice más rápido: algo más pausado
+    ritmo = '+0%' if voz.startswith('en-') else '+6%'          # el inglés se dice más rápido: algo más pausado
     c = edge_tts.Communicate(texto, voz, rate=ritmo, boundary='WordBoundary')
     pal = []
     with open(mp3, 'wb') as f:
