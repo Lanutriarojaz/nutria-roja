@@ -46,8 +46,8 @@ def montar_y_revisar(g, lang, voz, clips, carpeta, salida):
     for intento in range(2):
         total = piloto.montar(g, lang, *voz, clips, carpeta, salida)
         fallos, datos = calidad.revisar(salida)
-        if not 38 <= total <= 65:
-            fallos.append(f'Duración {total:.1f} s fuera de 40-60')
+        if not 30 <= total <= 70:                      # Álvaro: mejor algo corto o largo que sin vídeo
+            fallos.append(f'Duración {total:.1f} s fuera de 30-70')
         print(f'  control de calidad ({lang}): {fallos or "OK"} {datos}', flush=True)
         if not fallos:
             break
