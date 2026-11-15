@@ -9,6 +9,7 @@ import datetime as dt
 import glob
 import json
 import os
+import random
 import re
 import sys
 
@@ -20,8 +21,9 @@ GUIONES = os.path.join(AQUI, 'guiones')
 
 LIBRE = """Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
 
-TU DÍA: {dia} de {mes}. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un {dia} de {mes} de cualquier año
-(un invento, un récord, un estreno, un descubrimiento, un personaje, algo insólito...). Que enganche a gente joven de España.
+TU DÍA: {dia} de {mes}. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un {dia} de {mes} de cualquier año.
+TEMA DE HOY (obligatorio, para que la semana sea variada: los otros seis días cubren otros temas): {tema}.
+Que enganche a gente joven de España.
 Evita tragedias con muchas víctimas y la política actual que divide. Usa solo datos de los que estés seguro: fecha, año y cifras exactos.
 IMPORTANTE, LAS FOTOS: el vídeo se ilustra solo con fotos libres de derechos de Wikimedia Commons (dominio público o licencias abiertas), y cada una
 se revisa mirándola. Elige un hecho que TENGA fotos libres claras: ciencia, exploración, inventos, edificios y lugares, naturaleza, historia y personajes
@@ -53,18 +55,28 @@ LAS FOTOS: otra IA buscará fotos reales en Wikimedia Commons y las revisará mi
 """
 
 
+TEMAS = ['ciencia y descubrimientos (medicina, física, química, biología)',
+         'historia antigua, medieval o de grandes imperios',
+         'arte, literatura, música clásica o arquitectura',
+         'deporte hasta los años 90: récords, hazañas, grandes citas',
+         'inventos y tecnología cotidiana (de la imprenta a internet)',
+         'exploración, geografía y naturaleza (expediciones, animales, lugares; como mucho UNA misión espacial a la semana)',
+         'personajes históricos: una vida llamativa o un episodio curioso (nada de política actual)']
+
+
 def preparar(desde, dias=7):
     """Un encargo por día con libertad total: ChatGPT elige el hecho y escribe el guion (sin veto de Gemini)."""
     os.makedirs(ENCARGOS, exist_ok=True)
     for f in glob.glob(os.path.join(ENCARGOS, '*')):
         os.remove(f)
+    temas = TEMAS[:]; random.Random(desde.toordinal()).shuffle(temas)      # un tema distinto cada día; el mismo reparto si se regenera la semana
     for n in range(dias):
         fecha = desde + dt.timedelta(days=n)
         mes = guion.MESES[fecha.month - 1]
-        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(LIBRE.format(dia=fecha.day, mes=mes, fecha=fecha.isoformat()))
+        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(LIBRE.format(dia=fecha.day, mes=mes, fecha=fecha.isoformat(), tema=temas[n % len(temas)]))
         json.dump({'fecha': fecha.isoformat(), 'libre': True}, open(os.path.join(ENCARGOS, f'meta-{fecha.isoformat()}.json'), 'w'),
                   ensure_ascii=False, indent=1)
-        print(f"✔ {fecha}: encargo libre")
+        print(f"✔ {fecha}: {temas[n % len(temas)][:40]}")
 
 
 def _json(texto):
