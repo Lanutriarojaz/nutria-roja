@@ -32,6 +32,6 @@ jobs:
           # el otro flujo del domingo puede subir a la vez: reintenta hasta subirlo y, si no puede, que falle y avise
           for i in $(seq 1 8); do
             git pull -q --rebase && git push -q && exit 0
-            git rebase --abort 2>/dev/null; sleep $((RANDOM % 10 + 3))
+            git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
           done
           exit 1
