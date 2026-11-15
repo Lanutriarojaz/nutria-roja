@@ -1,19 +1,24 @@
 {
- "gancho": "Dos universidades acaban de conectar sus ordenadores por primera vez",
+ "fecha": "2026-11-21",
+ "año": 1969,
+ "hecho": "el Apolo 12 alunizó con éxito en el Océano de las Tormentas",
+ "articulo": "Apolo 12",
+ "sujeto": "módulo lunar Intrepid del Apolo 12",
+ "detalles_clave": "EE. UU., NASA, 1969; módulo lunar Intrepid, superficie lunar, astronautas",
+ "gancho": "El segundo alunizaje cambió lo que sabíamos de la Luna",
  "frases": [
-  "Un día como hoy, 21 de noviembre de 1969, se estableció el primer enlace permanente de ARPANET.",
-  "La conexión unió la Universidad de California en Los Ángeles con el Instituto de Investigaciones de Stanford.",
-  "ARPANET era un proyecto del Departamento de Defensa de Estados Unidos para comunicar instituciones académicas y estatales.",
-  "Este enlace fue la base de lo que acabaría siendo Internet, usando pequeños ordenadores llamados IMP para gestionar la red.",
-  "Lo curioso es que todo empezó con solo dos nodos y un módem telefónico."
+  "Un día como hoy, 21 de noviembre de 1969, el Apolo 12 alunizó en la Luna.",
+  "Su módulo lunar, llamado Intrepid, tocó el suelo del Océano de las Tormentas con total precisión.",
+  "Los astronautas Charles Conrad y Alan Bean salieron a explorar y recoger muestras.",
+  "Colocaron instrumentos para estudiar la superficie y hasta recuperaron piezas de una sonda anterior.",
+  "Fue la primera vez que la NASA aterrizó justo donde había planeado, a solo 200 metros del objetivo."
  ],
- "pregunta": "¿Te imaginas ver nacer Internet con solo dos ordenadores?",
- "titulo": "Primer enlace de ARPANET en 1969: el origen de Internet 🌐",
- "descripcion": "ARPANET conecta UCLA y Stanford, el primer paso hacia Internet.\nUn nodo, un módem y comienza la historia de la red.\n#historia #undiacomohoy #curiosidades #internet #arpanet",
+ "pregunta": "¿Te atreverías a salir a caminar por la Luna?",
+ "titulo": "Apolo 12: el segundo alunizaje en 1969 🚀",
+ "descripcion": "Apolo 12 y el segundo alunizaje cambió lo que sabíamos de la Luna. La NASA logró aterrizar a solo 200 metros del punto previsto.\n#historia #undiacomohoy #curiosidades #NASA #espacio",
  "busquedas": [
-  "ARPANET UCLA Stanford 1969",
-  "BBN IMP computer 1969",
-  "UCLA computer lab ARPANET 1969"
- ],
- "fecha": "2026-11-21"
+  "Apollo 12 Intrepid lunar module 1969",
+  "Alan Bean Charles Conrad Moon 1969",
+  "Ocean of Storms Apollo 12 landing site"
+ ]
 }
