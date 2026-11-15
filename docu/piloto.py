@@ -55,7 +55,7 @@ def adaptar_en(g):
     msg = [{'role': 'system', 'content':
             'You localise Spanish science short-video scripts into natural, punchy American English for '
             'YouTube Shorts/TikTok/Reels. Adapt, do not translate word by word: same facts, same scene count and order, '
-            'similar length per scene (spoken English ~ same duration). Keep on-screen text max 5 words. '
+            'each scene AT LEAST as many words as the Spanish one (English is spoken faster; the video must last 45-55 s): add a vivid detail or a short clarifying clause rather than cutting. Keep on-screen text max 5 words. '
             'Hashtags in English. Answer ONLY JSON with the same structure: '
             '{"titulo": str, "pregunta": str (the hook question, short), "escenas": [{"n": int, "locucion": str, "texto_pantalla": str}], '
             '"metadatos": {"titulo": str, "descripcion": str, "hashtags": [str]}}'},
@@ -70,7 +70,8 @@ def adaptar_en(g):
 # ---------- voz ----------
 async def _edge(texto, voz, mp3):
     import edge_tts
-    c = edge_tts.Communicate(texto, voz, rate='+6%', boundary='WordBoundary')
+    ritmo = '-4%' if voz.startswith('en-') else '+6%'          # el inglés se dice más rápido: algo más pausado
+    c = edge_tts.Communicate(texto, voz, rate=ritmo, boundary='WordBoundary')
     pal = []
     with open(mp3, 'wb') as f:
         async for ch in c.stream():
