@@ -1,19 +1,24 @@
 {
- "gancho": "Un canal que cambió las rutas del planeta",
+ "fecha": "2026-11-17",
+ "año": 1970,
+ "hecho": "la sonda soviética Lunojod 1 aterrizó en la Luna",
+ "articulo": "Lunojod 1",
+ "sujeto": "rover Lunojod 1",
+ "detalles_clave": "URSS, misión espacial no tripulada, 1970, rover lunar en la superficie de la Luna; no es Apolo ni NASA",
+ "gancho": "El primer coche teledirigido que rodó sobre la Luna",
  "frases": [
-  "Un día como hoy, 17 de noviembre de 1869, se inauguró oficialmente el canal de Suez en Egipto.",
-  "Unió el mar Mediterráneo con el golfo de Suez en el mar Rojo, atravesando el istmo de Suez.",
-  "Ojo a esto: convirtió la región del Sinaí en una nueva península, marcando la frontera entre África y Asia.",
-  "Con 193 kilómetros de longitud, ofrecía a los barcos una ruta directa entre Europa y Asia sin rodear África.",
-  "Lo mejor viene ahora: el canal no tiene esclusas y el agua fluye libremente, cambiando de dirección según la estación o la marea."
+  "Un día como hoy, 17 de noviembre de 1970, la Unión Soviética logró poner ruedas en la Luna.",
+  "Su rover Lunojod 1 aterrizó en el Mar de las Lluvias, dentro de la nave Luna 17.",
+  "Pesaba casi 800 kilos y tenía paneles solares para recargarse durante el día lunar.",
+  "Se movía a velocidad de paseo y lo manejaban desde la Tierra con segundos de retraso.",
+  "Estuvo activo 10 meses y recorrió más de 10 kilómetros sobre el polvo lunar."
  ],
- "pregunta": "¿Has pasado alguna vez cerca del canal de Suez?",
- "titulo": "Inauguración del canal de Suez en 1869 🌊",
- "descripcion": "Canal de Suez, un canal que cambió las rutas del planeta.\nSe extiende 193 km entre Puerto Saíd y Suez, sin esclusas.\n#historia #undiacomohoy #curiosidades #Egipto #canaldeSuez",
+ "pregunta": "¿Te gustaría conducir un rover así por la Luna?",
+ "titulo": "Lunojod 1: el rover soviético que llegó a la Luna en 1970 🚀",
+ "descripcion": "Lunojod 1, el primer coche teledirigido que rodó sobre la Luna. \nPesaba 800 kg y recorrió 10 km sin que nadie lo pisara. #historia #undiacomohoy #curiosidades #espacio #Luna",
  "busquedas": [
-  "Suez Canal inauguration 1869",
-  "Port Said Egypt 19th century",
-  "Suez Canal construction historical photos"
- ],
- "fecha": "2026-11-17"
+  "Lunokhod 1 rover 1970 site:commons.wikimedia.org",
+  "Luna 17 landing Soviet rover site:commons.wikimedia.org",
+  "Soviet lunar rover Lunokhod 1 Moon surface site:commons.wikimedia.org"
+ ]
 }
