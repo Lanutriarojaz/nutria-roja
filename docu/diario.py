@@ -41,6 +41,24 @@ def descripcion_en(m, ia):
     return f"{m['descripcion']}\n\nThe Red Otter: the extraordinary is closer than you think.{extra}\n\n{piloto.CREDITO_MUSICA}\n\n{tags}"
 
 
+MAX_S, MIN_S, OBJETIVO_S = 70, 30, 66
+
+
+def acelerar(salida, total):
+    """AUTOCORRECCIÓN: si el vídeo se pasa de 70 s pero por poco (hasta ~1,28×), se acelera el propio vídeo y su audio lo justo para
+    dejarlo en ~66 s, en vez de anularlo. Es lo que se hacía a mano. Devuelve la nueva duración o None si no se puede."""
+    factor = total / OBJETIVO_S
+    if not 1.0 < factor <= 1.28:
+        return None
+    tmp = salida + '.rapido.mp4'
+    piloto.sh(['ffmpeg', '-v', 'error', '-y', '-i', salida, '-filter_complex',
+               f'[0:v]setpts=PTS/{factor:.4f}[v];[0:a]atempo={factor:.4f}[a]', '-map', '[v]', '-map', '[a]',
+               '-c:v', 'libx264', '-preset', 'fast', '-crf', '22', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k',
+               '-movflags', '+faststart', tmp])
+    os.replace(tmp, salida)
+    return piloto.duracion(salida)
+
+
 def montar_y_revisar(g, lang, voz, clips, carpeta, salida):
     fallos, total = ['sin montar'], 0
     ritmo_original = piloto.RITMO_EN
@@ -48,14 +66,19 @@ def montar_y_revisar(g, lang, voz, clips, carpeta, salida):
         for intento in range(3):
             total = piloto.montar(g, lang, *voz, clips, carpeta, salida)
             fallos, datos = calidad.revisar(salida)
-            demasiado_largo = total > 70
-            if not 30 <= total <= 70:                  # Álvaro: mejor algo corto o largo que sin vídeo
-                fallos.append(f'Duración {total:.1f} s fuera de 30-70')
+            if total > MAX_S and not fallos:                 # solo falla la duración: se arregla sin rehacer nada
+                nuevo = acelerar(salida, total)
+                if nuevo:
+                    print(f'  ⏩ {lang}: dura {total:.1f} s, se acelera a {nuevo:.1f} s en vez de anularlo', flush=True)
+                    total = nuevo
+                    fallos, datos = calidad.revisar(salida)
+            if not MIN_S <= total <= MAX_S:                  # Álvaro: mejor algo corto o largo que sin vídeo
+                fallos.append(f'Duración {total:.1f} s fuera de {MIN_S}-{MAX_S}')
             print(f'  control de calidad ({lang}): {fallos or "OK"} {datos}', flush=True)
             if not fallos:
                 break
-            if demasiado_largo and lang == 'en':      # reintentar IGUAL daba lo mismo: se acelera la voz lo justo para entrar en 66 s
-                pct = min(int((total / 66 - 1) * 100) + 2, 30)
+            if total > MAX_S and lang == 'en':                # demasiado largo para acelerar el vídeo: reintentar con la voz más rápida
+                pct = min(int((total / OBJETIVO_S - 1) * 100) + 2, 30)
                 piloto.RITMO_EN = f'+{pct}%'
                 print(f'  el inglés dura {total:.1f} s: reintento con la voz {piloto.RITMO_EN} más rápida', flush=True)
     finally:
