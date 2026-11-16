@@ -22,9 +22,13 @@ GUIONES = os.path.join(AQUI, 'guiones')
 LIBRE = """Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
 
 TU DÍA: {dia} de {mes}. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un {dia} de {mes} de cualquier año.
-TEMA DE HOY (obligatorio, para que la semana sea variada: los otros seis días cubren otros temas): {tema}.
+TEMA DE HOY (preferente: si hay un hecho verificado de la lista que encaje, elígelo; la fecha verificada manda sobre el tema): {tema}.
 Que enganche a gente joven de España.
-Evita tragedias con muchas víctimas y la política actual que divide. Usa solo datos de los que estés seguro: fecha, año y cifras exactos.
+Evita tragedias con muchas víctimas y la política actual que divide. FECHA EXACTA (lo más importante para no perder credibilidad): el vídeo empieza con «Un día como hoy, {dia} de {mes} de AAAA». Esa fecha
+COMPLETA tiene que estar escrita en el artículo de Wikipedia del tema, y un guion cuya fecha no figure allí se DESCARTA automáticamente.
+Por eso ELIGE PREFERENTEMENTE UNO DE ESTOS HECHOS REALES del {dia} de {mes} (fecha verificada en Wikipedia; formato: año: hecho · artículo):
+{sugerencias}
+Elige el que más enganche. Solo si ninguno te sirve, elige otro del que tengas la fecha exacta (día, mes y año) 100 % segura; si dudas, no lo elijas.
 IMPORTANTE, LAS FOTOS: el vídeo se ilustra solo con fotos libres de derechos de Wikimedia Commons (dominio público o licencias abiertas), y cada una
 se revisa mirándola. Elige un hecho que TENGA fotos libres claras: ciencia, exploración, inventos, edificios y lugares, naturaleza, historia y personajes
 históricos, deporte hasta los años 90, misiones espaciales (NASA), obras de arte antiguas. EVITA lo que casi nunca tiene fotos libres: manga, anime, cine,
@@ -58,6 +62,17 @@ LAS FOTOS: otra IA buscará fotos reales en Wikimedia Commons y las revisará mi
 """
 
 
+def _sugerencias(fecha, n=16):
+    """Hechos reales de ese día según Wikipedia (primero los destacados): son la lista de la que ChatGPT elige con fecha garantizada."""
+    try:
+        cands = fuentes.efemerides(fecha.month, fecha.day)
+    except Exception as e:
+        print(f'⚠️ {fecha}: sin sugerencias de Wikipedia ({str(e)[:80]})')
+        return '(no hay lista hoy: elige un hecho del que tengas la fecha exacta 100 % segura)'
+    cands = sorted(cands, key=lambda c: not c['destacado'])[:n]
+    return '\n'.join(f"- {c['año']}: {c['texto'][:150].rstrip()} · {c['articulos'][0]}" for c in cands)
+
+
 TEMAS = ['ciencia y descubrimientos (medicina, física, química, biología)',
          'historia antigua, medieval o de grandes imperios',
          'arte, literatura, música clásica o arquitectura',
@@ -76,7 +91,7 @@ def preparar(desde, dias=7):
     for n in range(dias):
         fecha = desde + dt.timedelta(days=n)
         mes = guion.MESES[fecha.month - 1]
-        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(LIBRE.format(dia=fecha.day, mes=mes, fecha=fecha.isoformat(), tema=temas[n % len(temas)]))
+        open(os.path.join(ENCARGOS, f'{n + 1}.txt'), 'w').write(LIBRE.format(dia=fecha.day, mes=mes, fecha=fecha.isoformat(), tema=temas[n % len(temas)], sugerencias=_sugerencias(fecha)))
         json.dump({'fecha': fecha.isoformat(), 'libre': True}, open(os.path.join(ENCARGOS, f'meta-{fecha.isoformat()}.json'), 'w'),
                   ensure_ascii=False, indent=1)
         print(f"✔ {fecha}: {temas[n % len(temas)][:40]}")

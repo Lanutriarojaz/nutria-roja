@@ -41,8 +41,8 @@ def efemerides(mes, dia):
     return out
 
 
-def articulo(titulo, max_chars=6000):
-    d = _get('https://es.wikipedia.org/w/api.php', action='query', prop='extracts', explaintext=1,
+def articulo(titulo, max_chars=6000, lang='es'):
+    d = _get(f'https://{lang}.wikipedia.org/w/api.php', action='query', prop='extracts', explaintext=1,
              titles=titulo, format='json', redirects=1)
     p = next(iter(d['query']['pages'].values()))
     return (p.get('extract') or '')[:max_chars]

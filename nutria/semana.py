@@ -170,6 +170,37 @@ def elegir_imagenes(hecho, g, carpeta, frases, minimo=3):
     return [rutas[i] for i in ids], [aprobadas[i]['im'] | {'muestra': aprobadas[i]['muestra']} for i in usadas]
 
 
+MESES_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+
+def _fecha_respaldada(hecho, g, dia, mes_n):
+    """Puerta de fechas (sin IA): el día y el mes del guion tienen que aparecer en el artículo de Wikipedia del tema (es o en)
+    junto con su año. Si no, ChatGPT se ha inventado la fecha para que cuadre con el día y el guion se descarta."""
+    art = _art(hecho)
+    mes, año = guion.MESES[mes_n - 1], str(hecho['año'])
+    textos = []
+    try:
+        textos.append(fuentes.articulo(art, 250000))
+        t_en = fuentes.titulo_en(art)
+        if t_en:
+            textos.append(fuentes.articulo(t_en, 250000, 'en'))
+    except Exception as e:
+        print(f'  (no pude comprobar la fecha en Wikipedia: {str(e)[:80]}; no me fío del guion)', flush=True)
+        return False
+    try:   # ¿es uno de los hechos reales que Wikipedia lista para ese día (mismo año y mismo artículo)? Entonces la fecha está garantizada
+        norm = lambda x: ' '.join(str(x).lower().split())
+        for c in fuentes.efemerides(mes_n, dia):
+            if str(c['año']) == año and any(norm(x) == norm(art) for x in c['articulos']):
+                return True
+    except Exception:
+        pass
+    completas = [f'{dia} de {mes} de {año}', f'{MESES_EN[mes_n - 1]} {dia}, {año}', f'{dia} {MESES_EN[mes_n - 1]} {año}']
+    for t in textos:
+        if any(c in t for c in completas):               # la fecha COMPLETA (día, mes y año) tiene que estar escrita en el artículo
+            return True
+    return False
+
+
 def _art(hecho):
     return (hecho.get('articulos') or [hecho.get('texto', '')[:60]])[0]
 
@@ -186,7 +217,9 @@ def un_dia(fecha, carpeta, usados):
             prev = obtener(fecha.isoformat())
             if prev and _art(prev[0]) not in usados and all(_art(prev[0]) != _art(x[0]) for x in chatgpts):
                 guion.validar(prev[2], prev[0], d, guion.MESES[m - 1])
-                chatgpts.append(prev); print(f"  guion de ChatGPT{etiqueta}: «{prev[2].get('titulo')}»", flush=True)
+                if not prev[1] and not _fecha_respaldada(prev[0], prev[2], d, m):      # hecho elegido por ChatGPT: la fecha tiene que existir en Wikipedia
+                    raise ValueError(f"la fecha {d}/{m}/{prev[0]['año']} no aparece en Wikipedia para «{_art(prev[0])}» (fecha inventada)")
+                chatgpts.append(prev); print(f"  guion de ChatGPT{etiqueta}: «{prev[2].get('titulo')}» (fecha comprobada en Wikipedia)", flush=True)
         except Exception as e:
             errores.append(f'ChatGPT{etiqueta} no válido: {e}'); print(f'  guion de ChatGPT{etiqueta} no válido:', str(e)[:120], flush=True)
     orden = [x[0] for x in chatgpts] + guion.elegir(candidatos, d, m, usados) + candidatos[:5]
