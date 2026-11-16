@@ -54,8 +54,3 @@ jobs:
             git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 12 + 4))
           done
           exit 1
-      - name: Aviso si las ideas no valían
-        if: failure()
-        run: |
-          .github/aviso.sh "💡 Una respuesta de ChatGPT no se ha podido guardar" \
-            "Ha llegado una respuesta del atajo (ideas o guion) que no se ha podido guardar. Se usa la alternativa de siempre; ciérrala cuando la veas. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

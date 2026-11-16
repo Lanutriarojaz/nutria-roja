@@ -100,13 +100,15 @@ jobs:
           echo "$(date '+%F %H:%M') run ${{ github.run_id }} ${{ job.status }}" >> registro.log
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qam "Registro $(date +%F)" && git push -q || true
 
-      - name: Correo con el resumen de la semana
-        if: ${{ always() && (github.event_name == 'schedule' || inputs.publicar) }}
+      - name: Aviso solo si algún día se ha quedado sin vídeo
+        if: ${{ success() && (github.event_name == 'schedule' || inputs.publicar) }}
         run: |
           [ -f salida/tirada.json ] || exit 0
+          # si todos los días tienen vídeo no se manda nada
+          python -c "import json,sys; sys.exit(0 if all(v.get('ok') for v in json.load(open('salida/tirada.json'))) else 1)" && exit 0
           python -m nutria.informe salida "$PAGES" > informe.md
           echo "" >> informe.md; echo "[Ejecución completa](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> informe.md
-          .github/aviso.sh "🦦 Tirada del $(date +%d/%m)" --body-file informe.md
+          .github/aviso.sh "⚠️ Tirada del $(date +%d/%m): algún día se ha quedado sin vídeo" --body-file informe.md
 
       - name: Correo de aviso si algo ha fallado
         if: ${{ failure() && (github.event_name == 'schedule' || inputs.publicar) }}

@@ -1,7 +1,7 @@
 name: Chequeo del domingo (¿han llegado los guiones?)
 
 # Cada domingo a las 22:30 (Madrid, invierno) mira si ChatGPT ha mandado los guiones de la semana que empieza el lunes
-# y te manda un correo con el resultado. Solo cuenta ficheros: no usa ninguna IA ni gasta cuota de nada.
+# y te manda un correo SOLO si falta alguno (si todo llegó, silencio). Solo cuenta ficheros: no usa ninguna IA ni gasta cuota de nada.
 on:
   schedule:
     - cron: '30 21 * * 0'
@@ -28,14 +28,10 @@ jobs:
       - name: Contar los guiones que han llegado
         id: r
         run: python -m nutria.chequeo ${{ inputs.lunes && format('--lunes {0}', inputs.lunes) || '' }}
-      - name: Mandar el correo del resultado
+      - name: Avisar solo si falta algún guion
         env:
           TITULO: ${{ steps.r.outputs.titulo }}
           OK: ${{ steps.r.outputs.ok }}
         run: |
-          # el correo sale al abrir la incidencia; si todo está bien se cierra al momento para no acumular
-          URL=$(.github/aviso.sh "$TITULO" --body-file informe-chequeo.md | tail -1)
-          echo "$URL"
-          if [ "$OK" = "si" ] && echo "$URL" | grep -q '^https://'; then
-            gh issue close "$URL" -c "Todo ha llegado." || true
-          fi
+          if [ "$OK" = "si" ]; then echo "Todo ha llegado: no se manda correo."; exit 0; fi
+          .github/aviso.sh "$TITULO" --body-file informe-chequeo.md
