@@ -1,0 +1,60 @@
+name: Panel de estadísticas (cada 6 horas)
+
+# Lee de Buffer las métricas de las 6 cuentas, guarda la foto del día y publica el panel cifrado en
+# https://lanutriarojaz.github.io/nutria-roja/panel/ (solo se ve con la contraseña del panel). Sin IA.
+on:
+  schedule:
+    - cron: '20 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: panel
+
+jobs:
+  panel:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests cryptography
+      - name: Recoger los datos de Buffer y cifrarlos
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_API_KEY_EN: ${{ secrets.BUFFER_API_KEY_EN }}
+          PANEL_CLAVE: ${{ secrets.PANEL_CLAVE }}
+        run: python -m nutria.panel_datos build-panel
+      - name: Guardar la foto del día (para la evolución)
+        run: |
+          git config user.name nutria-bot && git config user.email bot@users.noreply.github.com
+          git add panel/historial.json
+          git commit -qm "Panel: foto de los números $(date +%F)" || exit 0
+          for i in $(seq 1 8); do
+            git pull -q --rebase && git push -q && exit 0
+            git rebase --abort 2>/dev/null || true; sleep $((RANDOM % 10 + 3))
+          done
+          exit 1
+      - name: Publicar el panel en la web
+        run: |
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          for i in 1 2 3 4; do
+            rm -rf /tmp/media; git clone -q --depth 1 -b media "$REMOTO" /tmp/media || exit 1
+            ( cd /tmp/media && rm -rf .git && mkdir -p panel
+              cp "$GITHUB_WORKSPACE/panel/index.html" "$GITHUB_WORKSPACE/build-panel/datos.json" panel/
+              git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Panel $(date +%F_%H%M)"
+              git push -qf "$REMOTO" media ) && exit 0
+            sleep 20
+          done
+          exit 1
+      - name: Aviso si el panel no se ha podido actualizar
+        if: failure()
+        run: |
+          .github/aviso.sh "📊 El panel de estadísticas no se ha podido actualizar" \
+            "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

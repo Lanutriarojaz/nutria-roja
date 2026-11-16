@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel · La Nutria Roja</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦦</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#ffffff;--ink:#14171c;--soft:#5b6472;--line:#e4e7ec;--accent:#e2552d;--accent-soft:#fdeee8;
+  --tt:#0891b2;--ig:#c026d3;--yt:#dc2626;--es:#e2552d;--en:#2563eb;--ok:#15803d;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0e1116;--panel:#161a21;--ink:#e8ebf0;--soft:#9aa3b2;--line:#262c36;--accent:#ff7a50;--accent-soft:#2a1a14;
+  --tt:#22d3ee;--ig:#e879f9;--yt:#f87171;--es:#ff7a50;--en:#60a5fa;--ok:#4ade80;--shadow:none;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h1 small{display:block;font-size:13px;font-weight:400;color:var(--soft);margin-top:2px}
+h2{font-size:15px;margin:0 0 12px;color:var(--ink)}
+.filtros{display:flex;flex-wrap:wrap;gap:8px}
+select,button,input{font:inherit;color:inherit}
+select{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.kpi .n{font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--soft);font-size:13px}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+@media (max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+.chart{position:relative;height:280px}
+.chart.small{height:220px}
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:12px}
+.insight{border-left:4px solid var(--accent);background:var(--panel);border-radius:12px;padding:12px 14px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.insight b{display:block;font-size:13px;color:var(--soft);font-weight:600;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--soft);font-weight:600;cursor:pointer;user-select:none;position:sticky;top:0;background:var(--panel)}
+th:nth-child(-n+3),td:nth-child(-n+3){text-align:left}
+td.t{white-space:normal;min-width:240px}
+tbody tr{cursor:pointer}tbody tr:hover{background:var(--accent-soft)}
+.tabla{overflow:auto;max-height:620px}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--soft);margin-right:4px}
+.pill.es{color:var(--es);border-color:var(--es)}.pill.en{color:var(--en);border-color:var(--en)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.nota{color:var(--soft);font-size:13px}
+/* acceso */
+#acceso{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9;padding:16px}
+#acceso .card{width:100%;max-width:380px;text-align:center;padding:28px}
+#acceso input[type=password]{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);margin:14px 0 10px;font-size:16px}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;width:100%}
+#error{color:var(--yt);min-height:20px;font-size:14px}
+/* ficha */
+#ficha{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:8;justify-content:flex-end}
+#ficha .hoja{background:var(--panel);width:min(560px,100%);height:100%;overflow:auto;padding:22px}
+#ficha .cerrar{float:right;background:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.redes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.red{border:1px solid var(--line);border-radius:12px;padding:12px}
+.red h3{margin:0 0 6px;font-size:14px}
+.red dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13px}
+.red dt{color:var(--soft)}.red dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.red a{display:inline-block;margin-top:8px;font-size:13px;color:var(--accent)}
+.texto{white-space:pre-wrap;font-size:13px;color:var(--soft);background:var(--bg);border-radius:10px;padding:10px}
+</style>
+</head>
+<body>
+<div id="acceso">
+  <div class="card">
+    <div style="font-size:42px">🦦</div>
+    <h1>Panel de La Nutria Roja<small>La Nutria Roja · The Red Otter</small></h1>
+    <form id="formulario">
+      <input id="clave" type="password" placeholder="Contraseña" autocomplete="current-password" autofocus>
+      <label class="nota"><input type="checkbox" id="recordar" checked> Recordar en este dispositivo</label>
+      <div id="error"></div>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <header>
+    <h1>¿Cómo van los vídeos?<small id="actualizado"></small></h1>
+    <div class="filtros">
+      <select id="fCuenta"><option value="">Las dos cuentas</option><option value="es">La Nutria Roja (español)</option><option value="en">The Red Otter (inglés)</option></select>
+      <select id="fRed"><option value="">Todas las redes</option><option value="tiktok">TikTok</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option></select>
+      <select id="fSerie"><option value="">Todas las series</option><option>Efemérides</option><option>Documentales</option><option>Tele-Dimensional</option></select>
+      <select id="fPeriodo"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="0">Desde el principio</option></select>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+  <section class="insights" id="insights"></section>
+
+  <section class="grid2">
+    <div class="card"><h2>Vistas de cada vídeo, por red</h2><div class="chart"><canvas id="cVideos"></canvas></div></div>
+    <div class="card"><h2>Reparto de vistas por red</h2><div class="chart"><canvas id="cRedes"></canvas></div></div>
+  </section>
+
+  <section class="card" style="margin-bottom:12px"><h2>Evolución (total acumulado de vistas)</h2>
+    <div class="chart small"><canvas id="cEvolucion"></canvas></div><div class="nota" id="notaEvolucion"></div></section>
+
+  <section class="grid3">
+    <div class="card"><h2>¿Qué serie funciona mejor?</h2><div class="chart small"><canvas id="cSerie"></canvas></div><div class="nota">Media de vistas por vídeo</div></div>
+    <div class="card"><h2>Efemérides: ¿qué época gusta más?</h2><div class="chart small"><canvas id="cEpoca"></canvas></div><div class="nota">Media de vistas por vídeo</div></div>
+    <div class="card"><h2>¿Quién escribe mejor?</h2><div class="chart small"><canvas id="cAutor"></canvas></div><div class="nota">Media de vistas por vídeo y guionista</div></div>
+  </section>
+
+  <section class="card"><h2>Todos los vídeos <span class="nota">· pulsa uno para ver su ficha</span></h2>
+    <div class="tabla"><table><thead><tr>
+      <th data-k="fecha">Fecha</th><th data-k="titulo">Vídeo</th><th data-k="serie">Serie</th>
+      <th data-k="vistas">Vistas</th><th data-k="megusta">Me gusta</th><th data-k="comentarios">Coment.</th>
+      <th data-k="compartidos">Compart.</th><th data-k="guardados">Guard.</th><th data-k="interaccion">Interacción</th>
+    </tr></thead><tbody id="filas"></tbody></table></div>
+  </section>
+  <p class="nota">Datos de Buffer, que publica en las 6 cuentas. Se actualiza solo cada 6 horas. Interacción = (me gusta + comentarios + compartidos + guardados) ÷ vistas.</p>
+</div>
+
+<div id="ficha"><div class="hoja" id="hoja"></div></div>
+
+<script>
+const RED = {tiktok:{n:'TikTok',c:'--tt'}, instagram:{n:'Instagram',c:'--ig'}, youtube:{n:'YouTube',c:'--yt'}};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt = n => (n==null||isNaN(n)) ? '—' : n>=1e6 ? (n/1e6).toFixed(1).replace('.',',')+' M' : n>=1e4 ? Math.round(n/1e3)+' mil' : Math.round(n).toLocaleString('es-ES',{useGrouping:'always'});
+const pct = x => (x==null||!isFinite(x)) ? '—' : (x*100).toFixed(1).replace('.',',')+' %';
+let D = null, charts = {}, orden = {k:'fecha', asc:false};
+
+// ---------- acceso: descifrar con la contraseña ----------
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function descifrar(pass){
+  const r = await fetch('datos.json?t=' + Date.now()); const e = await r.json();
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  const k = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b64(e.sal), iterations:200000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const plano = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(e.iv)}, k, b64(e.datos));
+  return JSON.parse(new TextDecoder().decode(plano));
+}
+async function entrar(pass, recordar){
+  try{
+    D = await descifrar(pass);
+    try{ recordar ? localStorage.setItem('panelClave', pass) : localStorage.removeItem('panelClave'); }catch(_){}
+    document.getElementById('acceso').hidden = true; document.getElementById('acceso').style.display='none';
+    document.getElementById('app').hidden = false; pintar();
+  }catch(err){ document.getElementById('error').textContent = 'Contraseña incorrecta'; try{localStorage.removeItem('panelClave')}catch(_){} }
+}
+document.getElementById('formulario').onsubmit = e => { e.preventDefault(); entrar(document.getElementById('clave').value, document.getElementById('recordar').checked); };
+try{ const g = localStorage.getItem('panelClave'); if(g) entrar(g, true); }catch(_){}
+
+// ---------- datos filtrados ----------
+function filtrados(){
+  const c = fCuenta.value, r = fRed.value, s = fSerie.value, p = +fPeriodo.value;
+  const desde = p ? new Date(Date.now() - p*864e5).toISOString().slice(0,10) : '';
+  return D.videos.filter(v => (!c||v.idioma===c) && (!s||v.serie===s) && (!desde||v.fecha>=desde) && (!r||v.redes[r]))
+    .map(v => {
+      const redes = Object.entries(v.redes).filter(([k]) => !r || k===r);
+      const suma = k => redes.reduce((a,[,x]) => a + (x[k]||0), 0);
+      const o = {...v, redesF: Object.fromEntries(redes)};
+      for (const k of ['vistas','megusta','comentarios','compartidos','guardados','minutos_vistos']) o[k] = suma(k);
+      o.interaccion = o.vistas ? (o.megusta+o.comentarios+o.compartidos+o.guardados)/o.vistas : null;
+      return o;
+    });
+}
+const media = (arr, k) => arr.length ? arr.reduce((a,x)=>a+(x[k]||0),0)/arr.length : 0;
+function agrupar(arr, campo){ const g={}; arr.forEach(v=>{ const k=v[campo]; if(k==null) return; (g[k]=g[k]||[]).push(v); }); return g; }
+
+// ---------- pintar ----------
+function grafico(id, cfg){ if(charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
+function base(){ Chart.defaults.color = css('--soft'); Chart.defaults.borderColor = css('--line'); Chart.defaults.font.family = getComputedStyle(document.body).fontFamily; }
+
+function pintar(){
+  base();
+  const V = filtrados();
+  const f = new Date(D.actualizado);
+  document.getElementById('actualizado').textContent = `Actualizado ${f.toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'short'})} · ${V.length} vídeos`;
+  const tot = k => V.reduce((a,v)=>a+(v[k]||0),0);
+  const inter = tot('vistas') ? (tot('megusta')+tot('comentarios')+tot('compartidos')+tot('guardados'))/tot('vistas') : null;
+  const K = [['Vídeos',V.length],['Vistas',tot('vistas')],['Me gusta',tot('megusta')],['Comentarios',tot('comentarios')],
+             ['Compartidos',tot('compartidos')],['Guardados',tot('guardados')],['Horas vistas',tot('minutos_vistos')/60],['Interacción',null,pct(inter)]];
+  kpis.innerHTML = K.map(([l,n,t]) => `<div class="card kpi"><div class="n">${t||fmt(n)}</div><div class="l">${l}</div></div>`).join('');
+
+  // ideas clave
+  const top = [...V].sort((a,b)=>b.vistas-a.vistas)[0];
+  const comp = [...V].sort((a,b)=>b.compartidos-a.compartidos)[0];
+  const porRed = Object.keys(RED).map(k => [k, V.reduce((a,v)=>a+((v.redesF[k]||{}).vistas||0),0)]).sort((a,b)=>b[1]-a[1]);
+  const series = Object.entries(agrupar(V,'serie')).map(([k,a])=>[k,media(a,'vistas')]).sort((a,b)=>b[1]-a[1]);
+  const ideas = [];
+  if (top) ideas.push(['El vídeo más visto', `«${top.titulo}» · ${fmt(top.vistas)} vistas`]);
+  if (comp && comp.compartidos) ideas.push(['El que más se comparte', `«${comp.titulo}» · ${fmt(comp.compartidos)} veces`]);
+  if (porRed[0] && porRed[0][1]) ideas.push(['Dónde se ve más', `${RED[porRed[0][0]].n}: ${fmt(porRed[0][1])} vistas (${pct(porRed[0][1]/Math.max(tot('vistas'),1))} del total)`]);
+  if (series.length > 1) ideas.push(['La serie que más tira', `${series[0][0]}: ${fmt(series[0][1])} vistas de media por vídeo`]);
+  insights.innerHTML = ideas.map(([t,x]) => `<div class="insight"><b>${t}</b>${x}</div>`).join('') || '<div class="nota">Aún no hay datos con estos filtros.</div>';
+
+  // vistas por vídeo, apiladas por red
+  const cron = [...V].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  grafico('cVideos', {type:'bar', data:{labels: cron.map(v => v.fecha.slice(5).split('-').reverse().join('/') + ' ' + (v.idioma==='en'?'EN':'')),
+    datasets: Object.entries(RED).map(([k,r]) => ({label:r.n, backgroundColor:css(r.c), data: cron.map(v => (v.redesF[k]||{}).vistas||0)}))},
+    options:{maintainAspectRatio:false, plugins:{tooltip:{callbacks:{title: i => cron[i[0].dataIndex].titulo}}}, scales:{x:{stacked:true,ticks:{maxRotation:60,autoSkip:true}},y:{stacked:true}}}});
+  grafico('cRedes', {type:'doughnut', data:{labels: porRed.map(([k])=>RED[k].n), datasets:[{data: porRed.map(([,n])=>n), backgroundColor: porRed.map(([k])=>css(RED[k].c)), borderWidth:0}]},
+    options:{maintainAspectRatio:false, cutout:'62%', plugins:{legend:{position:'bottom'}}}});
+
+  // evolución (de las fotos diarias)
+  const ev = D.evolucion || [];
+  const filtroEv = clave => { const [idi, red, k] = clave.split('|'); return k==='vistas' && (!fCuenta.value||idi===fCuenta.value) && (!fRed.value||red===fRed.value); };
+  const serieEv = Object.entries(RED).map(([k,r]) => ({label:r.n, borderColor:css(r.c), backgroundColor:css(r.c), tension:.3, pointRadius:3,
+    data: ev.map(d => Object.entries(d.totales).filter(([c]) => filtroEv(c) && c.split('|')[1]===k).reduce((a,[,n])=>a+n,0))}));
+  grafico('cEvolucion', {type:'line', data:{labels: ev.map(d=>d.dia.slice(5).split('-').reverse().join('/')), datasets: serieEv}, options:{maintainAspectRatio:false}});
+  notaEvolucion.textContent = ev.length < 2 ? 'Se va llenando: cada día se guarda una foto de los números. En unos días verás la curva.' : '';
+
+  // temas
+  const barra = (id, grupos, color) => { const e = Object.entries(grupos).map(([k,a])=>[k, media(a,'vistas'), a.length]).sort((a,b)=>b[1]-a[1]);
+    grafico(id, {type:'bar', data:{labels: e.map(([k,,n])=>`${k} (${n})`), datasets:[{data:e.map(([,m])=>Math.round(m)), backgroundColor: color, borderRadius:6}]},
+      options:{indexAxis:'y', maintainAspectRatio:false, plugins:{legend:{display:false}}}}); };
+  barra('cSerie', agrupar(V,'serie'), css('--accent'));
+  barra('cEpoca', agrupar(V.filter(v=>v.serie==='Efemérides'),'epoca'), css('--en'));
+  barra('cAutor', agrupar(V,'autor'), css('--ok'));
+
+  // tabla
+  const filas = [...V].sort((a,b) => { const x=a[orden.k], y=b[orden.k]; const r = (typeof x==='string') ? String(x).localeCompare(String(y)) : ((x??-1)-(y??-1)); return orden.asc ? r : -r; });
+  document.getElementById('filas').innerHTML = filas.map(v => `<tr data-id="${encodeURIComponent(v.id)}">
+    <td>${v.fecha.split('-').reverse().join('/')}</td>
+    <td class="t">${v.titulo} <span class="pill ${v.idioma}">${v.idioma==='es'?'ES':'EN'}</span>${Object.keys(v.redesF).map(k=>`<span class="dot" style="background:${css(RED[k].c)}" title="${RED[k].n}"></span>`).join('')}</td>
+    <td>${v.serie}</td><td>${fmt(v.vistas)}</td><td>${fmt(v.megusta)}</td><td>${fmt(v.comentarios)}</td><td>${fmt(v.compartidos)}</td><td>${fmt(v.guardados)}</td><td>${pct(v.interaccion)}</td></tr>`).join('');
+  document.querySelectorAll('#filas tr').forEach(tr => tr.onclick = () => ficha(filas.find(v => encodeURIComponent(v.id)===tr.dataset.id)));
+}
+
+function ficha(v){
+  const nombres = {vistas:'Vistas', megusta:'Me gusta', comentarios:'Comentarios', compartidos:'Compartidos', guardados:'Guardados', alcance:'Alcance', minutos_vistos:'Minutos vistos', seg_medios:'Segundos medios', interaccion:'Interacción (Buffer)'};
+  hoja.innerHTML = `<button class="cerrar" onclick="ficha.cerrar()">Cerrar</button>
+    <div class="nota">${v.fecha.split('-').reverse().join('/')} · ${v.cuenta} · ${v.serie}${v.autor?' · guion de '+v.autor:''}${v.año?' · año '+v.año:''}</div>
+    <h2 style="font-size:20px;margin-top:6px">${v.titulo}</h2>
+    <div class="redes">${Object.entries(v.redes).map(([k,r]) => `<div class="red"><h3><span class="dot" style="background:${css(RED[k].c)}"></span>${RED[k].n}</h3>
+      <dl>${Object.entries(nombres).filter(([m])=>r[m]!=null).map(([m,n])=>`<dt>${n}</dt><dd>${m==='interaccion'?String(r[m]).replace('.',',')+' %':fmt(r[m])}</dd>`).join('')}</dl>
+      ${r.enlace?`<a href="${r.enlace}" target="_blank" rel="noopener">Abrir en ${RED[k].n} ↗</a>`:''}
+      <div class="nota" style="margin-top:6px">Datos del ${r.actualizado ? r.actualizado.slice(8,10)+'/'+r.actualizado.slice(5,7)+' a las '+r.actualizado.slice(11,16)+' (UTC)' : '—'}</div></div>`).join('')}</div>
+    <h2>Comentarios</h2><p class="nota">${v.comentarios ? 'Este vídeo tiene comentarios. Muy pronto podrás leer aquí los de YouTube; los de Instagram y TikTok, con el enlace de cada red.' : 'Todavía sin comentarios.'}</p>
+    <h2>Texto publicado</h2><div class="texto">${v.texto.replace(/</g,'&lt;')}</div>`;
+  document.getElementById('ficha').style.display = 'flex';
+}
+ficha.cerrar = () => document.getElementById('ficha').style.display = 'none';
+document.getElementById('ficha').onclick = e => { if (e.target.id === 'ficha') ficha.cerrar(); };
+document.querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; orden = {k, asc: orden.k===k ? !orden.asc : false}; pintar(); });
+['fCuenta','fRed','fSerie','fPeriodo'].forEach(id => document.getElementById(id).onchange = pintar);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => D && pintar());
+</script>
+</body>
+</html>
