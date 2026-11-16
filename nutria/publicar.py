@@ -98,7 +98,7 @@ def main():
         cuando = dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid'))
         if cuando < dt.datetime.now(ZoneInfo('Europe/Madrid')) + dt.timedelta(minutes=3):
             print(f"⏭ {v['fecha']}: la hora ya ha pasado, no se programa"); continue
-        url = f"{base}/{v['fecha']}.mp4"
+        url = f"{base}/{v.get('archivo') or v['fecha']}.mp4"
         texto = v['descripcion']
         for servicio, c in chs.items():
             if (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') in en_cola:

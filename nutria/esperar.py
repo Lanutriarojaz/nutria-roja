@@ -19,7 +19,7 @@ def listo(url):
 def main():
     tirada, base = sys.argv[1], sys.argv[2].rstrip('/')
     limite = float(sys.argv[3]) if len(sys.argv) > 3 else 15
-    todos = [f"{base}/{v['fecha']}.mp4" for v in json.load(open(tirada)) if v.get('ok')]
+    todos = [f"{base}/{v.get('archivo') or v['fecha']}.mp4" for v in json.load(open(tirada)) if v.get('ok')]
     pendientes, t0 = list(todos), time.time()
     while pendientes and time.time() - t0 < limite * 60:
         pendientes = [u for u in pendientes if not listo(u)]

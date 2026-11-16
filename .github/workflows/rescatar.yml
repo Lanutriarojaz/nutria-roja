@@ -1,0 +1,86 @@
+name: Rescatar días (sustituir en Buffer la versión de un día por otra)
+
+# 1) coge los vídeos de una ejecución de la tirada (artefacto «videos»), 2) los sube a la web con otro nombre (para no chocar con la caché),
+# 3) en «ver» solo enseña la cola de Buffer; en «sustituir» borra los posts de esos días y programa los nuevos. Solo posts aún en cola.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Id de la ejecución de la tirada que tiene los vídeos buenos'
+        required: true
+      fechas:
+        description: 'Días a sustituir, separados por comas (AAAA-MM-DD)'
+        required: true
+      accion:
+        description: 'ver = solo mirar · sustituir = borrar los posts de esos días y programar los nuevos'
+        required: true
+        default: 'ver'
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency: tirada
+
+jobs:
+  rescatar:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      MEDIA_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: Bajar los vídeos buenos y preparar la lista
+        run: |
+          mkdir -p descarga salida
+          gh run download "${{ inputs.run_id }}" -n videos -D descarga
+          python - <<'PY'
+          import json
+          fechas = {f.strip() for f in "${{ inputs.fechas }}".split(',') if f.strip()}
+          t = [dict(v, archivo=v['fecha'] + '-chatgpt') for v in json.load(open('descarga/tirada.json')) if v.get('ok') and v['fecha'] in fechas]
+          assert t, 'ninguno de esos días tiene vídeo bueno en esa ejecución'
+          json.dump(t, open('salida/rescate.json', 'w'), ensure_ascii=False, indent=1)
+          print('Días a rescatar:', [v['fecha'] + ' · ' + v['titulo'] for v in t])
+          PY
+      - name: Subir los vídeos nuevos a la web (con otro nombre) y esperar a que se sirvan
+        run: |
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
+          for f in $(python -c "import json;print(' '.join(v['fecha'] for v in json.load(open('$GITHUB_WORKSPACE/salida/rescate.json'))))"); do
+            cp "$GITHUB_WORKSPACE/descarga/$f/video.mp4" "$f-chatgpt.mp4"
+          done
+          git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos de rescate"
+          git push -qf "$REMOTO" media
+          cd "$GITHUB_WORKSPACE" && python -m nutria.esperar salida/rescate.json "$PAGES" 15
+      - name: Mirar la cola de Buffer
+        if: ${{ inputs.accion == 'ver' }}
+        run: python -m nutria.rescate ver salida/rescate.json
+      - name: Sustituir en Buffer
+        if: ${{ inputs.accion == 'sustituir' }}
+        run: python -m nutria.rescate sustituir salida/rescate.json
+      - name: Dejar la lista de la semana al día (para el vigía de las 08:00)
+        if: ${{ inputs.accion == 'sustituir' && success() }}
+        run: |
+          REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
+          python - <<'PY'
+          import json
+          nuevos = {v['fecha']: v for v in json.load(open('/home/runner/work/nutria-roja/nutria-roja/salida/rescate.json'))}
+          t = json.load(open('tirada.json'))
+          json.dump([nuevos.get(v['fecha'], v) for v in t], open('tirada.json', 'w'), ensure_ascii=False, indent=2)
+          PY
+          git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Lista de la semana con los vídeos de rescate"
+          git push -qf "$REMOTO" media
+      - name: Aviso si algo ha fallado
+        if: failure()
+        run: |
+          .github/aviso.sh "📺 El rescate de vídeos ha fallado" \
+            "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
