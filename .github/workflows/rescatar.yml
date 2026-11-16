@@ -17,7 +17,7 @@ on:
         default: 'ver'
 
 permissions:
-  contents: read
+  contents: write
   actions: read
   issues: write
 
