@@ -10,6 +10,12 @@ def campos(tipo):
 
 
 def main():
+    qf = gql('query { __type(name: "Query") { fields { name args { name type { name kind ofType { name } } } } } }')['__type']['fields']
+    print('CONSULTAS:', [f['name'] for f in qf])
+    for f in qf:
+        if any(k in f['name'].lower() for k in ('comment', 'engage', 'communit', 'inbox', 'conversation', 'mention')):
+            print('  ->', f['name'], [(a['name'], a['type'].get('name') or (a['type'].get('ofType') or {}).get('name')) for a in f['args']])
+    return
     post = campos('Post')
     print('Campos de Post:', [f['name'] for f in post['fields']])
     for f in post['fields']:
