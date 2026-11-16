@@ -6,6 +6,7 @@ import datetime as dt
 import json
 import os
 import sys
+import time
 from zoneinfo import ZoneInfo
 
 from nutria.publicar import CREAR, canales, gql, metadatos, ya_programados
@@ -53,7 +54,11 @@ def main():
                    'dueAt': cuando.astimezone(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
                    'assets': [{'video': {'url': url, 'metadata': {'thumbnailOffset': 2500}}}],
                    'metadata': metadatos(servicio, v)}
-        r = gql(CREAR, {'input': entrada})['createPost']
+        for intento in range(4):                      # si Buffer aún no ve el vídeo en la web, esperar y reintentar
+            r = gql(CREAR, {'input': entrada})['createPost']
+            if 'post' in r or 'could not be read' not in str(r.get('message', '')):
+                break
+            print(f'  … Buffer aún no lee {url}; reintento en 60 s ({intento + 1}/4)', flush=True); time.sleep(60)
         ok = 'post' in r
         print(f"{'✔' if ok else '✖'} {servicio}: {r.get('post', {}).get('id') or r.get('message')}")
         if not ok:

@@ -39,7 +39,7 @@ jobs:
           python - <<'PY'
           import json
           f = json.load(open('descarga/diario-en.json'))
-          f.update(ok=True, motivo='', archivo='${{ inputs.archivo }}', duracion=float('${{ inputs.duracion }}'))
+          f.update(ok=True, motivo='', archivo='${{ inputs.archivo }}.mp4', duracion=float('${{ inputs.duracion }}'))
           json.dump(f, open('descarga/diario-en.json', 'w'), ensure_ascii=False, indent=1)
           print(f['fecha'], f['titulo'])
           PY
