@@ -78,12 +78,15 @@ jobs:
           done
           echo "::error::GitHub Pages no sirve el vídeo"; exit 1
       - name: Programar en Buffer a las 19:00 (La Nutria Roja)
+        id: pub_es
         if: always() && hashFiles('salida-docu/diario/diario.json') != ''
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           MEDIA_BASE: ${{ env.PAGES }}
         run: python -m docu.publicar salida-docu/diario/diario.json $([ "$PUBLICAR" = true ] || echo --prueba)
       - name: Programar en Buffer a las 19:00 (The Red Otter, inglés)
+        id: pub_en
+        continue-on-error: true      # un fallo del inglés no debe tumbar ni hacer pasar por fallido al documental en español
         if: always() && hashFiles('salida-docu/diario/diario-en.json') != '' && env.BUFFER_EN != ''
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY_EN }}
@@ -95,8 +98,14 @@ jobs:
           git add docu/historial.json
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Documental $(date +%F)" || exit 0
           for i in 1 2 3 4 5; do git pull -q --rebase && git push -q && break; sleep 5; done
+      - name: Aviso si solo ha fallado el inglés
+        if: always() && env.PUBLICAR == 'true' && steps.pub_en.outcome == 'failure' && steps.pub_es.outcome != 'failure'
+        run: |
+          motivo=$(python -c "import json;print(json.load(open('salida-docu/diario/diario-en.json')).get('motivo',''))" 2>/dev/null)
+          .github/aviso.sh "🦦 The Red Otter: hoy $(date +%d/%m) sin versión en inglés (el español SÍ está programado)" \
+            "El documental en español está programado con normalidad. La versión inglesa no pasó los controles: ${motivo:-mira el registro}. Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - name: Aviso si no se ha podido publicar
-        if: failure() && env.PUBLICAR == 'true'
+        if: failure() && env.PUBLICAR == 'true' && steps.pub_es.outcome != 'success'
         run: |
           motivo=$(python -c "import json;print(' | '.join(f\"{f}: {json.load(open('salida-docu/diario/'+f)).get('motivo','')}\" for f in ('diario.json','diario-en.json')))" 2>/dev/null)
           .github/aviso.sh "🎬 El documental del $(date +%d/%m) no se ha publicado" \

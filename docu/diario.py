@@ -43,14 +43,23 @@ def descripcion_en(m, ia):
 
 def montar_y_revisar(g, lang, voz, clips, carpeta, salida):
     fallos, total = ['sin montar'], 0
-    for intento in range(2):
-        total = piloto.montar(g, lang, *voz, clips, carpeta, salida)
-        fallos, datos = calidad.revisar(salida)
-        if not 30 <= total <= 70:                      # Álvaro: mejor algo corto o largo que sin vídeo
-            fallos.append(f'Duración {total:.1f} s fuera de 30-70')
-        print(f'  control de calidad ({lang}): {fallos or "OK"} {datos}', flush=True)
-        if not fallos:
-            break
+    ritmo_original = piloto.RITMO_EN
+    try:
+        for intento in range(3):
+            total = piloto.montar(g, lang, *voz, clips, carpeta, salida)
+            fallos, datos = calidad.revisar(salida)
+            demasiado_largo = total > 70
+            if not 30 <= total <= 70:                  # Álvaro: mejor algo corto o largo que sin vídeo
+                fallos.append(f'Duración {total:.1f} s fuera de 30-70')
+            print(f'  control de calidad ({lang}): {fallos or "OK"} {datos}', flush=True)
+            if not fallos:
+                break
+            if demasiado_largo and lang == 'en':      # reintentar IGUAL daba lo mismo: se acelera la voz lo justo para entrar en 66 s
+                pct = min(int((total / 66 - 1) * 100) + 2, 30)
+                piloto.RITMO_EN = f'+{pct}%'
+                print(f'  el inglés dura {total:.1f} s: reintento con la voz {piloto.RITMO_EN} más rápida', flush=True)
+    finally:
+        piloto.RITMO_EN = ritmo_original
     return fallos, total
 
 

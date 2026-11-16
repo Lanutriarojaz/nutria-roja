@@ -67,10 +67,13 @@ def adaptar_en(g):
     raise RuntimeError('Gemini no devolvió una versión inglesa con las mismas escenas')
 
 
+RITMO_EN = '+0%'
+
+
 # ---------- voz ----------
 async def _edge(texto, voz, mp3):
     import edge_tts
-    ritmo = '+0%' if voz.startswith('en-') else '+6%'          # el inglés se dice más rápido: algo más pausado
+    ritmo = RITMO_EN if voz.startswith('en-') else '+6%'        # el inglés se dice más rápido: algo más pausado (diario.py lo acelera si se pasa de 70 s)
     c = edge_tts.Communicate(texto, voz, rate=ritmo, boundary='WordBoundary')
     pal = []
     with open(mp3, 'wb') as f:
