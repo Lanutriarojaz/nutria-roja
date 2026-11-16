@@ -1,0 +1,43 @@
+name: Republicar la tirada (reprograma en Buffer lo que no quedó programado)
+
+# Para cuando la tirada hizo los vídeos pero Buffer rechazó algunos. NO rehace ningún vídeo: coge la lista que dejó la tirada
+# en la web, espera a que todos los vídeos se sirvan y programa en Buffer solo los que aún no están en la cola (sin duplicar).
+on:
+  workflow_dispatch:
+    inputs:
+      hora:
+        description: 'Hora de publicación en Madrid (HH:MM)'
+        required: false
+        default: '13:30'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  republicar:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: Bajar la lista de la tirada y esperar a que se sirvan todos los vídeos
+        run: |
+          mkdir -p salida
+          curl -sf "$PAGES/tirada.json" -o salida/tirada.json
+          python -m nutria.esperar salida/tirada.json "$PAGES" 15
+      - name: Programar en Buffer lo que falte
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m nutria.publicar salida/tirada.json --hora "${{ inputs.hora || '13:30' }}"
+      - name: Aviso si algo ha fallado
+        if: failure()
+        run: |
+          .github/aviso.sh "📺 Republicar la tirada ha fallado" \
+            "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

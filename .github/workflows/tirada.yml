@@ -78,13 +78,8 @@ jobs:
           echo "La Nutria Roja — vídeos de la semana" > index.html
           git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Vídeos $(date +%F)"
           git push -qf "$REMOTO" media
-          # Esperar a que GitHub Pages sirva los vídeos antes de dárselos a Buffer
-          primero=$(basename $(ls -d $GITHUB_WORKSPACE/salida/*/ | head -1)).mp4; [ -f "$primero" ] || primero=$(ls *.mp4 | tail -1)
-          for i in $(seq 1 40); do
-            [ "$(curl -s -o /dev/null -w '%{http_code}' "$PAGES/$primero")" = 200 ] && echo "Pages listo" && exit 0
-            sleep 15
-          done
-          echo "::error::GitHub Pages no sirve los vídeos"; exit 1
+          # Esperar a que GitHub Pages sirva TODOS los vídeos (no solo el primero) antes de dárselos a Buffer
+          cd "$GITHUB_WORKSPACE" && python -m nutria.esperar salida/tirada.json "$PAGES" 15
 
       - name: Programar en Buffer (TikTok, YouTube, Instagram)
         if: ${{ github.event_name == 'schedule' || inputs.publicar }}
