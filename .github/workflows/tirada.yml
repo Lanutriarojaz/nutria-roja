@@ -86,7 +86,13 @@ jobs:
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           MEDIA_BASE: ${{ env.PAGES }}
-        run: python -m nutria.publicar salida/tirada.json
+        run: |
+          # Hasta 3 intentos: lo que ya está en la cola de Buffer no se duplica, solo se completa lo que falte.
+          for i in 1 2 3; do
+            python -m nutria.publicar salida/tirada.json && exit 0
+            echo "Intento $i incompleto: espero 3 minutos y reintento"; sleep 180
+          done
+          exit 1
 
       - name: Registro (mantiene vivo el repositorio)
         if: always()

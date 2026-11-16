@@ -1,8 +1,11 @@
 name: Republicar la tirada (reprograma en Buffer lo que no quedó programado)
 
-# Para cuando la tirada hizo los vídeos pero Buffer rechazó algunos. NO rehace ningún vídeo: coge la lista que dejó la tirada
+# VIGÍA DIARIO: cada mañana comprueba que los vídeos de la semana están programados y programa los que falten (si un día algo falla, se repara solo).
+# También se puede lanzar a mano cuando la tirada hizo los vídeos pero Buffer rechazó algunos. NO rehace ningún vídeo: coge la lista que dejó la tirada
 # en la web, espera a que todos los vídeos se sirvan y programa en Buffer solo los que aún no están en la cola (sin duplicar).
 on:
+  schedule:
+    - cron: '0 7 * * *'     # cada día a las 08:00 (Madrid, invierno): completa cualquier vídeo que no quedara programado
   workflow_dispatch:
     inputs:
       hora:

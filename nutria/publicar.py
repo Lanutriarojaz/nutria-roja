@@ -117,6 +117,21 @@ def main():
             print(f"{'✔' if ok else '✖'} {v['fecha']} {servicio}: {resultado[-1]['detalle']}")
         if a.prueba:
             print(f"(prueba) {v['fecha']} {cuando:%H:%M} → {url}\n  {v['titulo']}")
+    # Comprobación final: leer la cola de Buffer y exigir que TODO lo esperado (cada día × cada red) esté de verdad programado.
+    if chs and not a.prueba:
+        cola = ya_programados(chs)
+        if cola:
+            ahora = dt.datetime.now(ZoneInfo('Europe/Madrid'))
+            for v in tirada:
+                if not v.get('ok'):
+                    continue
+                dia = dt.date.fromisoformat(v['fecha'])
+                if dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid')) < ahora + dt.timedelta(minutes=3):
+                    continue
+                for servicio, c in chs.items():
+                    if (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') not in cola:
+                        resultado.append({'fecha': v['fecha'], 'red': servicio, 'ok': False, 'detalle': 'no aparece en la cola de Buffer'})
+                        print(f"✖ COMPROBACIÓN: {v['fecha']} {servicio} NO está en la cola de Buffer")
     json.dump(resultado, open(os.path.join(os.path.dirname(a.tirada), 'programados.json'), 'w'), ensure_ascii=False, indent=2)
     if any(not r['ok'] for r in resultado):
         sys.exit(1)
