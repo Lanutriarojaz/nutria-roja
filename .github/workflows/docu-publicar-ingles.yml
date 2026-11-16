@@ -1,0 +1,60 @@
+name: Documental en inglés — programar un vídeo ya hecho (The Red Otter)
+
+# Para salvar la versión inglesa de un día cuando el vídeo ya existe pero no se programó (p. ej. se pasó de 70 s y se arregló aparte).
+# Coge la ficha del artefacto «documental» de una ejecución, usa el vídeo ya subido a la web con otro nombre y lo programa a las 19:00.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Id de la ejecución del documental (artefacto «documental»)'
+        required: true
+      archivo:
+        description: 'Nombre del vídeo ya subido a la web, sin .mp4'
+        required: true
+      duracion:
+        description: 'Duración real en segundos'
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PAGES: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - name: Preparar la ficha y comprobar que el vídeo se sirve
+        run: |
+          mkdir -p descarga
+          gh run download "${{ inputs.run_id }}" -n documental -D descarga
+          python - <<'PY'
+          import json
+          f = json.load(open('descarga/diario-en.json'))
+          f.update(ok=True, motivo='', archivo='${{ inputs.archivo }}', duracion=float('${{ inputs.duracion }}'))
+          json.dump(f, open('descarga/diario-en.json', 'w'), ensure_ascii=False, indent=1)
+          print(f['fecha'], f['titulo'])
+          PY
+          for i in $(seq 1 40); do
+            [ "$(curl -s -o /dev/null -w '%{http_code}' "$PAGES/${{ inputs.archivo }}.mp4")" = 200 ] && echo "Pages sirve el vídeo" && exit 0
+            sleep 15
+          done
+          echo "::error::GitHub Pages no sirve el vídeo"; exit 1
+      - name: Programar en Buffer (The Red Otter)
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY_EN }}
+          MEDIA_BASE: ${{ env.PAGES }}
+        run: python -m docu.publicar descarga/diario-en.json
+      - name: Aviso si ha fallado
+        if: failure()
+        run: |
+          .github/aviso.sh "🦦 The Red Otter: no se pudo programar el vídeo inglés de rescate" \
+            "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
