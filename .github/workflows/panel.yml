@@ -48,7 +48,7 @@ jobs:
           for i in 1 2 3 4; do
             rm -rf /tmp/media; git clone -q --depth 1 -b media "$REMOTO" /tmp/media || exit 1
             ( cd /tmp/media && rm -rf .git && mkdir -p panel
-              cp "$GITHUB_WORKSPACE/panel/index.html" "$GITHUB_WORKSPACE/build-panel/datos.json" panel/
+              cp "$GITHUB_WORKSPACE/panel/index.html" "$GITHUB_WORKSPACE/panel/manifest.json" "$GITHUB_WORKSPACE"/panel/icono-*.png "$GITHUB_WORKSPACE/build-panel/datos.json" panel/
               git init -q -b media && git add -A && git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qm "Panel $(date +%F_%H%M)"
               git push -qf "$REMOTO" media ) && exit 0
             sleep 20

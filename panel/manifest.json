@@ -1,0 +1,3 @@
+{"name":"Panel · La Nutria Roja","short_name":"Panel Nutria","start_url":"./","scope":"./","display":"standalone",
+ "background_color":"#e2552d","theme_color":"#e2552d",
+ "icons":[{"src":"icono-180.png","sizes":"180x180","type":"image/png"},{"src":"icono-512.png","sizes":"512x512","type":"image/png"}]}
