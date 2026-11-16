@@ -24,7 +24,13 @@ def main():
                     print('   (no se pudo abrir)', e)
     orgs = gql('query { account { organizations { id } } }')['account']['organizations']
     d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [sent]}}, first: 3) { edges { node { id dueAt channelId text } } } }', {'o': orgs[0]['id']})
-    print('\nEjemplo de enviados:', json.dumps(d, ensure_ascii=False)[:600])
+    print('\nEjemplo de enviados:', json.dumps(d, ensure_ascii=False)[:300])
+    q = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [sent]}}, first: 30) '
+            '{ edges { node { sentAt channelService externalLink metricsUpdatedAt metrics { name value unit } text } } } }', {'o': orgs[0]['id']})
+    for e in q['posts']['edges']:
+        n = e['node']
+        m = {x['name']: x['value'] for x in (n.get('metrics') or [])}
+        print(f"POST {str(n.get('sentAt'))[:16]} {n['channelService']:9} act={str(n.get('metricsUpdatedAt'))[:16]} {json.dumps(m, ensure_ascii=False)} | {n.get('externalLink')} | {(n.get('text') or '')[:40]}")
 
 
 if __name__ == '__main__':
