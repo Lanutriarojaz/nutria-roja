@@ -101,7 +101,7 @@ jobs:
           git -c user.name=nutria-bot -c user.email=bot@users.noreply.github.com commit -qam "Registro $(date +%F)" && git push -q || true
 
       - name: Correo con el resumen de la semana
-        if: always()
+        if: ${{ always() && (github.event_name == 'schedule' || inputs.publicar) }}
         run: |
           [ -f salida/tirada.json ] || exit 0
           python -m nutria.informe salida "$PAGES" > informe.md
@@ -109,7 +109,7 @@ jobs:
           .github/aviso.sh "🦦 Tirada del $(date +%d/%m)" --body-file informe.md
 
       - name: Correo de aviso si algo ha fallado
-        if: failure()
+        if: ${{ failure() && (github.event_name == 'schedule' || inputs.publicar) }}
         run: |
           .github/aviso.sh "❌ La tirada del $(date +%d/%m) ha fallado" \
             "Algo ha fallado. Mira los detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

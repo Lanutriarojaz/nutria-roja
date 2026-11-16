@@ -50,6 +50,9 @@ Devuelve SOLO este JSON (sin explicaciones ni ```):
  "descripcion": "primera línea con la palabra clave y gancho, segunda con un dato extra breve, y al final 4 o 5 hashtags: #historia #undiacomohoy #curiosidades + 1 o 2 del tema",
  "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
 }}
+PLAN B (campo "plan_b" dentro del MISMO JSON): un SEGUNDO guion completo, con los mismos campos que el principal (año, hecho, articulo, sujeto,
+detalles_clave, gancho, frases, pregunta, titulo, descripcion, busquedas), sobre OTRO hecho distinto del mismo día y del mismo tema de hoy.
+Se usa si las fotos libres del principal no alcanzan, así que elige para el plan B algo con fotos libres abundantes y claras.
 LAS FOTOS: otra IA buscará fotos reales en Wikimedia Commons y las revisará mirándolas. "sujeto" y "detalles_clave" son la guía de esa revisión: sé concreto y exacto.
 "frases": de 4 a 6, en total 60 a 90 palabras, con 1 o 2 curiosidades sorprendentes y el dato más bestia guardado para el final.
 """
@@ -111,6 +114,23 @@ def de_chatgpt(fecha):
     hecho = {'año': año, 'texto': g.get('hecho') or g.get('titulo', ''), 'articulos': [a for a in [g.get('articulo')] if a],
              'resumen': ''}
     return hecho, '', g
+
+
+def de_chatgpt_b(fecha):
+    """(hecho, fuente, guion) del PLAN B de ChatGPT (segundo hecho del mismo día), o None."""
+    r = os.path.join(GUIONES, f'{fecha}.json')
+    if not os.path.exists(r):
+        return None
+    pb = json.load(open(r)).get('plan_b')
+    if not isinstance(pb, dict) or not pb.get('frases'):
+        return None
+    pb = dict(pb); pb.setdefault('fecha', fecha)
+    try:
+        año = int(str(pb.get('año') or re.search(r'de (\d{3,4}),', pb['frases'][0]).group(1)))
+    except (AttributeError, ValueError):
+        return None
+    hecho = {'año': año, 'texto': pb.get('hecho') or pb.get('titulo', ''), 'articulos': [a for a in [pb.get('articulo')] if a], 'resumen': ''}
+    return hecho, '', pb
 
 
 def main():

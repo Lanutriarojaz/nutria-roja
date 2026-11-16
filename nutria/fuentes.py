@@ -48,7 +48,7 @@ def articulo(titulo, max_chars=6000):
     return (p.get('extract') or '')[:max_chars]
 
 
-_MALAS = re.compile(r'(logo|icon|flag|bandera|escudo|coat_of_arms|map|mapa|locator|signature|firma|\.svg$|commons-logo|wiki)', re.I)
+_MALAS = re.compile(r'(logo|icon|flag|bandera|escudo|coat_of_arms|map|mapa|locator|signature|firma|\.svg$|commons-logo|wiki|collage|timeline|chart|diagram)', re.I)
 
 
 def _info_imagenes(titulos):
@@ -74,13 +74,62 @@ def _info_imagenes(titulos):
     return out
 
 
-def imagenes_articulo(titulo):
-    d = _get('https://es.wikipedia.org/w/api.php', action='query', prop='images', titles=titulo,
-             imlimit=40, format='json', redirects=1)
+def imagenes_articulo(titulo, lang='es'):
+    d = _get(f'https://{lang}.wikipedia.org/w/api.php', action='query', prop='images', titles=titulo,
+             imlimit=60, format='json', redirects=1)
     p = next(iter(d['query']['pages'].values()))
-    nombres = [i['title'].replace('Archivo:', 'File:') for i in p.get('images', [])]
-    nombres = [n for n in nombres if not _MALAS.search(n)]
-    return _info_imagenes(nombres)
+    nombres = [i['title'].replace('Archivo:', 'File:').replace('Image:', 'File:') for i in p.get('images', [])]
+    nombres = [n for n in nombres if n.startswith('File:') and not _MALAS.search(n)]
+    return _info_imagenes(nombres[:50])
+
+
+def titulo_en(titulo):
+    """Título del mismo artículo en la Wikipedia inglesa (suele tener más y mejores fotos), o None."""
+    d = _get('https://es.wikipedia.org/w/api.php', action='query', prop='langlinks', lllang='en', titles=titulo,
+             redirects=1, lllimit=1, format='json')
+    p = next(iter(d['query']['pages'].values()))
+    ll = p.get('langlinks') or []
+    return ll[0].get('*') or ll[0].get('title') if ll else None
+
+
+def categoria_commons(titulo):
+    """Categoría de Wikimedia Commons del tema (vía Wikidata), p. ej. 'Category:Suez Canal', o None."""
+    d = _get('https://es.wikipedia.org/w/api.php', action='query', prop='pageprops', ppprop='wikibase_item',
+             titles=titulo, redirects=1, format='json')
+    p = next(iter(d['query']['pages'].values()))
+    q = (p.get('pageprops') or {}).get('wikibase_item')
+    if not q:
+        return None
+    w = _get('https://www.wikidata.org/w/api.php', action='wbgetentities', ids=q, props='sitelinks|claims',
+             sitefilter='commonswiki', format='json')
+    ent = (w.get('entities') or {}).get(q) or {}
+    cw = ((ent.get('sitelinks') or {}).get('commonswiki') or {}).get('title')
+    if cw and cw.startswith('Category:'):
+        return cw
+    for c in (ent.get('claims') or {}).get('P373', []):
+        v = ((c.get('mainsnak') or {}).get('datavalue') or {}).get('value')
+        if v:
+            return 'Category:' + v
+    return None
+
+
+def ficheros_categoria(cat, n=40, subcats=4):
+    """Fotos de esa categoría de Commons y de unas pocas subcategorías con pinta de histórica (año, siglo, construcción...)."""
+    api = 'https://commons.wikimedia.org/w/api.php'
+    nombres = []
+    d = _get(api, action='query', list='categorymembers', cmtitle=cat, cmtype='file', cmlimit=n, format='json')
+    nombres += [m['title'] for m in d.get('query', {}).get('categorymembers', [])]
+    d = _get(api, action='query', list='categorymembers', cmtitle=cat, cmtype='subcat', cmlimit=40, format='json')
+    subs = [m['title'] for m in d.get('query', {}).get('categorymembers', [])
+            if re.search(r'(histor|\b1\d{3}\b|\b20\d\d\b|century|construction|inaugur|portrait|early|original|archive)', m['title'], re.I)][:subcats]
+    for sc in subs:
+        d = _get(api, action='query', list='categorymembers', cmtitle=sc, cmtype='file', cmlimit=max(n // 2, 15), format='json')
+        nombres += [m['title'] for m in d.get('query', {}).get('categorymembers', [])]
+    nombres = [x for x in dict.fromkeys(nombres) if not _MALAS.search(x)]
+    out = []
+    for i in range(0, len(nombres), 50):
+        out += _info_imagenes(nombres[i:i + 50])
+    return out
 
 
 def buscar_commons(consulta, n=6):

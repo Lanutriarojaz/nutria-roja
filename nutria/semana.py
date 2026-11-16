@@ -22,11 +22,15 @@ def _candidatas(hecho, g):
             vistas.add(im['titulo']); cands.append((prio, im))
 
     for art in hecho.get('articulos') or []:
-        try:
-            for im in fuentes.imagenes_articulo(art):
-                add(im, 0)
-        except Exception as e:
-            print(f'  (sin fotos del artículo «{art}»: {str(e)[:80]})', flush=True)
+        for etiqueta, obtener, prio in (
+                ('artículo', lambda: fuentes.imagenes_articulo(art), 0),
+                ('wikipedia inglesa', lambda: (fuentes.imagenes_articulo(fuentes.titulo_en(art), 'en') if fuentes.titulo_en(art) else []), 0),
+                ('categoría de Commons', lambda: (fuentes.ficheros_categoria(fuentes.categoria_commons(art)) if fuentes.categoria_commons(art) else []), 0.5)):
+            try:
+                for im in obtener():
+                    add(im, prio)
+            except Exception as e:
+                print(f'  (sin fotos de {etiqueta} «{art}»: {str(e)[:80]})', flush=True)
     consultas = list(g.get('busquedas', []))[:3]
     try:   # Gemini: búsquedas propias, más variadas y concretas que las del guion
         r = guion.llm([
@@ -45,7 +49,13 @@ def _candidatas(hecho, g):
         except Exception as e:
             print(f'  (búsqueda «{q}» falla: {str(e)[:60]})', flush=True)
     cands.sort(key=lambda x: (x[0], -min(x[1]['ancho'], 1600) * min(x[1]['alto'], 1600)))
-    return [im for _, im in cands]
+    # tope por origen para que ninguna fuente tape a las demás (artículo, categoría y cada búsqueda aportan lo suyo)
+    cuenta, salida = {}, []
+    for prio, im in cands:
+        k = int(prio) if prio == int(prio) else prio
+        if cuenta.get(k, 0) < 10:
+            cuenta[k] = cuenta.get(k, 0) + 1; salida.append(im)
+    return salida
 
 
 def _miniatura_b64(ruta):
@@ -137,7 +147,7 @@ def elegir_imagenes(hecho, g, carpeta, frases, minimo=3):
     sujeto = g.get('sujeto') or hecho.get('texto') or g.get('titulo')
     detalles = g.get('detalles_clave') or ''
     cands, n = [], 0
-    for im in _candidatas(hecho, g)[:16]:
+    for im in _candidatas(hecho, g)[:30]:
         ext = '.png' if im['url'].lower().split('?')[0].endswith('.png') else '.jpg'
         ruta = os.path.join(carpeta, f'cand{n}{ext}')
         try:
@@ -170,21 +180,23 @@ def un_dia(fecha, carpeta, usados):
     if not candidatos:
         raise RuntimeError('Wikipedia no tiene efemérides para ese día')
     errores = []
-    chatgpt = None                                   # guion de ChatGPT (atajo del domingo): él elige el hecho y manda; solo se mira el formato
-    try:
-        prev = encargos.de_chatgpt(fecha.isoformat())
-        if prev and _art(prev[0]) not in usados:
-            guion.validar(prev[2], prev[0], d, guion.MESES[m - 1])
-            chatgpt = prev; print(f"  guion de ChatGPT: «{prev[2].get('titulo')}»", flush=True)
-    except Exception as e:
-        errores.append(f'ChatGPT no válido: {e}'); print('  guion de ChatGPT no válido:', str(e)[:120], flush=True)
-    orden = ([chatgpt[0]] if chatgpt else []) + guion.elegir(candidatos, d, m, usados) + candidatos[:5]
+    chatgpts = []                                    # guiones de ChatGPT (principal y plan B): él elige y manda; solo se mira el formato
+    for etiqueta, obtener in (('', encargos.de_chatgpt), (' (plan B)', encargos.de_chatgpt_b)):
+        try:
+            prev = obtener(fecha.isoformat())
+            if prev and _art(prev[0]) not in usados and all(_art(prev[0]) != _art(x[0]) for x in chatgpts):
+                guion.validar(prev[2], prev[0], d, guion.MESES[m - 1])
+                chatgpts.append(prev); print(f"  guion de ChatGPT{etiqueta}: «{prev[2].get('titulo')}»", flush=True)
+        except Exception as e:
+            errores.append(f'ChatGPT{etiqueta} no válido: {e}'); print(f'  guion de ChatGPT{etiqueta} no válido:', str(e)[:120], flush=True)
+    orden = [x[0] for x in chatgpts] + guion.elegir(candidatos, d, m, usados) + candidatos[:5]
     for hecho in orden:
-        if _art(hecho) in usados or (chatgpt and hecho is not chatgpt[0] and _art(hecho) == _art(chatgpt[0])):
+        if _art(hecho) in usados or (not any(hecho is x[0] for x in chatgpts) and any(_art(hecho) == _art(x[0]) for x in chatgpts)):
             continue
         try:
-            if chatgpt and hecho is chatgpt[0]:
-                fuente, g = chatgpt[1], chatgpt[2]
+            propio = next((x for x in chatgpts if hecho is x[0]), None)
+            if propio:
+                fuente, g = propio[1], propio[2]
             else:
                 fuente = (hecho.get('resumen') or '') + '\n\n' + fuentes.articulo(hecho['articulos'][0])
                 g = None
