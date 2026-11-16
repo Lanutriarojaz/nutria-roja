@@ -30,6 +30,7 @@ jobs:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           BUFFER_API_KEY_EN: ${{ secrets.BUFFER_API_KEY_EN }}
           PANEL_CLAVE: ${{ secrets.PANEL_CLAVE }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python -m nutria.panel_datos build-panel
       - name: Guardar la foto del día (para la evolución)
         run: |

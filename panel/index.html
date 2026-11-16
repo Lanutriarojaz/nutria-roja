@@ -88,7 +88,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:var(--accent-soft)}
     <div class="filtros">
       <select id="fCuenta"><option value="">Las dos cuentas</option><option value="es">La Nutria Roja (español)</option><option value="en">The Red Otter (inglés)</option></select>
       <select id="fRed"><option value="">Todas las redes</option><option value="tiktok">TikTok</option><option value="instagram">Instagram</option><option value="youtube">YouTube</option></select>
-      <select id="fSerie"><option value="">Todas las series</option><option>Efemérides</option><option>Documentales</option><option>Tele-Dimensional</option></select>
+      <select id="fSerie"><option value="">Todas las series</option><option>Efemérides</option><option>Documentales</option></select>
       <select id="fPeriodo"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option><option value="0">Desde el principio</option></select>
     </div>
   </header>
@@ -179,6 +179,8 @@ function pintar(){
   const inter = tot('vistas') ? (tot('megusta')+tot('comentarios')+tot('compartidos')+tot('guardados'))/tot('vistas') : null;
   const K = [['Vídeos',V.length],['Vistas',tot('vistas')],['Me gusta',tot('megusta')],['Comentarios',tot('comentarios')],
              ['Compartidos',tot('compartidos')],['Guardados',tot('guardados')],['Horas vistas',tot('minutos_vistos')/60],['Interacción',null,pct(inter)]];
+  const C = D.canales || {}; const sus = Object.entries(C).filter(([k]) => !fCuenta.value || k===fCuenta.value).reduce((a,[,c])=>a+c.suscriptores,0);
+  if (Object.keys(C).length) K.push(['Suscriptores YouTube', sus]);
   kpis.innerHTML = K.map(([l,n,t]) => `<div class="card kpi"><div class="n">${t||fmt(n)}</div><div class="l">${l}</div></div>`).join('');
 
   // ideas clave
@@ -235,7 +237,8 @@ function ficha(v){
       <dl>${Object.entries(nombres).filter(([m])=>r[m]!=null).map(([m,n])=>`<dt>${n}</dt><dd>${m==='interaccion'?String(r[m]).replace('.',',')+' %':fmt(r[m])}</dd>`).join('')}</dl>
       ${r.enlace?`<a href="${r.enlace}" target="_blank" rel="noopener">Abrir en ${RED[k].n} ↗</a>`:''}
       <div class="nota" style="margin-top:6px">Datos del ${r.actualizado ? r.actualizado.slice(8,10)+'/'+r.actualizado.slice(5,7)+' a las '+r.actualizado.slice(11,16)+' (UTC)' : '—'}</div></div>`).join('')}</div>
-    <h2>Comentarios</h2><p class="nota">${v.comentarios ? 'Este vídeo tiene comentarios. Muy pronto podrás leer aquí los de YouTube; los de Instagram y TikTok, con el enlace de cada red.' : 'Todavía sin comentarios.'}</p>
+    <h2>Comentarios</h2>${(v.comentarios_yt||[]).length ? v.comentarios_yt.map(c => `<div class="red" style="margin-bottom:8px"><div class="nota"><b>${c.autor.replace(/</g,'&lt;')}</b> · YouTube · ${c.fecha.split('-').reverse().join('/')}${c.megusta?' · ♥ '+c.megusta:''}${c.respuestas?' · '+c.respuestas+' respuestas':''}</div><div style="margin-top:4px">${c.texto.replace(/</g,'&lt;')}</div></div>`).join('') : ''}
+    <p class="nota">${v.comentarios ? 'Los de Instagram y TikTok se leen en cada red: usa los enlaces de arriba.' : 'Todavía sin comentarios.'}</p>
     <h2>Texto publicado</h2><div class="texto">${v.texto.replace(/</g,'&lt;')}</div>`;
   document.getElementById('ficha').style.display = 'flex';
 }

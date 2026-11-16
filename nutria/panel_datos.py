@@ -131,6 +131,8 @@ def recoger():
             fecha = (p.get('sentAt') or p.get('dueAt') or '')[:10]
             clave_video = f"{idioma}|{fecha}|{re.sub(r'[^a-z0-9]', '', texto.lower())[:60]}"
             serie = _serie(texto)
+            if serie == 'Tele-Dimensional':          # se borró de las redes el 13-nov: no cuenta
+                continue
             v = videos.setdefault(clave_video, {
                 'id': clave_video, 'idioma': idioma, 'cuenta': cuenta, 'fecha': fecha, 'serie': serie,
                 'titulo': _titulo(texto), 'texto': texto[:600], 'año': _año(texto) if serie == 'Efemérides' else None,
@@ -144,6 +146,46 @@ def recoger():
             v['redes'][p['channelService']] = {'post': p['id'], 'enlace': p.get('externalLink'), 'hora': (p.get('sentAt') or '')[11:16],
                                                'actualizado': (p.get('metricsUpdatedAt') or '')[:16], 'canal': p.get('canal'), **m}
     return sorted(videos.values(), key=lambda v: v['fecha'], reverse=True)
+
+
+CANALES_YT = {'es': 'UCYBRd4-WO871UN7Yqn-nSPg', 'en': 'UCu6T5HbDJiAp3Q1nHeVjufw'}
+
+
+def youtube(videos):
+    """Con la clave gratuita de la API de YouTube: textos de los comentarios de cada Short y datos de los dos canales."""
+    clave = os.environ.get('YOUTUBE_API_KEY')
+    if not clave:
+        return {}
+    api = 'https://www.googleapis.com/youtube/v3'
+    canales = {}
+    try:
+        r = requests.get(f'{api}/channels', params={'part': 'statistics,snippet', 'id': ','.join(CANALES_YT.values()), 'key': clave}, timeout=30).json()
+        for it in r.get('items', []):
+            idioma = next(k for k, v in CANALES_YT.items() if v == it['id'])
+            st = it['statistics']
+            canales[idioma] = {'nombre': it['snippet']['title'], 'suscriptores': int(st.get('subscriberCount', 0)),
+                               'vistas': int(st.get('viewCount', 0)), 'videos': int(st.get('videoCount', 0))}
+    except Exception as e:
+        print(f'⚠️ YouTube (canales): {str(e)[:120]}')
+    n = 0
+    for v in videos:
+        yt = v['redes'].get('youtube') or {}
+        m = re.search(r'(?:shorts/|v=|youtu\.be/)([\w-]{11})', yt.get('enlace') or '')
+        if not m:
+            continue
+        try:
+            r = requests.get(f'{api}/commentThreads', params={'part': 'snippet', 'videoId': m.group(1), 'maxResults': 30, 'order': 'relevance',
+                                                              'textFormat': 'plainText', 'key': clave}, timeout=30).json()
+            v['comentarios_yt'] = [{'autor': c['snippet']['topLevelComment']['snippet'].get('authorDisplayName', ''),
+                                    'texto': c['snippet']['topLevelComment']['snippet'].get('textDisplay', '')[:500],
+                                    'megusta': c['snippet']['topLevelComment']['snippet'].get('likeCount', 0),
+                                    'fecha': c['snippet']['topLevelComment']['snippet'].get('publishedAt', '')[:10],
+                                    'respuestas': c['snippet'].get('totalReplyCount', 0)} for c in r.get('items', [])]
+            n += len(v['comentarios_yt'])
+        except Exception as e:
+            print(f'⚠️ YouTube (comentarios de {m.group(1)}): {str(e)[:100]}')
+    print(f'YouTube: {n} comentarios, canales: {list(canales)}')
+    return canales
 
 
 def guardar_historial(videos):
@@ -192,8 +234,9 @@ def main():
     if not clave:
         sys.exit('Falta la contraseña del panel (secreto PANEL_CLAVE)')
     videos = recoger()
+    canales = youtube(videos)
     h = guardar_historial(videos)
-    datos = {'actualizado': dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes'), 'videos': videos,
+    datos = {'canales': canales, 'actualizado': dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes'), 'videos': videos,
              'evolucion': resumen_historial(h, videos)}
     os.makedirs(salida, exist_ok=True)
     json.dump(cifrar(datos, clave), open(os.path.join(salida, 'datos.json'), 'w'))
