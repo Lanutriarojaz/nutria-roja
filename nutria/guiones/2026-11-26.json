@@ -1,0 +1,47 @@
+{
+ "fecha": "2026-11-26",
+ "año": 2011,
+ "hecho": "la NASA lanza el todoterreno Curiosity rumbo a Marte",
+ "articulo": "NASA",
+ "sujeto": "Mars Science Laboratory Curiosity",
+ "detalles_clave": "EE. UU., NASA, 2011; cohete Atlas V, rover Curiosity, no usar imágenes de Perseverance",
+ "gancho": "El robot que viajó 560 millones de km hasta Marte",
+ "frases": [
+  "Un día como hoy, 26 de noviembre de 2011, la NASA lanzó el rover Curiosity rumbo a Marte.",
+  "Despegó desde Cabo Cañaveral a bordo de un cohete Atlas V, iniciando un viaje de 560 millones de kilómetros.",
+  "Su misión era explorar el cráter Gale y buscar señales de que el planeta rojo pudo albergar vida.",
+  "Lleva cámaras, un taladro y hasta un láser para analizar rocas marcianas.",
+  "Tardó casi 9 meses en llegar, aterrizando con una maniobra llamada ‘sky crane’ que parecía de ciencia ficción."
+ ],
+ "pregunta": "¿Te gustaría vivir un día en Marte?",
+ "titulo": "Curiosity despega hacia Marte en 2011 🚀",
+ "descripcion": "Curiosity despega hacia Marte, un viaje de 560 millones de km. Lanzado por la NASA desde Cabo Cañaveral en 2011. #historia #undiacomohoy #curiosidades #NASA #Marte",
+ "busquedas": [
+  "Curiosity rover launch 2011",
+  "Atlas V rocket Cape Canaveral 2011",
+  "Mars Science Laboratory rover"
+ ],
+ "plan_b": {
+  "año": 2018,
+  "hecho": "aterriza en Marte la misión InSight de la NASA",
+  "articulo": "Marte (planeta)",
+  "sujeto": "Mars InSight lander",
+  "detalles_clave": "EE. UU., NASA, 2018; módulo InSight en superficie marciana, no confundir con rovers",
+  "gancho": "El robot que escucha los terremotos en Marte",
+  "frases": [
+   "Un día como hoy, 26 de noviembre de 2018, la sonda InSight aterrizó en Marte.",
+   "Su objetivo era estudiar el interior del planeta y detectar ‘marsquakes’, los terremotos marcianos.",
+   "Aterrizó en la llanura Elysium Planitia tras un descenso de siete minutos de infarto.",
+   "Incluye un sismómetro ultrafino capaz de detectar vibraciones mínimas bajo el suelo marciano.",
+   "Gracias a InSight, sabemos que Marte aún está geológicamente activo."
+  ],
+  "pregunta": "¿Prefieres explorar Marte por dentro o por fuera?",
+  "titulo": "InSight aterriza en Marte en 2018 🌌",
+  "descripcion": "InSight aterriza en Marte para estudiar su subsuelo y escuchar ‘marsquakes’. Una misión histórica de la NASA. #historia #undiacomohoy #curiosidades #NASA #Marte",
+  "busquedas": [
+   "Mars InSight lander 2018",
+   "Elysium Planitia Mars NASA",
+   "InSight landing NASA"
+  ]
+ }
+}
