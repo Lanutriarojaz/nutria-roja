@@ -1,0 +1,91 @@
+{
+ "fecha": "2026-11-25",
+ "topic_id": "peces-voladores-planear",
+ "categoria": "naturaleza",
+ "pregunta": "¿Por qué los peces vuelan?",
+ "titulo": "El secreto de los peces voladores",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Por qué los peces vuelan? No son aves, pero parecen flotar sobre el mar.",
+   "busqueda_en": "flying fish ocean",
+   "alternativa_en": "fish jump sea",
+   "texto_pantalla": "¿Peces voladores?"
+  },
+  {
+   "n": 2,
+   "locucion": "Los peces voladores no vuelan como un pájaro: planean. Saltan a toda velocidad fuera del agua.",
+   "busqueda_en": "ocean splash fish",
+   "alternativa_en": "fish jump waves",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 3,
+   "locucion": "Su aleta caudal actúa como un motor, batiendo bajo la superficie antes del salto.",
+   "busqueda_en": "underwater fish tail",
+   "alternativa_en": "fish swimming fast",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 4,
+   "locucion": "Luego despliegan sus enormes aletas pectorales, que funcionan como alas.",
+   "busqueda_en": "flying fish glide",
+   "alternativa_en": "fish fins spread",
+   "texto_pantalla": "Aletas alas"
+  },
+  {
+   "n": 5,
+   "locucion": "El viento y la velocidad del salto les permiten deslizarse decenas de metros sobre las olas.",
+   "busqueda_en": "ocean waves wide",
+   "alternativa_en": "sea horizon",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 6,
+   "locucion": "Este truco aéreo es su mejor defensa para escapar de depredadores como atunes o delfines.",
+   "busqueda_en": "ocean predator fish",
+   "alternativa_en": "dolphins hunting",
+   "texto_pantalla": "Escapar volando"
+  },
+  {
+   "n": 7,
+   "locucion": "Al tocar el agua pueden impulsarse de nuevo, encadenando saltos y planeos.",
+   "busqueda_en": "fish jumping ocean",
+   "alternativa_en": "flying fish leap",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 8,
+   "locucion": "Así, un pez que parece volar en realidad está usando el aire como un refugio temporal.",
+   "busqueda_en": "sunset ocean fish",
+   "alternativa_en": "sea sky horizon",
+   "texto_pantalla": "Vuelo fugaz"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "Los peces voladores planean gracias a sus aletas pectorales extendidas",
+   "titulo": "Flying fish",
+   "url": "https://en.wikipedia.org/wiki/Flying_fish",
+   "editor": "Wikipedia"
+  },
+  {
+   "afirmacion": "Pueden planear hasta 200 metros para escapar de depredadores",
+   "titulo": "Flying fish facts",
+   "url": "https://www.nationalgeographic.com/animals/fish/facts/flying-fish",
+   "editor": "National Geographic"
+  }
+ ],
+ "metadatos": {
+  "titulo": "¿Por qué los peces parecen volar sobre el mar?",
+  "descripcion": "Los peces voladores planean para escapar de depredadores, usando sus aletas como alas.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Animales",
+   "#Océano",
+   "#Naturaleza"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
