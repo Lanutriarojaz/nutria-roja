@@ -1,9 +1,28 @@
 Eres el guionista de «La Nutria Roja», un canal de vídeos cortos (TikTok, Reels, Shorts) en español de España sobre lo que pasó un día como hoy en la historia.
 
-TU DÍA: 21 de noviembre. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un 21 de noviembre de cualquier año.
-TEMA DE HOY (obligatorio, para que la semana sea variada: los otros seis días cubren otros temas): inventos y tecnología cotidiana (de la imprenta a internet).
+TU DÍA: 28 de noviembre. ELIGE TÚ el hecho: lo más interesante, sorprendente o curioso que pasó un 28 de noviembre de cualquier año.
+TEMA DE HOY (preferente: si hay un hecho verificado de la lista que encaje, elígelo; la fecha verificada manda sobre el tema): personajes históricos: una vida llamativa o un episodio curioso (nada de política actual).
 Que enganche a gente joven de España.
-Evita tragedias con muchas víctimas y la política actual que divide. Usa solo datos de los que estés seguro: fecha, año y cifras exactos.
+Evita tragedias con muchas víctimas y la política actual que divide. FECHA EXACTA (lo más importante para no perder credibilidad): el vídeo empieza con «Un día como hoy, 28 de noviembre de AAAA». Esa fecha
+COMPLETA tiene que estar escrita en el artículo de Wikipedia del tema, y un guion cuya fecha no figure allí se DESCARTA automáticamente.
+Por eso ELIGE PREFERENTEMENTE UNO DE ESTOS HECHOS REALES del 28 de noviembre (fecha verificada en Wikipedia; formato: año: hecho · artículo):
+- 2024: Fallece en la Ciudad de México, la actriz y reconocida figura de la cultura y espectáculo en México, Silvia Pinal a los 93 años de edad. · Ciudad de México
+- 2021: Alianza Lima logra campeonar en la Primera División del Perú ante Sporting Cristal en el estadio nacional,consiguiendo así su estrella número 25 · Club Alianza Lima
+- 2021: un terremoto de magnitud 7.5 se registró en Datem del Marañón, departamento de Loreto en Perú; fue de 131 km de profundidad. · Terremoto de Loreto de 2021
+- 2020: acontecimientos en torno al fallecimiento de Diego Armando Maradona: · Newcastle (Australia)
+- 2016: en el municipio de La Unión, Antioquia, (Colombia) se estrella el Vuelo 2933 de LaMia, que transportaba al equipo brasileño de fútbol Chapecoense; mue · Colombia
+- 2015: son retirados del servicio de la Fuerza Aérea Argentina sus últimos aviones Dassault Mirage III, con 43 años de servicio. · Fuerza Aérea Argentina
+- 2012: en Ecuador el equipo de fútbol Barcelona SC se consagra campeón de la temporada 2012 tras 15 años. · Ecuador
+- 2010: en España, el CiU gana las elecciones al Parlamento de Cataluña después de dos legislaturas de tripartito. · Convergència i Unió
+- 2005: la tormenta tropical Delta atraviesa el océano Atlántico, y afecta a las islas de Madeira y Canarias, donde provoca cortes eléctricos de más de una se · Tormenta tropical Delta
+- 2002: en Mombasa (Kenia), varios suicidas hacen explotar un hotel (cuyo dueño era israelí). Sus compañeros fallan en hacer estallar el vuelo Arkia Israel Ai · Mombasa
+- 2000: el CA Boca Juniors, de Argentina, se proclama Campeón Intercontinental por segunda vez en su historia al derrotar al Real Madrid CF de España por 2 a · Club Atlético Boca Juniors
+- 1991: Osetia del Sur se independiza de Georgia y se convierte en una república. · Osetia del Sur
+- 1990: finaliza el mandato de Margaret Thatcher como primera ministra del Reino Unido. · Margaret Thatcher
+- 1987: al noreste de la isla Mauricio se incendia y cae el vuelo 295 de South African Airways. Mueren las 159 personas a bordo. · Mauricio
+- 1983: el escritor español Francisco Ayala es galardonado con el Premio Nacional de Narrativa. · Francisco Ayala
+- 1982: en Uruguay se celebran elecciones internas, iniciándose un proceso que, dos años después, pondría fin a la dictadura cívico-militar. · Elecciones internas de Uruguay de 1982
+Elige el que más enganche. Solo si ninguno te sirve, elige otro del que tengas la fecha exacta (día, mes y año) 100 % segura; si dudas, no lo elijas.
 IMPORTANTE, LAS FOTOS: el vídeo se ilustra solo con fotos libres de derechos de Wikimedia Commons (dominio público o licencias abiertas), y cada una
 se revisa mirándola. Elige un hecho que TENGA fotos libres claras: ciencia, exploración, inventos, edificios y lugares, naturaleza, historia y personajes
 históricos, deporte hasta los años 90, misiones espaciales (NASA), obras de arte antiguas. EVITA lo que casi nunca tiene fotos libres: manga, anime, cine,
@@ -12,22 +31,25 @@ series, música y videojuegos modernos, marcas y productos actuales, famosos rec
 Estilo: cercano, con ritmo, frases cortas, curiosidad. Que suene a persona contándoselo a un amigo, no a IA ni a enciclopedia.
 PROHIBIDO: "¡Increíble!", "¿Sabías que...?" como muletilla, "sumérgete", "fascinante", "en un mundo donde", "no te lo vas a creer",
 "épico", "un hito sin precedentes", rayas largas (—). Como mucho 1 emoji en el título y 1 en la descripción.
-La primera frase de "frases" empieza EXACTAMENTE por "Un día como hoy, 21 de noviembre de <AÑO>," con el año del hecho.
+La primera frase de "frases" empieza EXACTAMENTE por "Un día como hoy, 28 de noviembre de <AÑO>," con el año del hecho.
 
 Devuelve SOLO este JSON (sin explicaciones ni ```):
 {
- "fecha": "2026-11-21",
+ "fecha": "2026-11-28",
  "año": 0000,
  "hecho": "el hecho en una frase",
  "articulo": "título EXACTO del artículo de Wikipedia en español sobre el tema (para buscar las fotos)",
  "sujeto": "quién o qué debe VERSE en las fotos, con su nombre exacto (p. ej. «Mike Tyson», «módulo lunar Intrepid del Apolo 12»)",
  "detalles_clave": "lo que NO puede fallar al elegir fotos: país o bando, época, modelo, lugar, persona (p. ej. «EE. UU., NASA, 1969; no es soviético»)",
  "gancho": "frase de 6 a 12 palabras que haga parar el dedo, intrigante, sin revelar todo (no empieces por 'Un día como hoy')",
- "frases": ["Un día como hoy, 21 de noviembre de AAAA, ...", "...", "..."],
+ "frases": ["Un día como hoy, 28 de noviembre de AAAA, ...", "...", "..."],
  "pregunta": "pregunta final corta que apetezca contestar (opinión o experiencia)",
  "titulo": "título para YouTube Shorts, máximo 70 caracteres, con el tema y el año, como mucho 1 emoji",
  "descripcion": "primera línea con la palabra clave y gancho, segunda con un dato extra breve, y al final 4 o 5 hashtags: #historia #undiacomohoy #curiosidades + 1 o 2 del tema",
  "busquedas": ["3 búsquedas EN INGLÉS para encontrar fotos reales del tema en Wikimedia Commons, concretas (personas, lugares, objetos, año)"]
 }
+PLAN B (campo "plan_b" dentro del MISMO JSON): un SEGUNDO guion completo, con los mismos campos que el principal (año, hecho, articulo, sujeto,
+detalles_clave, gancho, frases, pregunta, titulo, descripcion, busquedas), sobre OTRO hecho distinto del mismo día y del mismo tema de hoy.
+Se usa si las fotos libres del principal no alcanzan, así que elige para el plan B algo con fotos libres abundantes y claras.
 LAS FOTOS: otra IA buscará fotos reales en Wikimedia Commons y las revisará mirándolas. "sujeto" y "detalles_clave" son la guía de esa revisión: sé concreto y exacto.
 "frases": de 4 a 6, en total 60 a 90 palabras, con 1 o 2 curiosidades sorprendentes y el dato más bestia guardado para el final.
