@@ -1,0 +1,78 @@
+{
+ "fecha": "2026-11-23",
+ "topic_id": "luna-roja-por-que",
+ "categoria": "ciencia",
+ "pregunta": "¿Por qué la Luna se vuelve roja?",
+ "titulo": "El misterio de la Luna roja",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Por qué la Luna se vuelve roja? Parece un truco del cielo.",
+   "busqueda_en": "red moon eclipse",
+   "alternativa_en": "lunar eclipse night",
+   "texto_pantalla": "Luna roja"
+  },
+  {
+   "n": 2,
+   "locucion": "Ocurre durante un eclipse lunar total, cuando la Tierra se interpone entre el Sol y la Luna.",
+   "busqueda_en": "earth shadow moon",
+   "alternativa_en": "lunar eclipse space",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 3,
+   "locucion": "La sombra de nuestro planeta cubre la Luna… pero no la apaga del todo.",
+   "busqueda_en": "lunar shadow",
+   "alternativa_en": "moon eclipse dark",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 4,
+   "locucion": "La luz del Sol atraviesa la atmósfera terrestre, que filtra los colores azules.",
+   "busqueda_en": "sunlight atmosphere",
+   "alternativa_en": "earth atmosphere light",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 5,
+   "locucion": "Solo la luz roja y naranja consigue rodear la Tierra y llegar a la superficie lunar.",
+   "busqueda_en": "red light scattering",
+   "alternativa_en": "atmospheric refraction red",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 6,
+   "locucion": "Es el mismo efecto que tiñe los atardeceres.",
+   "busqueda_en": "red sunset sky",
+   "alternativa_en": "orange dusk clouds",
+   "texto_pantalla": "Como un atardecer"
+  },
+  {
+   "n": 7,
+   "locucion": "Por eso, cuando miras una Luna roja, en realidad estás viendo todos los amaneceres y atardeceres de la Tierra reflejados en ella.",
+   "busqueda_en": "red moon landscape",
+   "alternativa_en": "moon over horizon",
+   "texto_pantalla": "Reflejo terrestre"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "La Luna aparece roja durante un eclipse total por la dispersión de Rayleigh y la refracción de la luz solar en la atmósfera terrestre.",
+   "titulo": "Why the Moon Turns Red During a Total Lunar Eclipse",
+   "url": "https://science.nasa.gov/solar-system/moon/why-the-moon-turns-red-during-a-total-lunar-eclipse/",
+   "editor": "NASA"
+  }
+ ],
+ "metadatos": {
+  "titulo": "¿Por qué la Luna se vuelve roja?",
+  "descripcion": "La sombra de la Tierra transforma la Luna en un espejo rojizo durante un eclipse total. Descubre por qué.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Luna",
+   "#EclipseLunar",
+   "#Ciencia"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
