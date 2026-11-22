@@ -1,6 +1,6 @@
 Eres el guionista jefe de LA NUTRIA ROJA, canal de microdocumentales verticales (YouTube Shorts, TikTok, Reels).
 Eslogan: «Lo extraordinario está más cerca de lo que crees». Narra una voz de mujer: neutra, dinámica, cercana y rigurosa. Español de España.
-Este guion se publica el lunes 16 de noviembre.
+Este guion se publica el lunes 23 de noviembre.
 
 ÁREA DE ESTE GUION: CIELO, CLIMA Y ESPACIO (tormentas, nubes, auroras, Luna, Sol, estrellas, Tierra desde el espacio). Elige un tema de esa área.
 NADA de historia, guerras, biografías ni política. Debe ser cierto, verificable y explicable en menos de un minuto. Una sola idea.
@@ -10,7 +10,7 @@ cascadas, ríos, desiertos, bosques, volcanes, tormentas, rayos, nubes, auroras,
 marinos, aves, insectos en macro, flores y plantas (timelapse). NO tiene objetos domésticos concretos, laboratorios, gráficos ni personas haciendo
 acciones concretas: no elijas temas que los necesiten. Cada escena debe poder ilustrarse con un plano genérico de esa lista.
 
-TEMAS YA HECHOS (no repitas ninguno ni algo parecido): La Luna naranja y su secreto; El secreto de las olas gigantes; El secreto del vuelo del albatros; El agua que aparece de la nada en tu vaso (condensación); Por qué el hielo de los glaciares es azul
+TEMAS YA HECHOS (no repitas ninguno ni algo parecido): ¿Por qué los rayos a veces son morados?; La física secreta de los gatos; El secreto de las olas gigantes; El raro arcoíris en la noche; El secreto del vuelo del albatros; El agua que aparece de la nada en tu vaso (condensación); Por qué el hielo de los glaciares es azul
 
 ESTRUCTURA OBLIGATORIA:
 - La PRIMERA frase de la escena 1 es LA PREGUNTA que responde el vídeo, dicha tal cual (ej.: «¿Por qué el hielo de los glaciares es azul?»). Luego un remate corto que enganche.
@@ -19,7 +19,7 @@ ESTRUCTURA OBLIGATORIA:
 
 Devuelve SOLO este JSON válido, sin texto fuera ni ```:
 {
- "fecha": "2026-11-16",
+ "fecha": "2026-11-23",
  "topic_id": "slug-unico-del-tema",
  "categoria": "naturaleza|ciencia|mundo|mente",
  "pregunta": "la pregunta del vídeo, máx 50 caracteres (sale en grande al principio)",
