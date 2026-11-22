@@ -1,0 +1,91 @@
+{
+ "fecha": "2026-11-27",
+ "topic_id": "bosques-nieblinosos-plantas-agua",
+ "categoria": "naturaleza|ciencia|mundo",
+ "pregunta": "¿Cómo beben los bosques de niebla?",
+ "titulo": "El secreto de los bosques de niebla",
+ "escenas": [
+  {
+   "n": 1,
+   "locucion": "¿Cómo beben los bosques de niebla? Parece magia, pero es pura ciencia.",
+   "busqueda_en": "fog forest",
+   "alternativa_en": "misty rainforest",
+   "texto_pantalla": "Bosques de niebla"
+  },
+  {
+   "n": 2,
+   "locucion": "En estos bosques, la lluvia no es la única fuente de agua.",
+   "busqueda_en": "cloud forest trees",
+   "alternativa_en": "foggy trees",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 3,
+   "locucion": "Las hojas y ramas capturan la niebla, gota a gota, como una red invisible.",
+   "busqueda_en": "close up leaves water",
+   "alternativa_en": "dew on leaves",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 4,
+   "locucion": "El agua se condensa, cae al suelo y alimenta al bosque incluso sin llover.",
+   "busqueda_en": "forest rain water",
+   "alternativa_en": "water dripping leaves",
+   "texto_pantalla": "Agua oculta"
+  },
+  {
+   "n": 5,
+   "locucion": "Este fenómeno se llama precipitación horizontal.",
+   "busqueda_en": "fog dripping forest",
+   "alternativa_en": "misty woods rain",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 6,
+   "locucion": "Gracias a él, los ríos y suelos de montaña siguen húmedos todo el año.",
+   "busqueda_en": "mountain river forest",
+   "alternativa_en": "stream in forest",
+   "texto_pantalla": ""
+  },
+  {
+   "n": 7,
+   "locucion": "Sin la niebla, muchos de estos bosques se secarían en pocas semanas.",
+   "busqueda_en": "dry forest contrast",
+   "alternativa_en": "forest drought",
+   "texto_pantalla": "Dependencia total"
+  },
+  {
+   "n": 8,
+   "locucion": "Así, la niebla es la gran aliada invisible que mantiene vivos estos ecosistemas.",
+   "busqueda_en": "cloud forest panorama",
+   "alternativa_en": "foggy jungle view",
+   "texto_pantalla": "La aliada invisible"
+  }
+ ],
+ "fuentes": [
+  {
+   "afirmacion": "Los bosques de niebla obtienen gran parte de su agua por precipitación horizontal.",
+   "titulo": "Cloud Forests: Water from Fog",
+   "url": "https://www.nationalgeographic.com/environment/article/cloud-forests",
+   "editor": "National Geographic"
+  },
+  {
+   "afirmacion": "Las hojas capturan la niebla y la convierten en agua disponible para el suelo y los ríos.",
+   "titulo": "Fog interception in montane cloud forests",
+   "url": "https://www.fs.usda.gov/research/treesearch/55062",
+   "editor": "USDA Forest Service"
+  }
+ ],
+ "metadatos": {
+  "titulo": "El secreto invisible de los bosques de niebla",
+  "descripcion": "Descubre cómo los bosques de niebla beben agua de la niebla sin una sola gota de lluvia.",
+  "hashtags": [
+   "#LaNutriaRoja",
+   "#Naturaleza",
+   "#Bosques",
+   "#Agua"
+  ]
+ },
+ "riesgos": [],
+ "autor": "chatgpt"
+}
