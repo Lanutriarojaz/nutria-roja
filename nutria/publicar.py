@@ -76,6 +76,18 @@ def metadatos(servicio, v):
     return {}
 
 
+DIAS_TRAS_DOCU = (1, 3, 5)      # martes, jueves y sábado: el día anterior hubo documental a las 19:00
+
+
+def hora_de(dia, hh, mm):
+    """YouTube (vía Buffer) solo deja 2 vídeos cada 24 h en ventana móvil. Tras un día con documental (13:30 + 19:00),
+    la efeméride a las 13:30 cae justo a 24 h de la anterior y, si Buffer va un minuto tarde, es la tercera y la rechaza
+    (pasó el 21-nov). Esos días sale a las 13:45: 15 min de margen."""
+    if (hh, mm) == (13, 30) and dia.weekday() in DIAS_TRAS_DOCU:
+        return 13, 45
+    return hh, mm
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('tirada')
@@ -95,13 +107,14 @@ def main():
         if not v.get('ok'):
             continue
         dia = dt.date.fromisoformat(v['fecha'])
-        cuando = dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid'))
+        h, mi = hora_de(dia, hh, mm)
+        cuando = dt.datetime(dia.year, dia.month, dia.day, h, mi, tzinfo=ZoneInfo('Europe/Madrid'))
         if cuando < dt.datetime.now(ZoneInfo('Europe/Madrid')) + dt.timedelta(minutes=3):
             print(f"⏭ {v['fecha']}: la hora ya ha pasado, no se programa"); continue
         url = f"{base}/{v.get('archivo') or v['fecha']}.mp4"
         texto = v['descripcion']
         for servicio, c in chs.items():
-            if (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') in en_cola:
+            if (c['id'], v['fecha'], f'{h:02d}:{mi:02d}') in en_cola or (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') in en_cola:
                 print(f"⏭ {v['fecha']} {servicio}: ya había un vídeo en cola ese día"); continue
             entrada = {'channelId': c['id'], 'text': texto, 'schedulingType': 'automatic', 'mode': 'customScheduled',
                        'dueAt': cuando.astimezone(ZoneInfo('UTC')).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
@@ -126,10 +139,11 @@ def main():
                 if not v.get('ok'):
                     continue
                 dia = dt.date.fromisoformat(v['fecha'])
-                if dt.datetime(dia.year, dia.month, dia.day, hh, mm, tzinfo=ZoneInfo('Europe/Madrid')) < ahora + dt.timedelta(minutes=3):
+                h, mi = hora_de(dia, hh, mm)
+                if dt.datetime(dia.year, dia.month, dia.day, h, mi, tzinfo=ZoneInfo('Europe/Madrid')) < ahora + dt.timedelta(minutes=3):
                     continue
                 for servicio, c in chs.items():
-                    if (c['id'], v['fecha'], f'{hh:02d}:{mm:02d}') not in cola:
+                    if (c['id'], v['fecha'], f'{h:02d}:{mi:02d}') not in cola:
                         resultado.append({'fecha': v['fecha'], 'red': servicio, 'ok': False, 'detalle': 'no aparece en la cola de Buffer'})
                         print(f"✖ COMPROBACIÓN: {v['fecha']} {servicio} NO está en la cola de Buffer")
     json.dump(resultado, open(os.path.join(os.path.dirname(a.tirada), 'programados.json'), 'w'), ensure_ascii=False, indent=2)
