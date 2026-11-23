@@ -1,17 +1,12 @@
-name: Vigilante de envíos (después de publicar)
+name: Vigilante de envios
 
-# Media hora después de cada publicación mira si Buffer ha marcado algún post como fallido, lo reintenta,
-# y SOLO si sigue fallando manda un correo. Si todo salió, silencio.
-# Con «mover» se cambia la hora de posts ya programados (p. ej. 13:30 → 13:45).
+# Media hora despues de cada publicacion mira si Buffer ha marcado algun post como fallido, lo reintenta
+# y SOLO si sigue fallando manda un correo. Si todo salio, silencio.
 on:
   schedule:
-    - cron: '20 13 * * *'      # 14:20 Madrid (efeméride 13:30 / 13:45)
-    - cron: '40 18 * * 1,3,5'  # 19:40 Madrid (documentales 19:00)
+    - cron: '20 13 * * *'
+    - cron: '40 18 * * 1,3,5'
   workflow_dispatch:
-    inputs:
-      mover:
-        description: 'Opcional: «HH:MM HH:MM AAAA-MM-DD …» para cambiar la hora de posts programados'
-        required: false
 
 permissions:
   contents: read
@@ -30,16 +25,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -q requests
-      - name: Cambiar horas (solo si se pide)
-        if: ${{ inputs.mover }}
-        run: python -m nutria.mover ${{ inputs.mover }}
-      - name: Buscar y reintentar envíos fallidos
-        if: ${{ !inputs.mover }}
+      - name: Buscar y reintentar envios fallidos
         id: r
         run: python -m nutria.envios
       - name: Correo solo si algo sigue sin publicarse
-        if: ${{ !inputs.mover && steps.r.outputs.ok == 'no' }}
+        if: steps.r.outputs.ok == 'no'
         run: .github/aviso.sh "${{ steps.r.outputs.titulo }}" --body-file informe-envios.md
       - name: Correo si el vigilante falla
         if: failure()
-        run: .github/aviso.sh "📺 El vigilante de envíos ha fallado" "Detalles: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: .github/aviso.sh "El vigilante de envios ha fallado" "Detalles en ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

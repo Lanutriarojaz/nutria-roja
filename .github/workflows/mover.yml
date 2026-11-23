@@ -1,0 +1,30 @@
+name: Mover horas en Buffer
+
+on:
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: 'Hora actual HH:MM'
+        required: true
+      hasta:
+        description: 'Hora nueva HH:MM'
+        required: true
+      fechas:
+        description: 'Dias AAAA-MM-DD separados por espacios'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  mover:
+    runs-on: ubuntu-latest
+    env:
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests
+      - run: python -m nutria.mover "${{ inputs.desde }}" "${{ inputs.hasta }}" ${{ inputs.fechas }}
