@@ -27,7 +27,7 @@ def extra():
     for f in m['__type']['fields']:
         if f['name'] in ('publishPostNow', 'editPost'):
             print(f['name'], [(a['name'], a['type'].get('name') or a['type']['ofType']['name']) for a in f['args']], f['type'])
-    for n in ('PublishPostNowInput', 'PostIdInput'):
+    for n in ('PublishPostNowInput', 'EditPostInput', 'DailyPostingLimitsInput'):
         try:
             c = gql('query($n: String!) { __type(name: $n) { inputFields { name type { name kind ofType { name } } } } }', {'n': n})['__type']
             if c: print(n, [(x['name'], x['type'].get('name') or x['type']['ofType']['name']) for x in c['inputFields']])
