@@ -240,7 +240,11 @@ def un_dia(fecha, carpeta, usados):
                     errores.append(f"guion: {e}"); continue
                 ok, malos = guion.verificar(g, fuente, hecho)
                 if ok:
-                    break
+                    ok, motivo = guion.mismo_suceso(g, hecho)
+                    if ok:
+                        break
+                    malos = [f'cuenta otro suceso: {motivo}']
+                    print(f'  ✖ guion de reserva descartado: {motivo}', flush=True)
                 errores.append(f"datos no respaldados: {malos[:2]}"); g = None
             if not g:
                 continue

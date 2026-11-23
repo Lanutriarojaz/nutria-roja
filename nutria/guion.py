@@ -159,6 +159,9 @@ def validar(g, hecho, dia, m):
         if not g.get(k):
             raise ValueError(f'Falta «{k}» en el guion')
     cab = f"Un día como hoy, {dia} de {m} de {hecho['año']},"
+    del_ = f"Un día como hoy, {dia} de {m} del {hecho['año']},"     # «del 2000» es correcto también: se normaliza en vez de descartar
+    if g['frases'][0].startswith(del_):
+        g['frases'][0] = cab + g['frases'][0][len(del_):]
     if not g['frases'][0].startswith(cab):
         raise ValueError(f'La primera frase no empieza por «{cab}»: {g["frases"][0][:80]}')
     todo = ' '.join([g['gancho'], *g['frases'], g['pregunta']])
@@ -183,3 +186,22 @@ def verificar(g, fuente, hecho):
     ], temperatura=0, rol='verificar')
     malos = [x for x in r.get('inventado', []) if x]
     return (bool(r.get('ok')) and not malos), malos
+
+
+def mismo_suceso(g, hecho):
+    """Tercera puerta: la frase «Un día como hoy…» tiene que contar EL MISMO suceso que Wikipedia lista para ese día
+    (no otro dato real del artículo con la fecha pegada). Si la IA no contesta, no se da por bueno."""
+    frase = next((f for f in [g.get('gancho', ''), *g.get('frases', [])] if 'día como hoy' in f.lower()), '')
+    if not frase:
+        return False, 'el guion no trae la frase «Un día como hoy»'
+    try:
+        r = llm([
+            {'role': 'system', 'content': 'Eres un verificador de datos estricto. Responde solo JSON.'},
+            {'role': 'user', 'content': f"SUCESO REAL de ese día según Wikipedia ({hecho['año']}): {hecho['texto']}\n\n"
+                                       f"FRASE DEL GUION: {frase}\n\n"
+                                       '¿La frase cuenta exactamente ese mismo suceso (mismo protagonista y misma acción), sin cambiarlo por otro hecho '
+                                       'ni añadir algo que el suceso no dice? Responde {"mismo": true|false, "motivo": "..."}'},
+        ], temperatura=0, rol='verificar')
+    except Exception as e:
+        return False, f'no pude comprobarlo ({str(e)[:60]})'
+    return bool(r.get('mismo')), str(r.get('motivo', ''))[:160]

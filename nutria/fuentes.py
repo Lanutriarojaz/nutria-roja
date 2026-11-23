@@ -7,18 +7,43 @@ UA = {'User-Agent': 'LaNutriaRoja/1.0 (bot de efemerides; contacto via GitHub la
 S = requests.Session(); S.headers.update(UA)
 
 
+_CACHE = {}
+_ULTIMA = [0.0]
+_ESPERADO = [0.0]          # segundos esperados en toda la tirada: tope de 15 min para no pasarse del tiempo del flujo
+
+
+def _esperar(segundos):
+    if _ESPERADO[0] > 900:
+        segundos = 3                                   # ya se ha esperado mucho hoy: reintentos cortos
+    segundos = min(60, segundos)
+    _ESPERADO[0] += segundos
+    time.sleep(segundos)
+
+
 def _get(url, **params):
-    for i in range(4):
+    """Wikimedia frena a los robots (429/503) cuando hay mucha gente en GitHub: se espera lo que pida, con paciencia,
+    y se guarda la respuesta para no repetir la misma consulta en la tirada."""
+    clave = (url, tuple(sorted(params.items())))
+    if clave in _CACHE:
+        return _CACHE[clave]
+    for i in range(6):
+        time.sleep(max(0.0, 0.4 - (time.time() - _ULTIMA[0])))        # como mucho ~2 peticiones por segundo
+        _ULTIMA[0] = time.time()
         try:
             r = S.get(url, params=params or None, timeout=30)
             if r.status_code == 200:
-                return r.json()
+                _CACHE[clave] = r.json()
+                return _CACHE[clave]
             if r.status_code in (429, 500, 502, 503, 504):
-                time.sleep(5 * (i + 1)); continue
+                try:
+                    pausa = float(r.headers.get('Retry-After', 0))
+                except ValueError:
+                    pausa = 0
+                _esperar(max(pausa, 5 * 2 ** i)); continue
             r.raise_for_status()
         except requests.RequestException:
-            if i == 3: raise
-            time.sleep(5 * (i + 1))
+            if i == 5: raise
+            _esperar(5 * 2 ** i)
     raise RuntimeError(f'No responde {url}')
 
 
