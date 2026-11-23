@@ -1,0 +1,28 @@
+name: Informe de la semana (solo lectura)
+
+on:
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: 'Primer día (AAAA-MM-DD)'
+        required: true
+      hasta:
+        description: 'Último día (AAAA-MM-DD)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  informe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q requests cryptography
+      - env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_API_KEY_EN: ${{ secrets.BUFFER_API_KEY_EN }}
+        run: python -m nutria.informe_semana "${{ inputs.desde }}" "${{ inputs.hasta }}"
