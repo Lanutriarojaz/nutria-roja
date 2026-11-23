@@ -53,7 +53,7 @@ jobs:
       - name: Subir los vídeos nuevos a la web (con otro nombre) y esperar a que se sirvan
         run: |
           REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
+          rm -rf /tmp/media && git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
           for f in $(python -c "import json;print(' '.join(v['fecha'] for v in json.load(open('$GITHUB_WORKSPACE/salida/rescate.json'))))"); do
             cp "$GITHUB_WORKSPACE/descarga/$f/video.mp4" "$f-chatgpt.mp4"
           done
@@ -70,7 +70,7 @@ jobs:
         if: ${{ inputs.accion == 'sustituir' && success() }}
         run: |
           REMOTO="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
+          rm -rf /tmp/media && git clone -q --depth 1 -b media "$REMOTO" /tmp/media; cd /tmp/media && rm -rf .git
           python - <<'PY'
           import json
           nuevos = {v['fecha']: v for v in json.load(open('/home/runner/work/nutria-roja/nutria-roja/salida/rescate.json'))}
