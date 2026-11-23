@@ -16,6 +16,13 @@ def main():
     print(f'{len(cola)} posts programados entre {min(fechas)} y {max(fechas)}')
     for pid, _, red, dia, hora, texto in cola:
         print(f'  {dia} {hora} {red:9} {texto}')
+    try:
+        fallidos = en_cola(chs, fechas, 'error')
+        print(f'{len(fallidos)} posts FALLIDOS en Buffer esos días')
+        for pid, _, red, dia, hora, texto in fallidos:
+            print(f'  ✖ {dia} {hora} {red:9} {pid} {texto}')
+    except Exception as e:
+        print(f'(no pude leer los fallidos: {str(e)[:150]})')
 
 
 if __name__ == '__main__':

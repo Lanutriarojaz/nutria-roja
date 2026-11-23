@@ -14,12 +14,12 @@ from nutria.publicar import canales, gql
 MADRID = ZoneInfo('Europe/Madrid')
 
 
-def en_cola(chs, fechas):
+def en_cola(chs, fechas, estado='scheduled'):
     """[(id, canal, servicio, dia, hora, texto)] de los posts programados en esos días."""
     ids = {c['id']: s for s, c in chs.items()}
     out = []
     for o in gql('query { account { organizations { id } } }')['account']['organizations']:
-        d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [scheduled]}}, first: 100) '
+        d = gql('query($o: OrganizationId!) { posts(input: {organizationId: $o, filter: {status: [' + estado + ']}}, first: 100) '
                 '{ edges { node { id dueAt channelId text } } } }', {'o': o['id']})
         for e in d['posts']['edges']:
             n = e['node']
