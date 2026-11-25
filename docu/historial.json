@@ -22,5 +22,11 @@
   "topic_id": "luna-roja-por-que",
   "titulo": "El misterio de la Luna roja",
   "autor": "chatgpt"
+ },
+ {
+  "fecha": "2026-11-25",
+  "topic_id": "secreto-patas-gecko",
+  "titulo": "El secreto físico de los geckos",
+  "autor": "gemini"
  }
 ]
